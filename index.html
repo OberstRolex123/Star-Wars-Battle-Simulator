@@ -13,7 +13,7 @@ canvas{display:block;image-rendering:pixelated;position:absolute;top:32px;left:0
 .screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
 .screen.hidden{display:none;}
 .title{font-size:26px;font-weight:bold;letter-spacing:6px;color:#fff;margin-bottom:4px;text-transform:uppercase;}
-.subtitle{font-size:10px;letter-spacing:3px;color:#556677;margin-bottom:32px;text-transform:uppercase;}
+.subtitle{font-size:10px;letter-spacing:3px;color:#556677;margin-bottom:24px;text-transform:uppercase;}
 .btn{display:block;width:220px;padding:11px 0;margin-bottom:10px;background:#0a0a1a;border:1px solid #556677;color:#dddddd;font-family:monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;text-align:center;cursor:pointer;}
 .btn:hover{background:#0f0f2a;border-color:#4fa3e0;color:#fff;}
 .btn.danger:hover{border-color:#e04f4f;color:#e04f4f;}
@@ -47,7 +47,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 .cl-entry{display:flex;gap:8px;margin-bottom:3px;font-size:10px;color:#889aaa;line-height:1.5;}
 .cl-bullet{color:#4fa3e0;flex-shrink:0;}
 .cl-fix .cl-bullet{color:#00cc44;}
-.cl-fix .cl-entry{color:#7aaa8a;}
+.cl-fix{color:#7aaa8a;}
 .cl-divider{border:none;border-top:1px solid #1a1a2a;margin:14px 0;}
 /* readme */
 #readmeScreen{overflow-y:auto;justify-content:flex-start;padding:20px 28px;background:#03030d;}
@@ -97,6 +97,11 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 .fpill{padding:3px 7px;background:#0a0a1a;border:1px solid #334455;color:#778899;font-family:monospace;font-size:8px;letter-spacing:1px;cursor:pointer;text-transform:uppercase;border-radius:3px;}
 .fpill:hover{border-color:#4fa3e0;color:#fff;}
 .fpill.active{border-color:#4fa3e0;color:#fff;background:#0f1a2a;}
+/* language pills */
+.lang-row{display:flex;gap:6px;margin-bottom:24px;}
+.lang-pill{padding:4px 12px;background:#0a0a1a;border:1px solid #334455;color:#667788;font-family:monospace;font-size:9px;letter-spacing:2px;cursor:pointer;text-transform:uppercase;border-radius:3px;}
+.lang-pill:hover{border-color:#4fa3e0;color:#fff;}
+.lang-pill.active{border-color:#4fa3e0;color:#fff;background:#0f1a2a;}
 </style>
 </head>
 <body>
@@ -106,306 +111,571 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 
 <div id="menuScreen" class="screen" style="background:transparent;">
   <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;">
-    <div class="title">Star Wars</div>
-    <div class="subtitle">Pixel Battle Simulator</div>
-    <button class="btn" onclick="startGame()">New Game</button>
-    <button class="btn" onclick="showConfig()">Configuration</button>
-    <button class="btn" onclick="showChangelog()">Changelog</button>
-    <button class="btn" onclick="showReadme()">About</button>
-    <button class="btn" style="border-color:#334455;color:#aaaaaa;" onclick="loadVersion()">Load Version</button>
-    <div style="font-size:9px;letter-spacing:2px;color:#ffffff;text-transform:uppercase;margin-top:4px;opacity:0.4;">v1.1 — made with Claude</div>
+    <div class="title" data-i18n="menu.title">Star Wars</div>
+    <div class="subtitle" data-i18n="menu.subtitle">Pixel Battle Simulator</div>
+    <div class="lang-row">
+      <button class="lang-pill active" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="lang-pill" data-lang="de" onclick="setLang('de')">DE</button>
+      <button class="lang-pill" data-lang="pl" onclick="setLang('pl')">PL</button>
+    </div>
+    <button class="btn" onclick="startGame()" data-i18n="menu.newGame">New Game</button>
+    <button class="btn" onclick="showConfig()" data-i18n="menu.config">Configuration</button>
+    <button class="btn" onclick="window.open('https://github.com/OberstRolex123/Star-Wars-Battle-Simulator/blob/main/CHANGELOG.md','_blank')" data-i18n="menu.changelog">Changelog</button>
+    <button class="btn" onclick="showReadme()" data-i18n="menu.about">About</button>
+    <button class="btn" style="border-color:#334455;color:#aaaaaa;" onclick="loadVersion()" data-i18n="menu.loadVersion">Load Version</button>
+    <div style="font-size:9px;letter-spacing:2px;color:#ffffff;text-transform:uppercase;margin-top:4px;opacity:0.4;" data-i18n="menu.madeWith">v1.2 — made with Claude</div>
   </div>
 </div>
 
 <div id="configScreen" class="screen hidden" style="background:#03030d;">
-  <div class="cfg-title">Configuration</div>
-
+  <div class="cfg-title" data-i18n="cfg.title">Configuration</div>
   <div class="cfg-sec">
-    <div class="cfg-sec-title">Field</div>
+    <div class="cfg-sec-title" data-i18n="cfg.sec.field">Field</div>
     <div class="preset-row">
-      <button class="preset-btn" id="ps-small"  onclick="setPreset('small')">Small</button>
-      <button class="preset-btn active" id="ps-medium" onclick="setPreset('medium')">Medium</button>
-      <button class="preset-btn" id="ps-large"  onclick="setPreset('large')">Large</button>
+      <button class="preset-btn" id="ps-small"  onclick="setPreset('small')" data-i18n="cfg.preset.small">Small</button>
+      <button class="preset-btn active" id="ps-medium" onclick="setPreset('medium')" data-i18n="cfg.preset.medium">Medium</button>
+      <button class="preset-btn" id="ps-large"  onclick="setPreset('large')" data-i18n="cfg.preset.large">Large</button>
     </div>
     <div class="toggle-row">
       <div class="toggle" id="tog-wrapWorld" onclick="toggleOpt('wrapWorld')"></div>
-      <span class="cfg-lbl">Wrap-around world</span>
+      <span class="cfg-lbl" data-i18n="cfg.wrapWorld">Wrap-around world</span>
       <span class="cfg-val" id="v-wrapWorld" style="color:#556677">Off</span>
     </div>
   </div>
-
   <div class="cfg-sec">
-    <div class="cfg-sec-title">Visual</div>
+    <div class="cfg-sec-title" data-i18n="cfg.sec.visual">Visual</div>
     <div class="toggle-row">
       <div class="toggle" id="tog-scrollStars" onclick="toggleOpt('scrollStars')"></div>
-      <span class="cfg-lbl">Scrolling starfield</span>
+      <span class="cfg-lbl" data-i18n="cfg.scrollStars">Scrolling starfield</span>
       <span class="cfg-val" id="v-scrollStars" style="color:#556677">Off</span>
     </div>
   </div>
-
   <div class="cfg-sec">
-    <div class="cfg-sec-title">Formation</div>
+    <div class="cfg-sec-title" data-i18n="cfg.sec.formation">Formation</div>
     <div class="toggle-row">
       <div class="toggle" id="tog-formation" onclick="toggleOpt('formation')"></div>
-      <span class="cfg-lbl">Formation flying</span>
+      <span class="cfg-lbl" data-i18n="cfg.formation">Formation flying</span>
       <span class="cfg-val" id="v-formation" style="color:#556677">Off</span>
     </div>
-    <!-- break trigger -->
     <div class="form-row">
-      <span class="form-lbl">Break trigger</span>
+      <span class="form-lbl" data-i18n="cfg.breakTrigger">Break trigger</span>
       <div class="form-pills" id="fp-breakTrigger"></div>
     </div>
     <div class="cfg-row">
-      <span class="cfg-lbl">Contact range (px)</span>
+      <span class="cfg-lbl" data-i18n="cfg.breakRange">Contact range (px)</span>
       <input type="range" min="40" max="300" step="10" id="sl-breakRange" oninput="cfgUpdateDirect('breakRange',this,0)">
       <span class="cfg-val" id="v-breakRange">120</span>
     </div>
     <div class="cfg-row">
-      <span class="cfg-lbl">Stagger delay (fr)</span>
+      <span class="cfg-lbl" data-i18n="cfg.breakStagger">Stagger delay (fr)</span>
       <input type="range" min="0" max="60" step="5" id="sl-breakStagger" oninput="cfgUpdateDirect('breakStagger',this,0)">
       <span class="cfg-val" id="v-breakStagger">15</span>
     </div>
   </div>
-
   <!-- X-Wing -->
   <div class="cfg-sec">
-    <div class="cfg-sec-title" style="color:#aaaaaa">X-Wing — Rebellion</div>
-    <div class="form-row"><span class="form-lbl">Formation</span><div class="form-pills" id="fp-xwing"></div></div>
-    <div class="cfg-row"><span class="cfg-lbl">HP</span><input type="range" min="1" max="50" step="1" data-ship="xwing" data-key="hp" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-hp">6</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Speed</span><input type="range" min="0.5" max="4" step="0.1" data-ship="xwing" data-key="spd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-spd">1.4</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Fire Rate (cd)</span><input type="range" min="15" max="120" step="5" data-ship="xwing" data-key="cd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-cd">55</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Laser Speed</span><input type="range" min="4" max="30" step="1" data-ship="xwing" data-key="laserSpd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-laserSpd">12</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Laser TTL (s)</span><input type="range" min="0.5" max="5" step="0.5" data-ship="xwing" data-key="ttl" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-ttl">2.0</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Damage</span><input type="range" min="1" max="10" step="1" data-ship="xwing" data-key="dmg" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-dmg">1</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Turn Rate</span><input type="range" min="0.01" max="0.15" step="0.005" data-ship="xwing" data-key="turnRate" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-turnRate">0.040</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Count</span><input type="range" min="1" max="20" step="1" data-ship="xwing" data-key="count" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-count">3</span></div>
+    <div class="cfg-sec-title" style="color:#aaaaaa" data-i18n="cfg.ship.xwing">X-Wing — Rebellion</div>
+    <div class="form-row"><span class="form-lbl" data-i18n="cfg.formation.label">Formation</span><div class="form-pills" id="fp-xwing"></div></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.hp">HP</span><input type="range" min="1" max="50" step="1" data-ship="xwing" data-key="hp" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-hp">6</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.spd">Speed</span><input type="range" min="0.5" max="4" step="0.1" data-ship="xwing" data-key="spd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-spd">1.4</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.cd">Fire Rate (cd)</span><input type="range" min="15" max="120" step="5" data-ship="xwing" data-key="cd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-cd">55</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.laserSpd">Laser Speed</span><input type="range" min="4" max="30" step="1" data-ship="xwing" data-key="laserSpd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-laserSpd">12</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.ttl">Laser TTL (s)</span><input type="range" min="0.5" max="5" step="0.5" data-ship="xwing" data-key="ttl" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-ttl">2.0</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.dmg">Damage</span><input type="range" min="1" max="10" step="1" data-ship="xwing" data-key="dmg" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-dmg">1</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.turnRate">Turn Rate</span><input type="range" min="0.01" max="0.15" step="0.005" data-ship="xwing" data-key="turnRate" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-turnRate">0.040</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.count">Count</span><input type="range" min="1" max="20" step="1" data-ship="xwing" data-key="count" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-count">3</span></div>
   </div>
-
   <!-- A-Wing -->
   <div class="cfg-sec">
-    <div class="cfg-sec-title" style="color:#aaaaaa">A-Wing — Rebellion</div>
-    <div class="form-row"><span class="form-lbl">Formation</span><div class="form-pills" id="fp-awing"></div></div>
-    <div class="cfg-row"><span class="cfg-lbl">HP</span><input type="range" min="1" max="50" step="1" data-ship="awing" data-key="hp" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-hp">2</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Speed</span><input type="range" min="0.5" max="4" step="0.1" data-ship="awing" data-key="spd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-spd">2.3</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Fire Rate (cd)</span><input type="range" min="15" max="120" step="5" data-ship="awing" data-key="cd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-cd">35</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Laser Speed</span><input type="range" min="4" max="30" step="1" data-ship="awing" data-key="laserSpd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-laserSpd">14</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Laser TTL (s)</span><input type="range" min="0.5" max="5" step="0.5" data-ship="awing" data-key="ttl" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-ttl">2.0</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Damage</span><input type="range" min="1" max="10" step="1" data-ship="awing" data-key="dmg" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-dmg">1</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Turn Rate</span><input type="range" min="0.01" max="0.15" step="0.005" data-ship="awing" data-key="turnRate" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-turnRate">0.070</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Count</span><input type="range" min="1" max="20" step="1" data-ship="awing" data-key="count" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-count">2</span></div>
+    <div class="cfg-sec-title" style="color:#aaaaaa" data-i18n="cfg.ship.awing">A-Wing — Rebellion</div>
+    <div class="form-row"><span class="form-lbl" data-i18n="cfg.formation.label">Formation</span><div class="form-pills" id="fp-awing"></div></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.hp">HP</span><input type="range" min="1" max="50" step="1" data-ship="awing" data-key="hp" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-hp">2</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.spd">Speed</span><input type="range" min="0.5" max="4" step="0.1" data-ship="awing" data-key="spd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-spd">2.3</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.cd">Fire Rate (cd)</span><input type="range" min="15" max="120" step="5" data-ship="awing" data-key="cd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-cd">35</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.laserSpd">Laser Speed</span><input type="range" min="4" max="30" step="1" data-ship="awing" data-key="laserSpd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-laserSpd">14</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.ttl">Laser TTL (s)</span><input type="range" min="0.5" max="5" step="0.5" data-ship="awing" data-key="ttl" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-ttl">2.0</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.dmg">Damage</span><input type="range" min="1" max="10" step="1" data-ship="awing" data-key="dmg" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-dmg">1</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.turnRate">Turn Rate</span><input type="range" min="0.01" max="0.15" step="0.005" data-ship="awing" data-key="turnRate" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-turnRate">0.070</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.count">Count</span><input type="range" min="1" max="20" step="1" data-ship="awing" data-key="count" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-count">2</span></div>
   </div>
-
   <!-- TIE Fighter -->
   <div class="cfg-sec">
-    <div class="cfg-sec-title" style="color:#aaaaaa">TIE Fighter — Empire</div>
-    <div class="form-row"><span class="form-lbl">Formation</span><div class="form-pills" id="fp-tie"></div></div>
-    <div class="cfg-row"><span class="cfg-lbl">HP</span><input type="range" min="1" max="50" step="1" data-ship="tie" data-key="hp" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-hp">1</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Speed</span><input type="range" min="0.5" max="4" step="0.1" data-ship="tie" data-key="spd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-spd">1.6</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Fire Rate (cd)</span><input type="range" min="15" max="120" step="5" data-ship="tie" data-key="cd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-cd">30</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Laser Speed</span><input type="range" min="4" max="30" step="1" data-ship="tie" data-key="laserSpd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-laserSpd">12</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Laser TTL (s)</span><input type="range" min="0.5" max="5" step="0.5" data-ship="tie" data-key="ttl" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-ttl">2.0</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Damage</span><input type="range" min="1" max="10" step="1" data-ship="tie" data-key="dmg" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-dmg">1</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Turn Rate</span><input type="range" min="0.01" max="0.15" step="0.005" data-ship="tie" data-key="turnRate" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-turnRate">0.030</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Count</span><input type="range" min="1" max="20" step="1" data-ship="tie" data-key="count" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-count">6</span></div>
+    <div class="cfg-sec-title" style="color:#aaaaaa" data-i18n="cfg.ship.tie">TIE Fighter — Empire</div>
+    <div class="form-row"><span class="form-lbl" data-i18n="cfg.formation.label">Formation</span><div class="form-pills" id="fp-tie"></div></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.hp">HP</span><input type="range" min="1" max="50" step="1" data-ship="tie" data-key="hp" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-hp">1</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.spd">Speed</span><input type="range" min="0.5" max="4" step="0.1" data-ship="tie" data-key="spd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-spd">1.6</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.cd">Fire Rate (cd)</span><input type="range" min="15" max="120" step="5" data-ship="tie" data-key="cd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-cd">30</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.laserSpd">Laser Speed</span><input type="range" min="4" max="30" step="1" data-ship="tie" data-key="laserSpd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-laserSpd">12</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.ttl">Laser TTL (s)</span><input type="range" min="0.5" max="5" step="0.5" data-ship="tie" data-key="ttl" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-ttl">2.0</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.dmg">Damage</span><input type="range" min="1" max="10" step="1" data-ship="tie" data-key="dmg" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-dmg">1</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.turnRate">Turn Rate</span><input type="range" min="0.01" max="0.15" step="0.005" data-ship="tie" data-key="turnRate" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-turnRate">0.030</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.count">Count</span><input type="range" min="1" max="20" step="1" data-ship="tie" data-key="count" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-count">6</span></div>
   </div>
-
   <!-- TIE Bomber -->
   <div class="cfg-sec">
-    <div class="cfg-sec-title" style="color:#aaaaaa">TIE Bomber — Empire</div>
-    <div class="form-row"><span class="form-lbl">Formation</span><div class="form-pills" id="fp-tiein"></div></div>
-    <div class="cfg-row"><span class="cfg-lbl">HP</span><input type="range" min="1" max="50" step="1" data-ship="tiein" data-key="hp" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-hp">2</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Speed</span><input type="range" min="0.5" max="4" step="0.1" data-ship="tiein" data-key="spd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-spd">2.2</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Fire Rate (cd)</span><input type="range" min="15" max="120" step="5" data-ship="tiein" data-key="cd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-cd">50</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Laser Speed</span><input type="range" min="4" max="30" step="1" data-ship="tiein" data-key="laserSpd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-laserSpd">10</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Laser TTL (s)</span><input type="range" min="0.5" max="5" step="0.5" data-ship="tiein" data-key="ttl" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-ttl">2.0</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Damage</span><input type="range" min="1" max="10" step="1" data-ship="tiein" data-key="dmg" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-dmg">2</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Turn Rate</span><input type="range" min="0.01" max="0.15" step="0.005" data-ship="tiein" data-key="turnRate" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-turnRate">0.065</span></div>
-    <div class="cfg-row"><span class="cfg-lbl">Count</span><input type="range" min="1" max="20" step="1" data-ship="tiein" data-key="count" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-count">2</span></div>
+    <div class="cfg-sec-title" style="color:#aaaaaa" data-i18n="cfg.ship.tiein">TIE Bomber — Empire</div>
+    <div class="form-row"><span class="form-lbl" data-i18n="cfg.formation.label">Formation</span><div class="form-pills" id="fp-tiein"></div></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.hp">HP</span><input type="range" min="1" max="50" step="1" data-ship="tiein" data-key="hp" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-hp">2</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.spd">Speed</span><input type="range" min="0.5" max="4" step="0.1" data-ship="tiein" data-key="spd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-spd">2.2</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.cd">Fire Rate (cd)</span><input type="range" min="15" max="120" step="5" data-ship="tiein" data-key="cd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-cd">50</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.laserSpd">Laser Speed</span><input type="range" min="4" max="30" step="1" data-ship="tiein" data-key="laserSpd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-laserSpd">10</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.ttl">Laser TTL (s)</span><input type="range" min="0.5" max="5" step="0.5" data-ship="tiein" data-key="ttl" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-ttl">2.0</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.dmg">Damage</span><input type="range" min="1" max="10" step="1" data-ship="tiein" data-key="dmg" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-dmg">2</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.turnRate">Turn Rate</span><input type="range" min="0.01" max="0.15" step="0.005" data-ship="tiein" data-key="turnRate" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-turnRate">0.065</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.count">Count</span><input type="range" min="1" max="20" step="1" data-ship="tiein" data-key="count" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-count">2</span></div>
   </div>
-
   <div class="cfg-btns">
-    <button class="cfg-btn" onclick="resetConfig()">Reset</button>
-    <button class="cfg-btn save" onclick="saveConfig()">Save</button>
-    <button class="cfg-btn" onclick="showMenu()">Back</button>
+    <button class="cfg-btn" onclick="resetConfig()" data-i18n="cfg.btn.reset">Reset</button>
+    <button class="cfg-btn save" onclick="saveConfig()" data-i18n="cfg.btn.save">Save</button>
+    <button class="cfg-btn" onclick="showMenu()" data-i18n="cfg.btn.back">Back</button>
   </div>
 </div>
 
 <div id="pauseScreen" class="screen hidden">
-  <div style="font-size:18px;font-weight:bold;letter-spacing:4px;color:#fff;text-transform:uppercase;margin-bottom:4px;">Paused</div>
-  <div style="font-size:9px;letter-spacing:2px;color:#445566;margin-bottom:28px;text-transform:uppercase;">— Round in progress —</div>
-  <button class="btn" onclick="resumeGame()">Resume</button>
-  <button class="btn danger" onclick="goMenu()">Main Menu</button>
-</div>
-
-<!-- CHANGELOG -->
-<div id="changelogScreen" class="screen hidden">
-  <div class="cl-header">Changelog</div>
-  <div class="cl-version">
-    <div><span class="cl-vtag">v1.1</span><span class="cl-date">2026-04-21 · current</span></div>
-    <div class="cl-entry cl-fix"><span class="cl-bullet">✓</span><span>Fixed pause-during-round-end causing permanent deadlock — respawn now uses a frame counter instead of setTimeout so it correctly freezes while paused</span></div>
-    <div class="cl-entry cl-fix"><span class="cl-bullet">✓</span><span>Changelog screen added to main menu — in-game styled with version tags, feature entries and bugfix highlights</span></div>
-    <div class="cl-entry cl-fix"><span class="cl-bullet">✓</span><span>About / README screen added — ship roster table, formations overview, config summary, tech stack and roadmap</span></div>
-    <div class="cl-entry cl-fix"><span class="cl-bullet">✓</span><span>Load Version screen added — lists all archived versions with descriptions, opens in new tab</span></div>
-  </div>
-  <hr class="cl-divider">
-  <div class="cl-version">
-    <div><span class="cl-vtag">v1.0</span><span class="cl-date">2026-04-21 · initial release</span></div>
-    <div class="cl-entry"><span class="cl-bullet">★</span><span>4 pixel-art ship types — X-Wing, A-Wing, TIE Fighter, TIE Bomber</span></div>
-    <div class="cl-entry"><span class="cl-bullet">★</span><span>6 formation types per ship — Delta, Line, Swarm, Wedge, Column, Pincer</span></div>
-    <div class="cl-entry"><span class="cl-bullet">★</span><span>Smart formation break — contact range, hit trigger, or both; staggered front-to-back dissolution</span></div>
-    <div class="cl-entry"><span class="cl-bullet">★</span><span>Inertia-based flight physics with deadlock detection and random kick</span></div>
-    <div class="cl-entry"><span class="cl-bullet">★</span><span>Directional shooting — ships must face target within 15° to fire</span></div>
-    <div class="cl-entry"><span class="cl-bullet">★</span><span>Per-ship config — HP (1–50), Speed, Turn Rate, Fire Rate, Laser Speed (4–30), Laser TTL, Damage, Count (1–20)</span></div>
-    <div class="cl-entry"><span class="cl-bullet">★</span><span>Wrap-around world (toroidal space) toggleable</span></div>
-    <div class="cl-entry"><span class="cl-bullet">★</span><span>3 field sizes — Small 480×320, Medium 680×426, Large 900×560</span></div>
-    <div class="cl-entry"><span class="cl-bullet">★</span><span>Scrolling parallax starfield, toggleable</span></div>
-    <div class="cl-entry"><span class="cl-bullet">★</span><span>8-bit procedural sound — laser fire, explosions, round-end fanfare, mute toggle</span></div>
-    <div class="cl-entry"><span class="cl-bullet">★</span><span>Config saved to localStorage, persists between sessions</span></div>
-    <div class="cl-entry"><span class="cl-bullet">★</span><span>Single HTML file, zero dependencies, ~44KB</span></div>
-  </div>
-  <hr class="cl-divider">
-  <div style="display:flex;justify-content:center;margin-top:4px;">
-    <button class="cfg-btn" onclick="showMenu()">Back</button>
-  </div>
+  <div style="font-size:18px;font-weight:bold;letter-spacing:4px;color:#fff;text-transform:uppercase;margin-bottom:4px;" data-i18n="pause.title">Paused</div>
+  <div style="font-size:9px;letter-spacing:2px;color:#445566;margin-bottom:28px;text-transform:uppercase;" data-i18n="pause.sub">— Round in progress —</div>
+  <button class="btn" onclick="resumeGame()" data-i18n="pause.resume">Resume</button>
+  <button class="btn danger" onclick="goMenu()" data-i18n="pause.menu">Main Menu</button>
 </div>
 
 <!-- README / ABOUT -->
 <div id="readmeScreen" class="screen hidden">
-  <div class="rm-header">Star Wars</div>
-  <div class="rm-sub">Pixel Battle Simulator — v1.1</div>
-
+  <div class="rm-header" data-i18n="rm.title">Star Wars</div>
+  <div class="rm-sub" data-i18n="rm.sub">Pixel Battle Simulator — v1.2</div>
   <div class="rm-sec">
-    <div class="rm-sec-title">What is this</div>
-    <div class="rm-p">An autonomous pixel-art space battle between the <span class="rm-highlight">Rebellion</span> and the <span class="rm-highlight">Empire</span>. Two fleets spawn, fight, and respawn endlessly. Configure everything, watch the Force decide.</div>
-    <div class="rm-p">Built entirely in a single HTML file — no server, no dependencies, no install. Open and play.</div>
+    <div class="rm-sec-title" data-i18n="rm.sec.what">What is this</div>
+    <div class="rm-p" data-i18n="rm.what.p1">An autonomous pixel-art space battle...</div>
+    <div class="rm-p" data-i18n="rm.what.p2">Built entirely in a single HTML file...</div>
   </div>
-
   <div class="rm-sec">
-    <div class="rm-sec-title">Ship Roster</div>
+    <div class="rm-sec-title" data-i18n="rm.sec.roster">Ship Roster</div>
     <div class="rm-row">
-      <div class="rm-cell-h" style="flex:1.4;">Ship</div>
-      <div class="rm-cell-h">Team</div>
-      <div class="rm-cell-h">HP</div>
-      <div class="rm-cell-h">Speed</div>
-      <div class="rm-cell-h" style="flex:1.6;">Role</div>
+      <div class="rm-cell-h" style="flex:1.4;" data-i18n="rm.col.ship">Ship</div>
+      <div class="rm-cell-h" data-i18n="rm.col.team">Team</div>
+      <div class="rm-cell-h" data-i18n="rm.col.hp">HP</div>
+      <div class="rm-cell-h" data-i18n="rm.col.spd">Speed</div>
+      <div class="rm-cell-h" style="flex:1.6;" data-i18n="rm.col.role">Role</div>
     </div>
     <div class="rm-row">
-      <div class="rm-cell" style="flex:1.4;">X-Wing</div>
-      <div class="rm-cell"><span class="rm-tag reb">Rebel</span></div>
+      <div class="rm-cell" style="flex:1.4;" data-i18n="rm.ship.xwing">X-Wing</div>
+      <div class="rm-cell"><span class="rm-tag reb" data-i18n="rm.team.rebel">Rebel</span></div>
       <div class="rm-cell">6</div><div class="rm-cell">1.4</div>
-      <div class="rm-cell" style="flex:1.6;">All-rounder, 4 cannons</div>
+      <div class="rm-cell" style="flex:1.6;" data-i18n="rm.role.xwing">All-rounder, 4 cannons</div>
     </div>
     <div class="rm-row">
-      <div class="rm-cell" style="flex:1.4;">A-Wing</div>
-      <div class="rm-cell"><span class="rm-tag reb">Rebel</span></div>
+      <div class="rm-cell" style="flex:1.4;" data-i18n="rm.ship.awing">A-Wing</div>
+      <div class="rm-cell"><span class="rm-tag reb" data-i18n="rm.team.rebel">Rebel</span></div>
       <div class="rm-cell">2</div><div class="rm-cell">2.3</div>
-      <div class="rm-cell" style="flex:1.6;">Interceptor, fast, evasive</div>
+      <div class="rm-cell" style="flex:1.6;" data-i18n="rm.role.awing">Interceptor, fast, evasive</div>
     </div>
     <div class="rm-row">
-      <div class="rm-cell" style="flex:1.4;">TIE Fighter</div>
-      <div class="rm-cell"><span class="rm-tag emp">Empire</span></div>
+      <div class="rm-cell" style="flex:1.4;" data-i18n="rm.ship.tie">TIE Fighter</div>
+      <div class="rm-cell"><span class="rm-tag emp" data-i18n="rm.team.empire">Empire</span></div>
       <div class="rm-cell">1</div><div class="rm-cell">1.6</div>
-      <div class="rm-cell" style="flex:1.6;">Cannon fodder, swarm</div>
+      <div class="rm-cell" style="flex:1.6;" data-i18n="rm.role.tie">Cannon fodder, swarm</div>
     </div>
     <div class="rm-row">
-      <div class="rm-cell" style="flex:1.4;">TIE Bomber</div>
-      <div class="rm-cell"><span class="rm-tag emp">Empire</span></div>
+      <div class="rm-cell" style="flex:1.4;" data-i18n="rm.ship.tiein">TIE Bomber</div>
+      <div class="rm-cell"><span class="rm-tag emp" data-i18n="rm.team.empire">Empire</span></div>
       <div class="rm-cell">2</div><div class="rm-cell">2.2</div>
-      <div class="rm-cell" style="flex:1.6;">Heavy, double shot</div>
+      <div class="rm-cell" style="flex:1.6;" data-i18n="rm.role.tiein">Heavy, double shot</div>
     </div>
   </div>
-
   <div class="rm-sec">
-    <div class="rm-sec-title">Formations</div>
+    <div class="rm-sec-title" data-i18n="rm.sec.formations">Formations</div>
     <div class="rm-p">
-      <span class="rm-tag sys">Delta ▲</span>
-      <span class="rm-tag sys">Line —</span>
-      <span class="rm-tag sys">Swarm</span>
-      <span class="rm-tag sys">Wedge ▼</span>
-      <span class="rm-tag sys">Column</span>
-      <span class="rm-tag sys">Pincer</span>
+      <span class="rm-tag sys">Delta ▲</span><span class="rm-tag sys">Line —</span>
+      <span class="rm-tag sys">Swarm</span><span class="rm-tag sys">Wedge ▼</span>
+      <span class="rm-tag sys">Column</span><span class="rm-tag sys">Pincer</span>
     </div>
-    <div class="rm-p">Formations hold until triggered — by enemy contact, taking a hit, or both. Ships dissolve front-to-back with a configurable stagger delay.</div>
+    <div class="rm-p" data-i18n="rm.formations.p">Formations hold until triggered...</div>
   </div>
-
   <div class="rm-sec">
-    <div class="rm-sec-title">Configuration</div>
-    <div class="rm-p">Per ship: <span class="rm-highlight">HP · Speed · Turn Rate · Fire Rate · Laser Speed · Laser TTL · Damage · Count · Formation</span></div>
-    <div class="rm-p">Global: <span class="rm-highlight">Field size · Wrap-around world · Scrolling starfield · Formation break trigger · Contact range · Stagger delay</span></div>
-    <div class="rm-p">All settings are saved automatically to localStorage.</div>
+    <div class="rm-sec-title" data-i18n="rm.sec.config">Configuration</div>
+    <div class="rm-p"><span class="rm-highlight" data-i18n="rm.config.perShip">Per ship: HP · Speed · ...</span></div>
+    <div class="rm-p"><span class="rm-highlight" data-i18n="rm.config.global">Global: Field size · ...</span></div>
+    <div class="rm-p" data-i18n="rm.config.saved">All settings are saved automatically.</div>
   </div>
-
   <div class="rm-sec">
-    <div class="rm-sec-title">Tech</div>
-    <div class="rm-p">Vanilla HTML · Canvas 2D · Web Audio API · localStorage · Base64 sprites · ~44KB single file</div>
-    <div class="rm-p">Built collaboratively with <span class="rm-highlight">Claude Sonnet</span> (Anthropic) through iterative conversation — physics, sound, UI, and game logic all designed in natural language.</div>
+    <div class="rm-sec-title" data-i18n="rm.sec.tech">Tech</div>
+    <div class="rm-p" data-i18n="rm.tech.stack">Vanilla HTML · Canvas 2D · ...</div>
+    <div class="rm-p"><span class="rm-highlight" data-i18n="rm.tech.claude">Built with Claude Sonnet...</span></div>
   </div>
-
   <div class="rm-sec">
-    <div class="rm-sec-title">Roadmap</div>
-    <div class="rm-p">Campaign mode: build your fleet with credits, face escalating Imperial squadrons across missions, earn credits on victory, upgrade ships between rounds.</div>
+    <div class="rm-sec-title" data-i18n="rm.sec.roadmap">Roadmap</div>
+    <div class="rm-p" data-i18n="rm.roadmap.p">Campaign mode: build your fleet...</div>
   </div>
-
   <div style="display:flex;justify-content:center;margin-top:4px;">
-    <button class="cfg-btn" onclick="showMenu()">Back</button>
+    <button class="cfg-btn" onclick="showMenu()" data-i18n="cfg.btn.back">Back</button>
   </div>
 </div>
+
+<!-- LOAD VERSION -->
 <div id="loadScreen" class="screen hidden">
-  <div class="lv-header">Load Version</div>
+  <div class="lv-header" data-i18n="lv.title">Load Version</div>
   <div class="lv-entry lv-current">
     <div class="lv-info">
-      <div class="lv-tag">v1.1 — current</div>
-      <div class="lv-desc">Pause bugfix · Changelog · About screen · Version loader</div>
+      <div class="lv-tag" data-i18n="lv.current.tag">v1.2 — current</div>
+      <div class="lv-desc" data-i18n="lv.current.desc">Pause bugfix · Changelog · About · i18n</div>
     </div>
-    <button class="lv-btn" style="width:60px;text-align:center;">Playing</button>
+    <button class="lv-btn" data-i18n="lv.current.btn">Playing</button>
   </div>
   <div class="lv-entry">
     <div class="lv-info">
       <div class="lv-tag">v1.0</div>
-      <div class="lv-desc">Initial release · All core features</div>
+      <div class="lv-desc" data-i18n="lv.v10.desc">Initial release · All core features</div>
     </div>
-    <button class="lv-btn" style="width:60px;text-align:center;" onclick="openVersion('versions/v1.0.html')">Load</button>
+    <button class="lv-btn" onclick="openVersion('versions/v1.0.html')" data-i18n="lv.load">Load</button>
   </div>
   <div style="margin-top:14px;padding:10px 12px;border:1px solid #1a1a2a;border-radius:4px;background:#06060f;">
-    <div style="font-size:9px;color:#334455;letter-spacing:1px;line-height:1.7;">
-      Older versions are archived in <span style="color:#4fa3e0;">versions/</span> in the repository.<br>
-      Loading opens the version in a new tab.
-    </div>
+    <div class="lv-desc" style="line-height:1.7;" data-i18n="lv.hint">Older versions are archived in versions/...</div>
   </div>
   <div style="display:flex;justify-content:center;margin-top:12px;">
-    <button class="cfg-btn" onclick="showMenu()">Back</button>
+    <button class="cfg-btn" onclick="showMenu()" data-i18n="cfg.btn.back">Back</button>
   </div>
 </div>
 
 <div id="hud" class="hidden">
-  <div><div class="hud-lbl" style="color:#aaaaaa">Rebellion</div><div class="hud-sc" style="color:#cccccc" id="hudXS">0</div></div>
+  <div><div class="hud-lbl" style="color:#aaaaaa" data-i18n="hud.rebellion">Rebellion</div><div class="hud-sc" style="color:#cccccc" id="hudXS">0</div></div>
   <div style="display:flex;gap:6px;">
     <button class="hud-btn" id="muteBtn" onclick="toggleMute()">♪ On</button>
-    <button class="hud-btn" onclick="pauseGame()">|| Pause</button>
+    <button class="hud-btn" onclick="pauseGame()" data-i18n="hud.pause">|| Pause</button>
   </div>
-  <div style="text-align:right"><div class="hud-lbl" style="color:#aaaaaa;text-align:right">Empire</div><div class="hud-sc" style="color:#cccccc" id="hudTS">0</div></div>
+  <div style="text-align:right"><div class="hud-lbl" style="color:#aaaaaa;text-align:right" data-i18n="hud.empire">Empire</div><div class="hud-sc" style="color:#cccccc" id="hudTS">0</div></div>
 </div>
 <div id="legend" class="hidden">
-  <div style="color:#445566;">A-Wing · X-Wing — Rebellion</div>
-  <div style="color:#445566;">Empire — TIE Fighter · TIE Bomber</div>
+  <div style="color:#445566;" data-i18n="legend.rebels">A-Wing · X-Wing — Rebellion</div>
+  <div style="color:#445566;" data-i18n="legend.empire">Empire — TIE Fighter · TIE Bomber</div>
 </div>
+
 <!-- VERSION HINT OVERLAY -->
 <div id="versionHint" class="hidden">
-  <div class="vh-title">⚠ Cannot open version</div>
+  <div class="vh-title" data-i18n="vh.title">⚠ Cannot open version</div>
   <div class="vh-box">
-    <div class="vh-line">You're running the game locally via <code>file://</code> — browsers block relative file links for security reasons.</div>
-    <div class="vh-line" style="margin-top:8px;">To load older versions, run a local server:</div>
-    <div class="vh-line" style="margin-top:6px;">→ <code>python3 -m http.server 8080</code></div>
-    <div class="vh-line">→ then open <code>http://localhost:8080</code></div>
-    <div class="vh-line" style="margin-top:6px;">Or push to GitHub Pages — it works there automatically.</div>
+    <div class="vh-line" data-i18n="vh.line1">You're running locally via file://...</div>
+    <div class="vh-line" style="margin-top:8px;" data-i18n="vh.line2">To load older versions, run a local server:</div>
+    <div class="vh-line" style="margin-top:6px;"><code data-i18n="vh.line3">python3 -m http.server 8080</code></div>
+    <div class="vh-line"><code data-i18n="vh.line4">http://localhost:8080</code></div>
+    <div class="vh-line" style="margin-top:6px;" data-i18n="vh.line5">Or push to GitHub Pages.</div>
     <div class="vh-path" id="versionHintPath"></div>
   </div>
-  <button class="cfg-btn" onclick="document.getElementById('versionHint').classList.add('hidden')">Got it</button>
+  <button class="cfg-btn" onclick="document.getElementById('versionHint').classList.add('hidden')" data-i18n="vh.gotit">Got it</button>
 </div>
 
 </div>
 
 <script>
+// ── LANGUAGE / i18n ───────────────────────────────────────────────────────────
+const LANGS={
+  en:{
+    // meta
+    'lang.code':'en','lang.label':'English',
+    // menu
+    'menu.title':'Star Wars','menu.subtitle':'Pixel Battle Simulator',
+    'menu.newGame':'New Game','menu.config':'Configuration',
+    'menu.changelog':'Changelog','menu.about':'About',
+    'menu.loadVersion':'Load Version','menu.madeWith':'v1.2 — made with Claude',
+    // hud
+    'hud.rebellion':'Rebellion','hud.empire':'Empire',
+    'hud.pause':'|| Pause','hud.mute.on':'♪ On','hud.mute.off':'♪ Off',
+    // legend
+    'legend.rebels':'A-Wing · X-Wing — Rebellion',
+    'legend.empire':'Empire — TIE Fighter · TIE Bomber',
+    // pause screen
+    'pause.title':'Paused','pause.sub':'— Round in progress —',
+    'pause.resume':'Resume','pause.menu':'Main Menu',
+    // config screen
+    'cfg.title':'Configuration',
+    'cfg.sec.field':'Field','cfg.sec.visual':'Visual',
+    'cfg.sec.formation':'Formation','cfg.sec.gameplay':'Gameplay',
+    'cfg.preset.small':'Small','cfg.preset.medium':'Medium','cfg.preset.large':'Large',
+    'cfg.wrapWorld':'Wrap-around world',
+    'cfg.scrollStars':'Scrolling starfield',
+    'cfg.formation':'Formation flying',
+    'cfg.breakTrigger':'Break trigger',
+    'cfg.breakRange':'Contact range (px)',
+    'cfg.breakStagger':'Stagger delay (fr)',
+    'cfg.ship.xwing':'X-Wing — Rebellion',
+    'cfg.ship.awing':'A-Wing — Rebellion',
+    'cfg.ship.tie':'TIE Fighter — Empire',
+    'cfg.ship.tiein':'TIE Bomber — Empire',
+    'cfg.formation.label':'Formation',
+    'cfg.hp':'HP','cfg.spd':'Speed','cfg.cd':'Fire Rate (cd)',
+    'cfg.laserSpd':'Laser Speed','cfg.ttl':'Laser TTL (s)',
+    'cfg.dmg':'Damage','cfg.turnRate':'Turn Rate','cfg.count':'Count',
+    'cfg.btn.reset':'Reset','cfg.btn.save':'Save','cfg.btn.back':'Back',
+    'cfg.saved':'✓ Saved',
+    'cfg.on':'On','cfg.off':'Off',
+    // changelog screen
+    'cl.title':'Changelog',
+    'cl.v11.tag':'v1.2','cl.v11.date':'2026-04-21 · current',
+    'cl.v11.e1':'Fixed pause-during-round-end causing permanent deadlock — respawn now uses a frame counter instead of setTimeout so it correctly freezes while paused',
+    'cl.v11.e2':'Changelog screen added to main menu — in-game styled with version tags, feature entries and bugfix highlights',
+    'cl.v11.e3':'About / README screen added — ship roster table, formations overview, config summary, tech stack and roadmap',
+    'cl.v11.e4':'Load Version screen added — lists all archived versions with descriptions, opens in new tab',
+    'cl.v11.e5':'Multi-language support added — English, German, Polish; language toggle in main menu',
+    'cl.v11b.tag':'v1.1','cl.v11b.date':'2026-04-21',
+    'cl.v11b.e1':'Fixed pause-during-round-end causing permanent deadlock — respawn now uses a frame counter instead of setTimeout',
+    'cl.v11b.e2':'Changelog screen, About screen and Load Version screen added to main menu',
+    'cl.v10.tag':'v1.0','cl.v10.date':'2026-04-21 · initial release',
+    'cl.v10.e1':'4 pixel-art ship types — X-Wing, A-Wing, TIE Fighter, TIE Bomber',
+    'cl.v10.e2':'6 formation types per ship — Delta, Line, Swarm, Wedge, Column, Pincer',
+    'cl.v10.e3':'Smart formation break — contact range, hit trigger, or both; staggered front-to-back dissolution',
+    'cl.v10.e4':'Inertia-based flight physics with deadlock detection and random kick',
+    'cl.v10.e5':'Directional shooting — ships must face target within 15° to fire',
+    'cl.v10.e6':'Per-ship config — HP (1–50), Speed, Turn Rate, Fire Rate, Laser Speed (4–30), Laser TTL, Damage, Count (1–20)',
+    'cl.v10.e7':'Wrap-around world (toroidal space) toggleable',
+    'cl.v10.e8':'3 field sizes — Small 480×320, Medium 680×426, Large 900×560',
+    'cl.v10.e9':'Scrolling parallax starfield, toggleable',
+    'cl.v10.e10':'8-bit procedural sound — laser fire, explosions, round-end fanfare, mute toggle',
+    'cl.v10.e11':'Config saved to localStorage, persists between sessions',
+    'cl.v10.e12':'Single HTML file, zero dependencies, ~44KB',
+    // about / readme screen
+    'rm.title':'Star Wars','rm.sub':'Pixel Battle Simulator — v1.2',
+    'rm.sec.what':'What is this',
+    'rm.what.p1':'An autonomous pixel-art space battle between the Rebellion and the Empire. Two fleets spawn, fight, and respawn endlessly. Configure everything, watch the Force decide.',
+    'rm.what.p2':'Built entirely in a single HTML file — no server, no dependencies, no install. Open and play.',
+    'rm.sec.roster':'Ship Roster',
+    'rm.col.ship':'Ship','rm.col.team':'Team','rm.col.hp':'HP','rm.col.spd':'Speed','rm.col.role':'Role',
+    'rm.ship.xwing':'X-Wing','rm.ship.awing':'A-Wing','rm.ship.tie':'TIE Fighter','rm.ship.tiein':'TIE Bomber',
+    'rm.team.rebel':'Rebel','rm.team.empire':'Empire',
+    'rm.role.xwing':'All-rounder, 4 cannons','rm.role.awing':'Interceptor, fast, evasive',
+    'rm.role.tie':'Cannon fodder, swarm','rm.role.tiein':'Heavy, double shot',
+    'rm.sec.formations':'Formations',
+    'rm.formations.p':'Formations hold until triggered — by enemy contact, taking a hit, or both. Ships dissolve front-to-back with a configurable stagger delay.',
+    'rm.sec.config':'Configuration',
+    'rm.config.perShip':'Per ship: HP · Speed · Turn Rate · Fire Rate · Laser Speed · Laser TTL · Damage · Count · Formation',
+    'rm.config.global':'Global: Field size · Wrap-around world · Scrolling starfield · Formation break trigger · Contact range · Stagger delay',
+    'rm.config.saved':'All settings are saved automatically to localStorage.',
+    'rm.sec.tech':'Tech',
+    'rm.tech.stack':'Vanilla HTML · Canvas 2D · Web Audio API · localStorage · Base64 sprites · ~58KB single file',
+    'rm.tech.claude':'Built collaboratively with Claude Sonnet (Anthropic) through iterative conversation — physics, sound, UI, and game logic all designed in natural language.',
+    'rm.sec.roadmap':'Roadmap',
+    'rm.roadmap.p':'Campaign mode: build your fleet with credits, face escalating Imperial squadrons across missions, earn credits on victory, upgrade ships between rounds.',
+    // load version screen
+    'lv.title':'Load Version',
+    'lv.current.tag':'v1.2 — current',
+    'lv.current.desc':'Pause bugfix · Changelog · About screen · Version loader · i18n',
+    'lv.current.btn':'Playing',
+    'lv.v10.desc':'Initial release · All core features',
+    'lv.load':'Load',
+    'lv.hint':'Older versions are archived in versions/ in the repository. Loading opens the version in a new tab.',
+    // version hint overlay
+    'vh.title':'⚠ Cannot open version',
+    'vh.line1':'You\'re running the game locally via file:// — browsers block relative file links for security reasons.',
+    'vh.line2':'To load older versions, run a local server:',
+    'vh.line3':'→ python3 -m http.server 8080',
+    'vh.line4':'→ then open http://localhost:8080',
+    'vh.line5':'Or push to GitHub Pages — it works there automatically.',
+    'vh.gotit':'Got it',
+  },
+  de:{
+    'lang.code':'de','lang.label':'Deutsch',
+    'menu.title':'Krieg der Sterne','menu.subtitle':'Pixel Kampfsimulator',
+    'menu.newGame':'Neues Spiel','menu.config':'Konfiguration',
+    'menu.changelog':'Changelog','menu.about':'Über das Spiel',
+    'menu.loadVersion':'Version laden','menu.madeWith':'v1.2 — made with Claude',
+    'hud.rebellion':'Rebellion','hud.empire':'Imperium',
+    'hud.pause':'|| Pause','hud.mute.on':'♪ An','hud.mute.off':'♪ Aus',
+    'legend.rebels':'A-Wing · X-Wing — Rebellion',
+    'legend.empire':'Imperium — TIE-Jäger · TIE-Bomber',
+    'pause.title':'Pausiert','pause.sub':'— Runde läuft —',
+    'pause.resume':'Weiter','pause.menu':'Hauptmenü',
+    'cfg.title':'Konfiguration',
+    'cfg.sec.field':'Spielfeld','cfg.sec.visual':'Grafik',
+    'cfg.sec.formation':'Formation','cfg.sec.gameplay':'Gameplay',
+    'cfg.preset.small':'Klein','cfg.preset.medium':'Mittel','cfg.preset.large':'Groß',
+    'cfg.wrapWorld':'Endlose Welt',
+    'cfg.scrollStars':'Scrollendes Sternfeld',
+    'cfg.formation':'Formationsflug',
+    'cfg.breakTrigger':'Auflösung bei',
+    'cfg.breakRange':'Kontaktreichweite (px)',
+    'cfg.breakStagger':'Staffelverzögerung (Fr)',
+    'cfg.ship.xwing':'X-Wing — Rebellion',
+    'cfg.ship.awing':'A-Wing — Rebellion',
+    'cfg.ship.tie':'TIE-Jäger — Imperium',
+    'cfg.ship.tiein':'TIE-Bomber — Imperium',
+    'cfg.formation.label':'Formation',
+    'cfg.hp':'TP','cfg.spd':'Geschwindigkeit','cfg.cd':'Feuerrate (CD)',
+    'cfg.laserSpd':'Lasergeschw.','cfg.ttl':'Laser-TTL (s)',
+    'cfg.dmg':'Schaden','cfg.turnRate':'Wenderate','cfg.count':'Anzahl',
+    'cfg.btn.reset':'Zurücksetzen','cfg.btn.save':'Speichern','cfg.btn.back':'Zurück',
+    'cfg.saved':'✓ Gespeichert',
+    'cfg.on':'An','cfg.off':'Aus',
+    'cl.title':'Changelog',
+    'cl.v11.tag':'v1.2','cl.v11.date':'2026-04-21 · aktuell',
+    'cl.v11.e1':'Fehler behoben: Pause während Rundenende führte zu dauerhaftem Einfrieren — Respawn nutzt jetzt einen Frame-Zähler statt setTimeout',
+    'cl.v11.e2':'Changelog-Bildschirm zum Hauptmenü hinzugefügt — im Spielstil mit Versions-Tags und Einträgen',
+    'cl.v11.e3':'Über-das-Spiel-Bildschirm hinzugefügt — Schiffstabelle, Formationsübersicht, Konfigurationszusammenfassung',
+    'cl.v11.e4':'Version-laden-Bildschirm hinzugefügt — zeigt alle archivierten Versionen mit Beschreibungen',
+    'cl.v11.e5':'Mehrsprachigkeit hinzugefügt — Englisch, Deutsch, Polnisch; Sprachumschalter im Hauptmenü',
+    'cl.v11b.tag':'v1.1','cl.v11b.date':'2026-04-21',
+    'cl.v11b.e1':'Fehler behoben: Pause während Rundenende führte zu dauerhaftem Einfrieren',
+    'cl.v11b.e2':'Changelog-, Über-das-Spiel- und Version-laden-Bildschirm zum Hauptmenü hinzugefügt',
+    'cl.v10.tag':'v1.0','cl.v10.date':'2026-04-21 · Erstveröffentlichung',
+    'cl.v10.e1':'4 Pixel-Art-Schiffstypen — X-Wing, A-Wing, TIE-Jäger, TIE-Bomber',
+    'cl.v10.e2':'6 Formationstypen pro Schiff — Delta, Linie, Schwarm, Keil, Kolonne, Zange',
+    'cl.v10.e3':'Intelligente Formationsauflösung — Kontaktreichweite, Treffer oder beides; gestaffelte Auflösung von vorne nach hinten',
+    'cl.v10.e4':'Trägheitsbasierte Flugphysik mit Blockierungserkennung und zufälligem Ausweichmanöver',
+    'cl.v10.e5':'Richtungsabhängiges Schießen — Schiffe müssen innerhalb von 15° auf das Ziel zeigen',
+    'cl.v10.e6':'Pro-Schiff-Konfiguration — TP (1–50), Geschw., Wenderate, Feuerrate, Lasergeschw. (4–30), Laser-TTL, Schaden, Anzahl (1–20)',
+    'cl.v10.e7':'Endlose Welt (toroidaler Raum) umschaltbar',
+    'cl.v10.e8':'3 Feldgrößen — Klein 480×320, Mittel 680×426, Groß 900×560',
+    'cl.v10.e9':'Scrollendes Parallax-Sternfeld, umschaltbar',
+    'cl.v10.e10':'8-Bit-Prozeduraler Sound — Laserfeuer, Explosionen, Rundenabschluss-Fanfare, Stummschalter',
+    'cl.v10.e11':'Konfiguration in localStorage gespeichert, bleibt zwischen Sitzungen erhalten',
+    'cl.v10.e12':'Einzelne HTML-Datei, keine Abhängigkeiten, ~44KB',
+    'rm.title':'Krieg der Sterne','rm.sub':'Pixel Kampfsimulator — v1.2',
+    'rm.sec.what':'Was ist das?',
+    'rm.what.p1':'Ein autonomer Pixel-Art-Weltraumkampf zwischen der Rebellion und dem Imperium. Zwei Flotten spawnen, kämpfen und respawnen endlos. Alles konfigurierbar — die Macht entscheidet.',
+    'rm.what.p2':'Komplett in einer einzigen HTML-Datei — kein Server, keine Abhängigkeiten, keine Installation. Öffnen und spielen.',
+    'rm.sec.roster':'Schiffsroster',
+    'rm.col.ship':'Schiff','rm.col.team':'Seite','rm.col.hp':'TP','rm.col.spd':'Geschw.','rm.col.role':'Rolle',
+    'rm.ship.xwing':'X-Wing','rm.ship.awing':'A-Wing','rm.ship.tie':'TIE-Jäger','rm.ship.tiein':'TIE-Bomber',
+    'rm.team.rebel':'Rebellen','rm.team.empire':'Imperium',
+    'rm.role.xwing':'Allrounder, 4 Kanonen','rm.role.awing':'Abfangjäger, schnell, ausweichend',
+    'rm.role.tie':'Kanonenfutter, Schwarm','rm.role.tiein':'Schwer, Doppelschuss',
+    'rm.sec.formations':'Formationen',
+    'rm.formations.p':'Formationen halten bis sie ausgelöst werden — durch Feindkontakt, Treffer oder beides. Schiffe lösen sich von vorne nach hinten mit konfigurierbarer Staffelverzögerung auf.',
+    'rm.sec.config':'Konfiguration',
+    'rm.config.perShip':'Pro Schiff: TP · Geschw. · Wenderate · Feuerrate · Lasergeschw. · Laser-TTL · Schaden · Anzahl · Formation',
+    'rm.config.global':'Global: Feldgröße · Endlose Welt · Scrollendes Sternfeld · Formationsauflösung · Kontaktreichweite · Staffelverzögerung',
+    'rm.config.saved':'Alle Einstellungen werden automatisch in localStorage gespeichert.',
+    'rm.sec.tech':'Technik',
+    'rm.tech.stack':'Vanilla HTML · Canvas 2D · Web Audio API · localStorage · Base64-Sprites · ~58KB Einzeldatei',
+    'rm.tech.claude':'In iterativer Zusammenarbeit mit Claude Sonnet (Anthropic) entwickelt — Physik, Sound, UI und Spiellogik komplett in natürlicher Sprache entworfen.',
+    'rm.sec.roadmap':'Ausblick',
+    'rm.roadmap.p':'Kampagnenmodus: Flotte mit Credits zusammenstellen, vordefinierte Imperiumsstaffeln über Missionen besiegen, Credits verdienen, Schiffe zwischen Runden aufrüsten.',
+    'lv.title':'Version laden',
+    'lv.current.tag':'v1.2 — aktuell',
+    'lv.current.desc':'Pause-Bugfix · Changelog · Über-Bildschirm · Version laden · Mehrsprachigkeit',
+    'lv.current.btn':'Aktiv',
+    'lv.v10.desc':'Erstveröffentlichung · Alle Kernfunktionen',
+    'lv.load':'Laden',
+    'lv.hint':'Ältere Versionen sind im Ordner versions/ im Repository archiviert. Das Laden öffnet die Version in einem neuen Tab.',
+    'vh.title':'⚠ Version nicht verfügbar',
+    'vh.line1':'Das Spiel läuft lokal über file:// — Browser blockieren relative Dateilinks aus Sicherheitsgründen.',
+    'vh.line2':'Um ältere Versionen zu laden, starte einen lokalen Server:',
+    'vh.line3':'→ python3 -m http.server 8080',
+    'vh.line4':'→ dann im Browser: http://localhost:8080',
+    'vh.line5':'Oder auf GitHub Pages hochladen — funktioniert dort automatisch.',
+    'vh.gotit':'Verstanden',
+  },
+  pl:{
+    'lang.code':'pl','lang.label':'Polski',
+    'menu.title':'Gwiezdne Wojny','menu.subtitle':'Pikselowy Symulator Bitwy',
+    'menu.newGame':'Nowa Gra','menu.config':'Konfiguracja',
+    'menu.changelog':'Historia zmian','menu.about':'O grze',
+    'menu.loadVersion':'Wczytaj wersję','menu.madeWith':'v1.2 — stworzone z Claude',
+    'hud.rebellion':'Rebelia','hud.empire':'Imperium',
+    'hud.pause':'|| Pauza','hud.mute.on':'♪ Wł','hud.mute.off':'♪ Wył',
+    'legend.rebels':'A-Wing · X-Wing — Rebelia',
+    'legend.empire':'Imperium — TIE Fighter · TIE Bomber',
+    'pause.title':'Pauza','pause.sub':'— Runda trwa —',
+    'pause.resume':'Wznów','pause.menu':'Menu główne',
+    'cfg.title':'Konfiguracja',
+    'cfg.sec.field':'Pole bitwy','cfg.sec.visual':'Grafika',
+    'cfg.sec.formation':'Formacja','cfg.sec.gameplay':'Rozgrywka',
+    'cfg.preset.small':'Małe','cfg.preset.medium':'Średnie','cfg.preset.large':'Duże',
+    'cfg.wrapWorld':'Świat okrągły',
+    'cfg.scrollStars':'Ruchome gwiazdy',
+    'cfg.formation':'Lot w formacji',
+    'cfg.breakTrigger':'Rozpad formacji',
+    'cfg.breakRange':'Zasięg kontaktu (px)',
+    'cfg.breakStagger':'Opóźnienie (kl)',
+    'cfg.ship.xwing':'X-Wing — Rebelia',
+    'cfg.ship.awing':'A-Wing — Rebelia',
+    'cfg.ship.tie':'TIE Fighter — Imperium',
+    'cfg.ship.tiein':'TIE Bomber — Imperium',
+    'cfg.formation.label':'Formacja',
+    'cfg.hp':'PW','cfg.spd':'Prędkość','cfg.cd':'Szybkostrzelność',
+    'cfg.laserSpd':'Prędkość lasera','cfg.ttl':'Czas życia lasera (s)',
+    'cfg.dmg':'Obrażenia','cfg.turnRate':'Zwrotność','cfg.count':'Liczba',
+    'cfg.btn.reset':'Resetuj','cfg.btn.save':'Zapisz','cfg.btn.back':'Wróć',
+    'cfg.saved':'✓ Zapisano',
+    'cfg.on':'Wł','cfg.off':'Wył',
+    'cl.title':'Historia zmian',
+    'cl.v11.tag':'v1.2','cl.v11.date':'2026-04-21 · aktualna',
+    'cl.v11.e1':'Naprawiono błąd: pauza podczas końca rundy powodowała trwałe zawieszenie — respawn używa teraz licznika klatek zamiast setTimeout',
+    'cl.v11.e2':'Dodano ekran historii zmian w menu głównym — w stylu gry z tagami wersji i wpisami',
+    'cl.v11.e3':'Dodano ekran "O grze" — tabela statków, przegląd formacji, podsumowanie konfiguracji',
+    'cl.v11.e4':'Dodano ekran wczytywania wersji — lista zarchiwizowanych wersji z opisami',
+    'cl.v11.e5':'Dodano obsługę wielu języków — angielski, niemiecki, polski; przełącznik języka w menu głównym',
+    'cl.v11b.tag':'v1.1','cl.v11b.date':'2026-04-21',
+    'cl.v11b.e1':'Naprawiono błąd: pauza podczas końca rundy powodowała trwałe zawieszenie',
+    'cl.v11b.e2':'Dodano ekrany historii zmian, O grze i wczytywania wersji do menu głównego',
+    'cl.v10.tag':'v1.0','cl.v10.date':'2026-04-21 · pierwsze wydanie',
+    'cl.v10.e1':'4 typy statków piksel-art — X-Wing, A-Wing, TIE Fighter, TIE Bomber',
+    'cl.v10.e2':'6 typów formacji na statek — Delta, Linia, Rój, Klin, Kolumna, Kleszcze',
+    'cl.v10.e3':'Inteligentny rozpad formacji — zasięg kontaktu, trafienie lub oba; stopniowy rozpad od przodu',
+    'cl.v10.e4':'Fizyka lotu oparta na bezwładności z wykrywaniem impasów i losowym wybiciem',
+    'cl.v10.e5':'Strzelanie kierunkowe — statki muszą celować w cel w odległości 15°',
+    'cl.v10.e6':'Konfiguracja na statek — PW (1–50), prędkość, zwrotność, szybkostrzelność, prędkość lasera (4–30), czas życia lasera, obrażenia, liczba (1–20)',
+    'cl.v10.e7':'Okrągły świat (przestrzeń toroidalna) — przełączalny',
+    'cl.v10.e8':'3 rozmiary pola — Małe 480×320, Średnie 680×426, Duże 900×560',
+    'cl.v10.e9':'Przewijane pole gwiezdne z paralaksą — przełączalne',
+    'cl.v10.e10':'8-bitowy dźwięk proceduralny — ogień laserowy, eksplozje, fanfara końca rundy, wyciszenie',
+    'cl.v10.e11':'Konfiguracja zapisana w localStorage, zachowywana między sesjami',
+    'cl.v10.e12':'Pojedynczy plik HTML, brak zależności, ~44KB',
+    'rm.title':'Gwiezdne Wojny','rm.sub':'Pikselowy Symulator Bitwy — v1.2',
+    'rm.sec.what':'Co to jest?',
+    'rm.what.p1':'Autonomiczna pikselowa bitwa kosmiczna między Rebelią a Imperium. Dwie floty rodzą się, walczą i odradzają bez końca. Skonfiguruj wszystko, a Moc zdecyduje.',
+    'rm.what.p2':'Zbudowane w jednym pliku HTML — brak serwera, brak zależności, brak instalacji. Otwórz i graj.',
+    'rm.sec.roster':'Lista statków',
+    'rm.col.ship':'Statek','rm.col.team':'Strona','rm.col.hp':'PW','rm.col.spd':'Prędkość','rm.col.role':'Rola',
+    'rm.ship.xwing':'X-Wing','rm.ship.awing':'A-Wing','rm.ship.tie':'TIE Fighter','rm.ship.tiein':'TIE Bomber',
+    'rm.team.rebel':'Rebelia','rm.team.empire':'Imperium',
+    'rm.role.xwing':'Wszechstronny, 4 działa','rm.role.awing':'Przechwytywacz, szybki, zwrotny',
+    'rm.role.tie':'Mięso armatnie, rój','rm.role.tiein':'Ciężki, podwójny strzał',
+    'rm.sec.formations':'Formacje',
+    'rm.formations.p':'Formacje utrzymują się do momentu wyzwolenia — przez kontakt z wrogiem, trafienie lub oba. Statki rozpadają się od przodu do tyłu z konfigurowalnym opóźnieniem.',
+    'rm.sec.config':'Konfiguracja',
+    'rm.config.perShip':'Na statek: PW · Prędkość · Zwrotność · Szybkostrzelność · Prędkość lasera · Czas życia · Obrażenia · Liczba · Formacja',
+    'rm.config.global':'Globalne: Rozmiar pola · Świat okrągły · Ruchome gwiazdy · Rozpad formacji · Zasięg kontaktu · Opóźnienie',
+    'rm.config.saved':'Wszystkie ustawienia są automatycznie zapisywane w localStorage.',
+    'rm.sec.tech':'Technologia',
+    'rm.tech.stack':'Vanilla HTML · Canvas 2D · Web Audio API · localStorage · Sprite Base64 · ~58KB pojedynczy plik',
+    'rm.tech.claude':'Zbudowane we współpracy z Claude Sonnet (Anthropic) przez iteracyjną rozmowę — fizyka, dźwięk, UI i logika gry zaprojektowane w języku naturalnym.',
+    'rm.sec.roadmap':'Plan rozwoju',
+    'rm.roadmap.p':'Tryb kampanii: zbuduj flotę za kredyty, zwalczaj predefiniowane eskadry Imperium w kolejnych misjach, zdobywaj kredyty za zwycięstwo, ulepszaj statki między rundami.',
+    'lv.title':'Wczytaj wersję',
+    'lv.current.tag':'v1.2 — aktualna',
+    'lv.current.desc':'Naprawa pauzy · Historia zmian · O grze · Wczytaj wersję · Wielojęzyczność',
+    'lv.current.btn':'Aktywna',
+    'lv.v10.desc':'Pierwsze wydanie · Wszystkie funkcje',
+    'lv.load':'Wczytaj',
+    'lv.hint':'Starsze wersje są zarchiwizowane w folderze versions/ w repozytorium. Wczytanie otwiera wersję w nowej karcie.',
+    'vh.title':'⚠ Nie można otworzyć wersji',
+    'vh.line1':'Gra działa lokalnie przez file:// — przeglądarki blokują względne linki do plików ze względów bezpieczeństwa.',
+    'vh.line2':'Aby wczytać starsze wersje, uruchom lokalny serwer:',
+    'vh.line3':'→ python3 -m http.server 8080',
+    'vh.line4':'→ następnie otwórz http://localhost:8080',
+    'vh.line5':'Lub wypchnij na GitHub Pages — działa tam automatycznie.',
+    'vh.gotit':'Rozumiem',
+  },
+};
+let currentLang='en';
+function t(key){return LANGS[currentLang][key]??LANGS.en[key]??key;}
+function applyLang(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key=el.dataset.i18n;
+    el.textContent=t(key);
+  });
+  // toggles need special handling
+  syncToggles();
+  // update mute button
+  const mb=document.getElementById('muteBtn');
+  if(mb)mb.textContent=muted?t('hud.mute.off'):t('hud.mute.on');
+  // update lang pills
+  document.querySelectorAll('.lang-pill').forEach(p=>{
+    p.classList.toggle('active',p.dataset.lang===currentLang);
+  });
+  // save lang preference
+  try{localStorage.setItem('swLang',currentLang);}catch(e){}
+}
+function setLang(lang){currentLang=lang;applyLang();}
+
+
 // ── FORMATIONS ────────────────────────────────────────────────────────────────
 function rand(a,b){return a+Math.random()*(b-a);}
 const FORMATIONS={
@@ -462,7 +732,7 @@ function drawStars(){
 // ── AUDIO ─────────────────────────────────────────────────────────────────────
 let audioCtx=null,muted=false;
 function getAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();return audioCtx;}
-function toggleMute(){muted=!muted;document.getElementById('muteBtn').textContent=muted?'♪ Off':'♪ On';}
+function toggleMute(){muted=!muted;document.getElementById('muteBtn').textContent=muted?t('hud.mute.off'):t('hud.mute.on');}
 function playLaser(team){if(muted)return;try{const ac=getAudio(),o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.type='square';if(team==='rebel'){o.frequency.setValueAtTime(880,ac.currentTime);o.frequency.exponentialRampToValueAtTime(440,ac.currentTime+0.08);}else{o.frequency.setValueAtTime(330,ac.currentTime);o.frequency.exponentialRampToValueAtTime(660,ac.currentTime+0.08);}g.gain.setValueAtTime(0.07,ac.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+0.08);o.start(ac.currentTime);o.stop(ac.currentTime+0.08);}catch(e){}}
 function playExplosion(){if(muted)return;try{const ac=getAudio(),bl=ac.sampleRate*0.18,b=ac.createBuffer(1,bl,ac.sampleRate);const d=b.getChannelData(0);for(let i=0;i<bl;i++)d[i]=(Math.random()*2-1);const s=ac.createBufferSource(),g=ac.createGain(),f=ac.createBiquadFilter();f.type='lowpass';f.frequency.value=800;s.connect(f);f.connect(g);g.connect(ac.destination);s.buffer=b;g.gain.setValueAtTime(0.22,ac.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+0.18);s.start(ac.currentTime);s.stop(ac.currentTime+0.18);}catch(e){}}
 function playRoundEnd(rw){if(muted)return;try{const ac=getAudio(),notes=rw?[523,659,784]:[330,277,220];notes.forEach((freq,i)=>{const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.type='square';o.frequency.value=freq;const t=ac.currentTime+i*0.13;g.gain.setValueAtTime(0.1,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.12);o.start(t);o.stop(t+0.13);});}catch(e){}}
@@ -538,7 +808,7 @@ function toggleOpt(key){
   const tog=document.getElementById('tog-'+key);
   const lbl=document.getElementById('v-'+key);
   if(tog)tog.classList.toggle('on',CFG[key]);
-  if(lbl){lbl.textContent=CFG[key]?'On':'Off';lbl.style.color=CFG[key]?'#00cc44':'#556677';}
+  if(lbl){lbl.textContent=CFG[key]?t('cfg.on'):t('cfg.off');lbl.style.color=CFG[key]?'#00cc44':'#556677';}
 }
 
 function syncToggles(){
@@ -546,7 +816,7 @@ function syncToggles(){
     const tog=document.getElementById('tog-'+key);
     const lbl=document.getElementById('v-'+key);
     if(tog)tog.classList.toggle('on',!!CFG[key]);
-    if(lbl){lbl.textContent=CFG[key]?'On':'Off';lbl.style.color=CFG[key]?'#00cc44':'#556677';}
+    if(lbl){lbl.textContent=CFG[key]?t('cfg.on'):t('cfg.off');lbl.style.color=CFG[key]?'#00cc44':'#556677';}
   }
 }
 
@@ -580,8 +850,8 @@ function saveConfig(){
   CFG.preset=currentPreset;
   try{localStorage.setItem('swBattleCfgV5',JSON.stringify(CFG));}catch(e){}
   const btn=document.querySelector('.cfg-btn.save');
-  const orig=btn.textContent;btn.textContent='✓ Saved';btn.style.color='#00cc44';
-  setTimeout(()=>{btn.textContent=orig;btn.style.color='';},1500);
+  const orig=btn.textContent;btn.textContent=t('cfg.saved');btn.style.color='#00cc44';
+  setTimeout(()=>{btn.textContent=t('cfg.btn.save');btn.style.color='';},1500);
 }
 function resetConfig(){CFG=JSON.parse(JSON.stringify(DEFAULTS));setPreset('medium');loadSlidersFromCfg();}
 
@@ -616,10 +886,9 @@ function getAngleTo(f,t){
   return Math.atan2(t.y-f.y,t.x-f.x);
 }
 
-function showScreen(id){['menuScreen','configScreen','pauseScreen','changelogScreen','loadScreen','readmeScreen'].forEach(s=>document.getElementById(s).classList.add('hidden'));if(id)document.getElementById(id).classList.remove('hidden');}
+function showScreen(id){['menuScreen','configScreen','pauseScreen','loadScreen','readmeScreen'].forEach(s=>document.getElementById(s).classList.add('hidden'));if(id)document.getElementById(id).classList.remove('hidden');}
 function showMenu(){stopGame();showScreen('menuScreen');document.getElementById('hud').classList.add('hidden');document.getElementById('legend').classList.add('hidden');ctx.clearRect(0,0,W,H);if(!menuAnimId)menuStarLoop();}
 function showConfig(){showScreen('configScreen');loadSlidersFromCfg();}
-function showChangelog(){showScreen('changelogScreen');}
 function showReadme(){showScreen('readmeScreen');}
 function loadVersion(){showScreen('loadScreen');}
 function openVersion(url){
@@ -920,7 +1189,15 @@ function loop(){
   animId=requestAnimationFrame(loop);
 }
 
-loadSprites(()=>{loadSlidersFromCfg();initStars();menuStarLoop();});
+loadSprites(()=>{
+  // restore saved language
+  try{const sl=localStorage.getItem('swLang');if(sl&&LANGS[sl])currentLang=sl;}catch(e){}
+  loadSlidersFromCfg();
+  initStars();
+  menuStarLoop();
+  applyLang();
+});
+
 </script>
 </body>
 </html>
