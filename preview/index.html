@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -6,10 +7,10 @@
 <title>Star Wars — Pixel Battle Simulator</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:#000;display:flex;align-items:center;justify-content:center;min-height:100vh;min-height:100dvh;font-family:monospace;overflow:hidden;touch-action:none;}
-#app{position:relative;overflow:hidden;background:#03030d;border-radius:8px;}
+body{background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;height:100dvh;width:100vw;font-family:monospace;overflow:hidden;margin:0;}
+#app{position:relative;overflow:hidden;background:#03030d;border-radius:0;}
 canvas{display:block;image-rendering:pixelated;position:absolute;top:32px;left:0;}
-#starCanvas{top:32px;left:0;position:absolute;}
+#starCanvas{position:absolute;top:0;left:0;width:100%!important;height:100%!important;}
 .screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
 .screen.hidden{display:none;}
 .title{font-size:26px;font-weight:bold;letter-spacing:6px;color:#fff;margin-bottom:4px;text-transform:uppercase;}
@@ -103,15 +104,35 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 .lang-pill:hover{border-color:#4fa3e0;color:#fff;}
 .lang-pill.active{border-color:#4fa3e0;color:#fff;background:#0f1a2a;}
 
-/* portrait overlay */
-#portraitOverlay{position:fixed;inset:0;background:#03030d;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:20px;}
-#portraitOverlay.show{display:flex;}
-.po-title{font-size:22px;font-weight:bold;letter-spacing:6px;color:#fff;text-transform:uppercase;}
-.po-sub{font-size:9px;letter-spacing:3px;color:#445566;text-transform:uppercase;}
-.po-icon{font-size:52px;animation:rotate-hint 2s ease-in-out infinite;}
-.po-hint{font-size:10px;letter-spacing:2px;color:#4fa3e0;text-transform:uppercase;}
-@keyframes rotate-hint{0%,100%{transform:rotate(0deg);}40%{transform:rotate(90deg);}60%{transform:rotate(90deg);}}
+/* ── MOBILE ─────────────────────────────────────────────────────────────────── */
+@media (max-width: 500px), (max-height: 500px) {
+.title{font-size:16px;letter-spacing:3px;margin-bottom:2px;}
+.subtitle{font-size:8px;margin-bottom:12px;}
+.btn{width:160px;padding:7px 0;font-size:9px;letter-spacing:1px;margin-bottom:6px;}
+.lang-row{margin-bottom:12px;gap:4px;}
+.lang-pill{padding:3px 8px;font-size:8px;}
+#configScreen{padding:8px 14px;}
+.cfg-title{font-size:10px;margin-bottom:6px;}
+.cfg-sec{margin-bottom:6px;}
+.cfg-sec-title{font-size:8px;margin-bottom:4px;}
+.cfg-lbl{font-size:9px;width:110px;}
+.cfg-val{font-size:9px;width:28px;}
+.cfg-row{margin-bottom:2px;}
+.cfg-btn{padding:5px 10px;font-size:8px;}
+.form-lbl{font-size:9px;width:110px;}
+.fpill{font-size:7px;padding:2px 5px;}
+.preset-btn{font-size:8px;}
+.cl-header,.lv-header,.rm-header{font-size:10px;}
+.cl-entry{font-size:9px;}
+.rm-p{font-size:9px;}
+.rm-cell,.rm-cell-h{font-size:8px;padding:2px 4px;}
+.hud-lbl{font-size:8px;}
+.hud-sc{font-size:11px;}
+.hud-btn{font-size:8px;padding:2px 5px;}
+#legend{font-size:8px;}
+}
 </style>
+
 </head>
 <body>
 <div id="app">
@@ -248,6 +269,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 </div>
 
 <!-- README / ABOUT -->
+
 <div id="readmeScreen" class="screen hidden">
   <div class="rm-header" data-i18n="rm.title">Star Wars</div>
   <div class="rm-sub" data-i18n="rm.sub">Pixel Battle Simulator — v1.2</div>
@@ -320,6 +342,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 </div>
 
 <!-- LOAD VERSION -->
+
 <div id="loadScreen" class="screen hidden">
   <div class="lv-header" data-i18n="lv.title">Load Version</div>
   <div class="lv-entry lv-current">
@@ -334,7 +357,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
       <div class="lv-tag">v1.0</div>
       <div class="lv-desc" data-i18n="lv.v10.desc">Initial release · All core features</div>
     </div>
-    <button class="lv-btn" onclick="openVersion('versions/v1.0.html')" data-i18n="lv.load">Load</button>
+    <button class="lv-btn" style="width:60px;text-align:center;" onclick="openVersion('versions/v1.0.html')" data-i18n="lv.load">Load</button>
   </div>
   <div style="margin-top:14px;padding:10px 12px;border:1px solid #1a1a2a;border-radius:4px;background:#06060f;">
     <div class="lv-desc" style="line-height:1.7;" data-i18n="lv.hint">Older versions are archived in versions/...</div>
@@ -358,6 +381,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 </div>
 
 <!-- VERSION HINT OVERLAY -->
+
 <div id="versionHint" class="hidden">
   <div class="vh-title" data-i18n="vh.title">⚠ Cannot open version</div>
   <div class="vh-box">
@@ -369,14 +393,6 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
     <div class="vh-path" id="versionHintPath"></div>
   </div>
   <button class="cfg-btn" onclick="document.getElementById('versionHint').classList.add('hidden')" data-i18n="vh.gotit">Got it</button>
-</div>
-
-<!-- PORTRAIT OVERLAY -->
-<div id="portraitOverlay">
-  <div class="po-title" data-i18n="menu.title">Star Wars</div>
-  <div class="po-sub" data-i18n="menu.subtitle">Pixel Battle Simulator</div>
-  <div class="po-icon">📱</div>
-  <div class="po-hint" data-i18n="ui.rotate">Please rotate your device</div>
 </div>
 
 </div>
@@ -431,9 +447,6 @@ const LANGS={
     'cl.v11.e3':'About / README screen added — ship roster table, formations overview, config summary, tech stack and roadmap',
     'cl.v11.e4':'Load Version screen added — lists all archived versions with descriptions, opens in new tab',
     'cl.v11.e5':'Multi-language support added — English, German, Polish; language toggle in main menu',
-    'cl.v11b.tag':'v1.1','cl.v11b.date':'2026-04-21',
-    'cl.v11b.e1':'Fixed pause-during-round-end causing permanent deadlock — respawn now uses a frame counter instead of setTimeout',
-    'cl.v11b.e2':'Changelog screen, About screen and Load Version screen added to main menu',
     'cl.v10.tag':'v1.0','cl.v10.date':'2026-04-21 · initial release',
     'cl.v10.e1':'4 pixel-art ship types — X-Wing, A-Wing, TIE Fighter, TIE Bomber',
     'cl.v10.e2':'6 formation types per ship — Delta, Line, Swarm, Wedge, Column, Pincer',
@@ -485,7 +498,6 @@ const LANGS={
     'vh.line4':'→ then open http://localhost:8080',
     'vh.line5':'Or push to GitHub Pages — it works there automatically.',
     'vh.gotit':'Got it',
-    'ui.rotate':'Please rotate your device',
   },
   de:{
     'lang.code':'de','lang.label':'Deutsch',
@@ -527,9 +539,6 @@ const LANGS={
     'cl.v11.e3':'Über-das-Spiel-Bildschirm hinzugefügt — Schiffstabelle, Formationsübersicht, Konfigurationszusammenfassung',
     'cl.v11.e4':'Version-laden-Bildschirm hinzugefügt — zeigt alle archivierten Versionen mit Beschreibungen',
     'cl.v11.e5':'Mehrsprachigkeit hinzugefügt — Englisch, Deutsch, Polnisch; Sprachumschalter im Hauptmenü',
-    'cl.v11b.tag':'v1.1','cl.v11b.date':'2026-04-21',
-    'cl.v11b.e1':'Fehler behoben: Pause während Rundenende führte zu dauerhaftem Einfrieren',
-    'cl.v11b.e2':'Changelog-, Über-das-Spiel- und Version-laden-Bildschirm zum Hauptmenü hinzugefügt',
     'cl.v10.tag':'v1.0','cl.v10.date':'2026-04-21 · Erstveröffentlichung',
     'cl.v10.e1':'4 Pixel-Art-Schiffstypen — X-Wing, A-Wing, TIE-Jäger, TIE-Bomber',
     'cl.v10.e2':'6 Formationstypen pro Schiff — Delta, Linie, Schwarm, Keil, Kolonne, Zange',
@@ -578,7 +587,6 @@ const LANGS={
     'vh.line4':'→ dann im Browser: http://localhost:8080',
     'vh.line5':'Oder auf GitHub Pages hochladen — funktioniert dort automatisch.',
     'vh.gotit':'Verstanden',
-    'ui.rotate':'Bitte Gerät drehen',
   },
   pl:{
     'lang.code':'pl','lang.label':'Polski',
@@ -620,9 +628,6 @@ const LANGS={
     'cl.v11.e3':'Dodano ekran "O grze" — tabela statków, przegląd formacji, podsumowanie konfiguracji',
     'cl.v11.e4':'Dodano ekran wczytywania wersji — lista zarchiwizowanych wersji z opisami',
     'cl.v11.e5':'Dodano obsługę wielu języków — angielski, niemiecki, polski; przełącznik języka w menu głównym',
-    'cl.v11b.tag':'v1.1','cl.v11b.date':'2026-04-21',
-    'cl.v11b.e1':'Naprawiono błąd: pauza podczas końca rundy powodowała trwałe zawieszenie',
-    'cl.v11b.e2':'Dodano ekrany historii zmian, O grze i wczytywania wersji do menu głównego',
     'cl.v10.tag':'v1.0','cl.v10.date':'2026-04-21 · pierwsze wydanie',
     'cl.v10.e1':'4 typy statków piksel-art — X-Wing, A-Wing, TIE Fighter, TIE Bomber',
     'cl.v10.e2':'6 typów formacji na statek — Delta, Linia, Rój, Klin, Kolumna, Kleszcze',
@@ -671,7 +676,6 @@ const LANGS={
     'vh.line4':'→ następnie otwórz http://localhost:8080',
     'vh.line5':'Lub wypchnij na GitHub Pages — działa tam automatycznie.',
     'vh.gotit':'Rozumiem',
-    'ui.rotate':'Obróć urządzenie',
   },
 };
 let currentLang='en';
@@ -726,24 +730,47 @@ const ctx=cv.getContext('2d');
 ctx.imageSmoothingEnabled=false;starCtx.imageSmoothingEnabled=false;
 function resizeCanvases(){
   const app=document.getElementById('app');
-  app.style.width=W+'px';app.style.height=(H+54)+'px';
+  // lock to exact px so rotation/resize doesn't stretch during a game
+  app.style.width=W+'px';
+  app.style.height=(H+54)+'px';
+  app.style.minWidth='';
+  app.style.minHeight='';
   cv.width=W;cv.height=H;cv.style.width=W+'px';cv.style.height=H+'px';
-  starCv.width=W;starCv.height=H;starCv.style.width=W+'px';starCv.style.height=H+'px';
+  starCv.width=W;starCv.height=H;
 }
-resizeCanvases();
+
+function unlockAppSize(){
+  const app=document.getElementById('app');
+  // use explicit px so resize listener can update cleanly
+  app.style.width=window.innerWidth+'px';
+  app.style.height=window.innerHeight+'px';
+  app.style.minWidth='';
+  app.style.minHeight='';
+}
+// set app container to full viewport immediately
+(function(){
+  const app=document.getElementById('app');
+  app.style.width=window.innerWidth+'px';
+  app.style.height=window.innerHeight+'px';
+})();
+calcGameSize();starCv.width=window.innerWidth;starCv.height=window.innerHeight;resizeCanvases();
 
 // ── STARFIELD ─────────────────────────────────────────────────────────────────
 let stars=[];let starScrollX=0;
 function initStars(){
   stars=[];
-  for(let i=0;i<Math.floor(W*H/1600);i++)
-    stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()>0.72?1.5:0.8,spd:Math.random()*0.3+0.05});
+  const sw=starCv.width||W, sh=starCv.height||H;
+  // cap density to W*H so performance stays consistent regardless of starCv buffer size
+  const count=Math.floor(W*H/1600);
+  for(let i=0;i<count;i++)
+    stars.push({x:Math.random()*sw,y:Math.random()*sh,r:Math.random()>0.72?1.5:0.8,spd:Math.random()*0.3+0.05});
 }
 function drawStars(){
-  starCtx.fillStyle='#03030d';starCtx.fillRect(0,0,W,H);
+  const sw=starCv.width,sh=starCv.height;
+  starCtx.fillStyle='#03030d';starCtx.fillRect(0,0,sw,sh);
   for(const s of stars){
     const b=s.r>1?255:140;starCtx.fillStyle=`rgb(${b},${b},${b})`;
-    const sx=((s.x-starScrollX*s.spd)%W+W)%W;
+    const sx=((s.x-starScrollX*s.spd)%sw+sw)%sw;
     starCtx.fillRect(Math.round(sx),Math.round(s.y),s.r>1?2:1,1);
   }
   if(CFG.scrollStars)starScrollX+=0.3;
@@ -907,7 +934,8 @@ function getAngleTo(f,t){
 }
 
 function showScreen(id){['menuScreen','configScreen','pauseScreen','loadScreen','readmeScreen'].forEach(s=>document.getElementById(s).classList.add('hidden'));if(id)document.getElementById(id).classList.remove('hidden');}
-function showMenu(){stopGame();showScreen('menuScreen');document.getElementById('hud').classList.add('hidden');document.getElementById('legend').classList.add('hidden');ctx.clearRect(0,0,W,H);if(!menuAnimId)menuStarLoop();}
+function showMenu(){stopGame();unlockAppSize();showScreen('menuScreen');
+document.getElementById('hud').classList.add('hidden');document.getElementById('legend').classList.add('hidden');ctx.clearRect(0,0,W,H);if(!menuAnimId)menuStarLoop();}
 function showConfig(){showScreen('configScreen');loadSlidersFromCfg();}
 function showReadme(){showScreen('readmeScreen');}
 function loadVersion(){showScreen('loadScreen');}
@@ -1029,7 +1057,7 @@ function spawnAll(){
 
 function startGame(){
   try{getAudio();}catch(e){}
-  calcDimensions();
+  calcGameSize();
   resizeCanvases();initStars();
   if(menuAnimId){cancelAnimationFrame(menuAnimId);menuAnimId=null;}
   xScore=0;tScore=0;
@@ -1209,46 +1237,33 @@ function loop(){
   animId=requestAnimationFrame(loop);
 }
 
-// ── RESPONSIVE DIMENSIONS ─────────────────────────────────────────────────────
-// Preset sets aspect ratio + max size; actual W/H fit the viewport
-const PRESET_BASE={
-  small: {w:480,h:320},
-  medium:{w:680,h:426},
-  large: {w:900,h:560},
-};
-function calcDimensions(){
-  const base=PRESET_BASE[currentPreset]||PRESET_BASE.medium;
-  const aspect=base.w/base.h;
-  const maxW=Math.min(window.innerWidth-20, base.w);
-  const maxH=Math.min(window.innerHeight-74, base.h); // 74 = HUD+legend+padding
-  if(maxW/aspect<=maxH){W=Math.floor(maxW);H=Math.floor(maxW/aspect);}
-  else{H=Math.floor(maxH);W=Math.floor(maxH*aspect);}
-  // keep even numbers for clean pixel rendering
-  if(W%2!==0)W--;if(H%2!==0)H--;
+// ── GAME SIZE — always fills full viewport ────────────────────────────────────
+function calcGameSize(){
+  W=window.innerWidth;
+  H=window.innerHeight-54; // 54 = HUD (32) + legend (22)
+  if(W%2!==0)W--;
+  if(H%2!==0)H--;
 }
 
-function onResize(){
-  const po=document.getElementById('portraitOverlay');
-  if(window.innerHeight>window.innerWidth){po.classList.add('show');return;}
-  po.classList.remove('show');
-  calcDimensions();
-  resizeCanvases();
-  initStars();
-}
-window.addEventListener('resize',onResize);
-window.addEventListener('orientationchange',()=>{setTimeout(onResize,200);});
+window.addEventListener('resize',()=>{
+  if(gameRunning)return; // locked during game
+  // update app container size
+  const app=document.getElementById('app');
+  app.style.width=window.innerWidth+'px';
+  app.style.height=window.innerHeight+'px';
+  calcGameSize();resizeCanvases();initStars();drawStars();
+});
 
 loadSprites(()=>{
   // restore saved language
   try{const sl=localStorage.getItem('swLang');if(sl&&LANGS[sl])currentLang=sl;}catch(e){}
   loadSlidersFromCfg();
-  calcDimensions();
-  resizeCanvases();
   initStars();
   menuStarLoop();
   applyLang();
 });
 
 </script>
+
 </body>
 </html>
