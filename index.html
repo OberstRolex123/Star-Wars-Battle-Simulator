@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Star Wars — Pixel Battle Simulator</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;font-family:monospace;}
-#app{position:relative;overflow:hidden;background:#03030d;border-radius:8px;}
+body{background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;height:100dvh;width:100vw;font-family:monospace;overflow:hidden;margin:0;}
+#app{position:relative;overflow:hidden;background:#03030d;border-radius:0;}
 canvas{display:block;image-rendering:pixelated;position:absolute;top:32px;left:0;}
-#starCanvas{top:32px;left:0;position:absolute;}
+#starCanvas{position:absolute;top:0;left:0;width:100%!important;height:100%!important;}
 .screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
 .screen.hidden{display:none;}
 .title{font-size:26px;font-weight:bold;letter-spacing:6px;color:#fff;margin-bottom:4px;text-transform:uppercase;}
@@ -25,7 +25,7 @@ canvas{display:block;image-rendering:pixelated;position:absolute;top:32px;left:0
 .hud-btn:hover{border-color:#4fa3e0;color:#fff;}
 #legend{position:absolute;bottom:0;left:0;right:0;height:22px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:#06060f;border-top:1px solid #1a1a2a;font-size:9px;letter-spacing:1px;font-family:monospace;z-index:10;}
 #legend.hidden{display:none;}
-#configScreen{overflow-y:auto;justify-content:flex-start;padding:14px 22px;}
+#configScreen{overflow-y:auto;justify-content:flex-start;padding:14px 22px;align-items:center;}
 .cfg-title{font-size:13px;letter-spacing:3px;color:#fff;text-transform:uppercase;margin-bottom:10px;width:100%;text-align:center;}
 .cfg-sec{width:100%;margin-bottom:10px;}
 .cfg-sec-title{font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;padding-bottom:3px;border-bottom:1px solid #1a1a2a;color:#667788;}
@@ -83,9 +83,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 .vh-line{font-size:10px;color:#556677;line-height:1.8;letter-spacing:1px;}
 .vh-line code{color:#4fa3e0;background:#080814;padding:1px 5px;border-radius:2px;font-family:monospace;font-size:10px;}
 .vh-path{font-size:9px;color:#334455;margin-top:8px;letter-spacing:1px;}
-.preset-row{display:flex;gap:6px;margin-bottom:5px;}
-.preset-btn{flex:1;padding:5px 0;background:#0a0a1a;border:1px solid #334455;color:#aabbcc;font-family:monospace;font-size:9px;letter-spacing:1px;cursor:pointer;text-transform:uppercase;}
-.preset-btn:hover,.preset-btn.active{border-color:#4fa3e0;color:#fff;background:#0f1a2a;}
+
 .toggle-row{display:flex;align-items:center;margin-bottom:4px;gap:8px;}
 .toggle{width:36px;height:18px;border:1px solid #334455;border-radius:9px;position:relative;cursor:pointer;background:#0a0a1a;flex-shrink:0;transition:background .15s,border-color .15s;}
 .toggle.on{background:#0f3020;border-color:#00cc44;}
@@ -102,6 +100,37 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 .lang-pill{padding:4px 12px;background:#0a0a1a;border:1px solid #334455;color:#667788;font-family:monospace;font-size:9px;letter-spacing:2px;cursor:pointer;text-transform:uppercase;border-radius:3px;}
 .lang-pill:hover{border-color:#4fa3e0;color:#fff;}
 .lang-pill.active{border-color:#4fa3e0;color:#fff;background:#0f1a2a;}
+
+/* ── MOBILE ─────────────────────────────────────────────────────────────────── */
+@media (max-width: 500px), (max-height: 500px) {
+  .title{font-size:16px;letter-spacing:3px;margin-bottom:2px;}
+  .subtitle{font-size:8px;margin-bottom:12px;}
+  .btn{width:160px;padding:7px 0;font-size:9px;letter-spacing:1px;margin-bottom:6px;}
+  .lang-row{margin-bottom:12px;gap:4px;}
+  .lang-pill{padding:3px 8px;font-size:8px;}
+  #configScreen{padding:8px 14px;}
+  .cfg-title{font-size:10px;margin-bottom:6px;}
+  .cfg-sec{margin-bottom:6px;}
+  .cfg-sec-title{font-size:8px;margin-bottom:4px;}
+  .cfg-lbl{font-size:9px;width:110px;}
+  .cfg-val{font-size:9px;width:28px;}
+  .cfg-row{margin-bottom:2px;}
+  .cfg-btn{padding:5px 10px;font-size:8px;}
+  .form-lbl{font-size:9px;width:110px;}
+  .fpill{font-size:7px;padding:2px 5px;}
+  .cl-header,.lv-header,.rm-header{font-size:10px;}
+  .cl-entry{font-size:9px;}
+  .rm-p{font-size:9px;}
+  .rm-cell,.rm-cell-h{font-size:8px;padding:2px 4px;}
+  .hud-lbl{font-size:8px;}
+  .hud-sc{font-size:11px;}
+  .hud-btn{font-size:8px;padding:2px 5px;}
+  #legend{font-size:8px;}
+}
+
+/* config layout — max width, centered */
+#cfgInner{width:100%;max-width:700px;}
+#cfgShips{display:block;}
 </style>
 </head>
 <body>
@@ -123,19 +152,15 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
     <button class="btn" onclick="window.open('https://github.com/OberstRolex123/Star-Wars-Battle-Simulator/blob/main/CHANGELOG.md','_blank')" data-i18n="menu.changelog">Changelog</button>
     <button class="btn" onclick="showReadme()" data-i18n="menu.about">About</button>
     <button class="btn" style="border-color:#334455;color:#aaaaaa;" onclick="loadVersion()" data-i18n="menu.loadVersion">Load Version</button>
-    <div style="font-size:9px;letter-spacing:2px;color:#ffffff;text-transform:uppercase;margin-top:4px;opacity:0.4;" data-i18n="menu.madeWith">v1.2 — made with Claude</div>
+    <div style="font-size:9px;letter-spacing:2px;color:#ffffff;text-transform:uppercase;margin-top:4px;opacity:0.4;" data-i18n="menu.madeWith">v1.3 — made with Claude</div>
   </div>
 </div>
 
 <div id="configScreen" class="screen hidden" style="background:#03030d;">
+<div id="cfgInner">
   <div class="cfg-title" data-i18n="cfg.title">Configuration</div>
   <div class="cfg-sec">
     <div class="cfg-sec-title" data-i18n="cfg.sec.field">Field</div>
-    <div class="preset-row">
-      <button class="preset-btn" id="ps-small"  onclick="setPreset('small')" data-i18n="cfg.preset.small">Small</button>
-      <button class="preset-btn active" id="ps-medium" onclick="setPreset('medium')" data-i18n="cfg.preset.medium">Medium</button>
-      <button class="preset-btn" id="ps-large"  onclick="setPreset('large')" data-i18n="cfg.preset.large">Large</button>
-    </div>
     <div class="toggle-row">
       <div class="toggle" id="tog-wrapWorld" onclick="toggleOpt('wrapWorld')"></div>
       <span class="cfg-lbl" data-i18n="cfg.wrapWorld">Wrap-around world</span>
@@ -161,10 +186,11 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
       <span class="form-lbl" data-i18n="cfg.breakTrigger">Break trigger</span>
       <div class="form-pills" id="fp-breakTrigger"></div>
     </div>
+
     <div class="cfg-row">
-      <span class="cfg-lbl" data-i18n="cfg.breakRange">Contact range (px)</span>
-      <input type="range" min="40" max="300" step="10" id="sl-breakRange" oninput="cfgUpdateDirect('breakRange',this,0)">
-      <span class="cfg-val" id="v-breakRange">120</span>
+      <span class="cfg-lbl" data-i18n="cfg.breakRange">Contact range (%)</span>
+      <input type="range" min="5" max="50" step="5" id="sl-breakRange" oninput="cfgUpdateDirect('breakRange',this,0)">
+      <span class="cfg-val" id="v-breakRange">25%</span>
     </div>
     <div class="cfg-row">
       <span class="cfg-lbl" data-i18n="cfg.breakStagger">Stagger delay (fr)</span>
@@ -172,10 +198,13 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
       <span class="cfg-val" id="v-breakStagger">15</span>
     </div>
   </div>
+  <div id="cfgShips">
   <!-- X-Wing -->
   <div class="cfg-sec">
     <div class="cfg-sec-title" style="color:#aaaaaa" data-i18n="cfg.ship.xwing">X-Wing — Rebellion</div>
     <div class="form-row"><span class="form-lbl" data-i18n="cfg.formation.label">Formation</span><div class="form-pills" id="fp-xwing"></div></div>
+    <div class="form-row"><span class="form-lbl" data-i18n="cfg.breakTrigger">Break trigger</span><div class="form-pills" id="fp-break-xwing"></div></div>
+    <div class="form-row"><span class="form-lbl" data-i18n="cfg.fireMode">Fire mode</span><div class="form-pills" id="fp-fire-xwing"></div></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.hp">HP</span><input type="range" min="1" max="50" step="1" data-ship="xwing" data-key="hp" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-hp">6</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.spd">Speed</span><input type="range" min="0.5" max="4" step="0.1" data-ship="xwing" data-key="spd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-spd">1.4</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.cd">Fire Rate (cd)</span><input type="range" min="15" max="120" step="5" data-ship="xwing" data-key="cd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-cd">55</span></div>
@@ -189,6 +218,8 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
   <div class="cfg-sec">
     <div class="cfg-sec-title" style="color:#aaaaaa" data-i18n="cfg.ship.awing">A-Wing — Rebellion</div>
     <div class="form-row"><span class="form-lbl" data-i18n="cfg.formation.label">Formation</span><div class="form-pills" id="fp-awing"></div></div>
+    <div class="form-row"><span class="form-lbl" data-i18n="cfg.breakTrigger">Break trigger</span><div class="form-pills" id="fp-break-awing"></div></div>
+    <div class="form-row"><span class="form-lbl" data-i18n="cfg.fireMode">Fire mode</span><div class="form-pills" id="fp-fire-awing"></div></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.hp">HP</span><input type="range" min="1" max="50" step="1" data-ship="awing" data-key="hp" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-hp">2</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.spd">Speed</span><input type="range" min="0.5" max="4" step="0.1" data-ship="awing" data-key="spd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-spd">2.3</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.cd">Fire Rate (cd)</span><input type="range" min="15" max="120" step="5" data-ship="awing" data-key="cd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-cd">35</span></div>
@@ -202,6 +233,8 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
   <div class="cfg-sec">
     <div class="cfg-sec-title" style="color:#aaaaaa" data-i18n="cfg.ship.tie">TIE Fighter — Empire</div>
     <div class="form-row"><span class="form-lbl" data-i18n="cfg.formation.label">Formation</span><div class="form-pills" id="fp-tie"></div></div>
+    <div class="form-row"><span class="form-lbl" data-i18n="cfg.breakTrigger">Break trigger</span><div class="form-pills" id="fp-break-tie"></div></div>
+    <div class="form-row"><span class="form-lbl" data-i18n="cfg.fireMode">Fire mode</span><div class="form-pills" id="fp-fire-tie"></div></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.hp">HP</span><input type="range" min="1" max="50" step="1" data-ship="tie" data-key="hp" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-hp">1</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.spd">Speed</span><input type="range" min="0.5" max="4" step="0.1" data-ship="tie" data-key="spd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-spd">1.6</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.cd">Fire Rate (cd)</span><input type="range" min="15" max="120" step="5" data-ship="tie" data-key="cd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-cd">30</span></div>
@@ -215,6 +248,8 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
   <div class="cfg-sec">
     <div class="cfg-sec-title" style="color:#aaaaaa" data-i18n="cfg.ship.tiein">TIE Bomber — Empire</div>
     <div class="form-row"><span class="form-lbl" data-i18n="cfg.formation.label">Formation</span><div class="form-pills" id="fp-tiein"></div></div>
+    <div class="form-row"><span class="form-lbl" data-i18n="cfg.breakTrigger">Break trigger</span><div class="form-pills" id="fp-break-tiein"></div></div>
+    <div class="form-row"><span class="form-lbl" data-i18n="cfg.fireMode">Fire mode</span><div class="form-pills" id="fp-fire-tiein"></div></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.hp">HP</span><input type="range" min="1" max="50" step="1" data-ship="tiein" data-key="hp" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-hp">2</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.spd">Speed</span><input type="range" min="0.5" max="4" step="0.1" data-ship="tiein" data-key="spd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-spd">2.2</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.cd">Fire Rate (cd)</span><input type="range" min="15" max="120" step="5" data-ship="tiein" data-key="cd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-cd">50</span></div>
@@ -224,11 +259,13 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.turnRate">Turn Rate</span><input type="range" min="0.01" max="0.15" step="0.005" data-ship="tiein" data-key="turnRate" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-turnRate">0.065</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.count">Count</span><input type="range" min="1" max="20" step="1" data-ship="tiein" data-key="count" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-count">2</span></div>
   </div>
+  </div><!-- /cfgShips -->
   <div class="cfg-btns">
     <button class="cfg-btn" onclick="resetConfig()" data-i18n="cfg.btn.reset">Reset</button>
     <button class="cfg-btn save" onclick="saveConfig()" data-i18n="cfg.btn.save">Save</button>
     <button class="cfg-btn" onclick="showMenu()" data-i18n="cfg.btn.back">Back</button>
   </div>
+</div><!-- /cfgInner -->
 </div>
 
 <div id="pauseScreen" class="screen hidden">
@@ -322,10 +359,17 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
   </div>
   <div class="lv-entry">
     <div class="lv-info">
+      <div class="lv-tag" data-i18n="lv.v12.tag">v1.2</div>
+      <div class="lv-desc" data-i18n="lv.v12.desc">Multi-language · Laser speed config · GitHub changelog</div>
+    </div>
+    <button class="lv-btn" style="width:60px;text-align:center;" onclick="openVersion('versions/v1.2.html')" data-i18n="lv.load">Load</button>
+  </div>
+  <div class="lv-entry">
+    <div class="lv-info">
       <div class="lv-tag">v1.0</div>
       <div class="lv-desc" data-i18n="lv.v10.desc">Initial release · All core features</div>
     </div>
-    <button class="lv-btn" onclick="openVersion('versions/v1.0.html')" data-i18n="lv.load">Load</button>
+    <button class="lv-btn" style="width:60px;text-align:center;" onclick="openVersion('versions/v1.0.html')" data-i18n="lv.load">Load</button>
   </div>
   <div style="margin-top:14px;padding:10px 12px;border:1px solid #1a1a2a;border-radius:4px;background:#06060f;">
     <div class="lv-desc" style="line-height:1.7;" data-i18n="lv.hint">Older versions are archived in versions/...</div>
@@ -374,7 +418,7 @@ const LANGS={
     'menu.title':'Star Wars','menu.subtitle':'Pixel Battle Simulator',
     'menu.newGame':'New Game','menu.config':'Configuration',
     'menu.changelog':'Changelog','menu.about':'About',
-    'menu.loadVersion':'Load Version','menu.madeWith':'v1.2 — made with Claude',
+    'menu.loadVersion':'Load Version','menu.madeWith':'v1.3 — made with Claude',
     // hud
     'hud.rebellion':'Rebellion','hud.empire':'Empire',
     'hud.pause':'|| Pause','hud.mute.on':'♪ On','hud.mute.off':'♪ Off',
@@ -386,14 +430,16 @@ const LANGS={
     'pause.resume':'Resume','pause.menu':'Main Menu',
     // config screen
     'cfg.title':'Configuration',
-    'cfg.sec.field':'Field','cfg.sec.visual':'Visual',
+    'cfg.sec.field':'Battlefield','cfg.sec.visual':'Visual',
     'cfg.sec.formation':'Formation','cfg.sec.gameplay':'Gameplay',
-    'cfg.preset.small':'Small','cfg.preset.medium':'Medium','cfg.preset.large':'Large',
     'cfg.wrapWorld':'Wrap-around world',
     'cfg.scrollStars':'Scrolling starfield',
     'cfg.formation':'Formation flying',
     'cfg.breakTrigger':'Break trigger',
-    'cfg.breakRange':'Contact range (px)',
+    'cfg.break.never':'Never',
+    'cfg.breakRange':'Contact range (%)',
+    'cfg.fireMode':'Fire mode',
+    'cfg.fire.hold':'Hold Fire','cfg.fire.atwill':'Fire at Will','cfg.fire.return':'Return Fire',
     'cfg.breakStagger':'Stagger delay (fr)',
     'cfg.ship.xwing':'X-Wing — Rebellion',
     'cfg.ship.awing':'A-Wing — Rebellion',
@@ -414,9 +460,6 @@ const LANGS={
     'cl.v11.e3':'About / README screen added — ship roster table, formations overview, config summary, tech stack and roadmap',
     'cl.v11.e4':'Load Version screen added — lists all archived versions with descriptions, opens in new tab',
     'cl.v11.e5':'Multi-language support added — English, German, Polish; language toggle in main menu',
-    'cl.v11b.tag':'v1.1','cl.v11b.date':'2026-04-21',
-    'cl.v11b.e1':'Fixed pause-during-round-end causing permanent deadlock — respawn now uses a frame counter instead of setTimeout',
-    'cl.v11b.e2':'Changelog screen, About screen and Load Version screen added to main menu',
     'cl.v10.tag':'v1.0','cl.v10.date':'2026-04-21 · initial release',
     'cl.v10.e1':'4 pixel-art ship types — X-Wing, A-Wing, TIE Fighter, TIE Bomber',
     'cl.v10.e2':'6 formation types per ship — Delta, Line, Swarm, Wedge, Column, Pincer',
@@ -431,7 +474,7 @@ const LANGS={
     'cl.v10.e11':'Config saved to localStorage, persists between sessions',
     'cl.v10.e12':'Single HTML file, zero dependencies, ~44KB',
     // about / readme screen
-    'rm.title':'Star Wars','rm.sub':'Pixel Battle Simulator — v1.2',
+    'rm.title':'Star Wars','rm.sub':'Pixel Battle Simulator — v1.3',
     'rm.sec.what':'What is this',
     'rm.what.p1':'An autonomous pixel-art space battle between the Rebellion and the Empire. Two fleets spawn, fight, and respawn endlessly. Configure everything, watch the Force decide.',
     'rm.what.p2':'Built entirely in a single HTML file — no server, no dependencies, no install. Open and play.',
@@ -454,10 +497,11 @@ const LANGS={
     'rm.roadmap.p':'Campaign mode: build your fleet with credits, face escalating Imperial squadrons across missions, earn credits on victory, upgrade ships between rounds.',
     // load version screen
     'lv.title':'Load Version',
-    'lv.current.tag':'v1.2 — current',
-    'lv.current.desc':'Pause bugfix · Changelog · About screen · Version loader · i18n',
+    'lv.current.tag':'v1.3 — current',
+    'lv.current.desc':'Mobile · Formations · Fire mode · Break trigger per ship',
     'lv.current.btn':'Playing',
     'lv.v10.desc':'Initial release · All core features',
+    'lv.v12.tag':'v1.2','lv.v12.desc':'Multi-language (EN/DE/PL) · Laser speed config · GitHub changelog link',
     'lv.load':'Load',
     'lv.hint':'Older versions are archived in versions/ in the repository. Loading opens the version in a new tab.',
     // version hint overlay
@@ -474,7 +518,7 @@ const LANGS={
     'menu.title':'Krieg der Sterne','menu.subtitle':'Pixel Kampfsimulator',
     'menu.newGame':'Neues Spiel','menu.config':'Konfiguration',
     'menu.changelog':'Changelog','menu.about':'Über das Spiel',
-    'menu.loadVersion':'Version laden','menu.madeWith':'v1.2 — made with Claude',
+    'menu.loadVersion':'Version laden','menu.madeWith':'v1.3 — made with Claude',
     'hud.rebellion':'Rebellion','hud.empire':'Imperium',
     'hud.pause':'|| Pause','hud.mute.on':'♪ An','hud.mute.off':'♪ Aus',
     'legend.rebels':'A-Wing · X-Wing — Rebellion',
@@ -482,14 +526,16 @@ const LANGS={
     'pause.title':'Pausiert','pause.sub':'— Runde läuft —',
     'pause.resume':'Weiter','pause.menu':'Hauptmenü',
     'cfg.title':'Konfiguration',
-    'cfg.sec.field':'Spielfeld','cfg.sec.visual':'Grafik',
+    'cfg.sec.field':'Schlachtfeld','cfg.sec.visual':'Grafik',
     'cfg.sec.formation':'Formation','cfg.sec.gameplay':'Gameplay',
-    'cfg.preset.small':'Klein','cfg.preset.medium':'Mittel','cfg.preset.large':'Groß',
     'cfg.wrapWorld':'Endlose Welt',
     'cfg.scrollStars':'Scrollendes Sternfeld',
     'cfg.formation':'Formationsflug',
     'cfg.breakTrigger':'Auflösung bei',
-    'cfg.breakRange':'Kontaktreichweite (px)',
+    'cfg.break.never':'Niemals',
+    'cfg.breakRange':'Kontaktreichweite (%)',
+    'cfg.fireMode':'Feuermodus',
+    'cfg.fire.hold':'Feuer halten','cfg.fire.atwill':'Freies Feuer','cfg.fire.return':'Feuer erwidern',
     'cfg.breakStagger':'Staffelverzögerung (Fr)',
     'cfg.ship.xwing':'X-Wing — Rebellion',
     'cfg.ship.awing':'A-Wing — Rebellion',
@@ -509,9 +555,6 @@ const LANGS={
     'cl.v11.e3':'Über-das-Spiel-Bildschirm hinzugefügt — Schiffstabelle, Formationsübersicht, Konfigurationszusammenfassung',
     'cl.v11.e4':'Version-laden-Bildschirm hinzugefügt — zeigt alle archivierten Versionen mit Beschreibungen',
     'cl.v11.e5':'Mehrsprachigkeit hinzugefügt — Englisch, Deutsch, Polnisch; Sprachumschalter im Hauptmenü',
-    'cl.v11b.tag':'v1.1','cl.v11b.date':'2026-04-21',
-    'cl.v11b.e1':'Fehler behoben: Pause während Rundenende führte zu dauerhaftem Einfrieren',
-    'cl.v11b.e2':'Changelog-, Über-das-Spiel- und Version-laden-Bildschirm zum Hauptmenü hinzugefügt',
     'cl.v10.tag':'v1.0','cl.v10.date':'2026-04-21 · Erstveröffentlichung',
     'cl.v10.e1':'4 Pixel-Art-Schiffstypen — X-Wing, A-Wing, TIE-Jäger, TIE-Bomber',
     'cl.v10.e2':'6 Formationstypen pro Schiff — Delta, Linie, Schwarm, Keil, Kolonne, Zange',
@@ -525,7 +568,7 @@ const LANGS={
     'cl.v10.e10':'8-Bit-Prozeduraler Sound — Laserfeuer, Explosionen, Rundenabschluss-Fanfare, Stummschalter',
     'cl.v10.e11':'Konfiguration in localStorage gespeichert, bleibt zwischen Sitzungen erhalten',
     'cl.v10.e12':'Einzelne HTML-Datei, keine Abhängigkeiten, ~44KB',
-    'rm.title':'Krieg der Sterne','rm.sub':'Pixel Kampfsimulator — v1.2',
+    'rm.title':'Krieg der Sterne','rm.sub':'Pixel Kampfsimulator — v1.3',
     'rm.sec.what':'Was ist das?',
     'rm.what.p1':'Ein autonomer Pixel-Art-Weltraumkampf zwischen der Rebellion und dem Imperium. Zwei Flotten spawnen, kämpfen und respawnen endlos. Alles konfigurierbar — die Macht entscheidet.',
     'rm.what.p2':'Komplett in einer einzigen HTML-Datei — kein Server, keine Abhängigkeiten, keine Installation. Öffnen und spielen.',
@@ -547,10 +590,11 @@ const LANGS={
     'rm.sec.roadmap':'Ausblick',
     'rm.roadmap.p':'Kampagnenmodus: Flotte mit Credits zusammenstellen, vordefinierte Imperiumsstaffeln über Missionen besiegen, Credits verdienen, Schiffe zwischen Runden aufrüsten.',
     'lv.title':'Version laden',
-    'lv.current.tag':'v1.2 — aktuell',
-    'lv.current.desc':'Pause-Bugfix · Changelog · Über-Bildschirm · Version laden · Mehrsprachigkeit',
+    'lv.current.tag':'v1.3 — aktuell',
+    'lv.current.desc':'Mobile · Formationen · Feuermodus · Auslösung pro Schiff',
     'lv.current.btn':'Aktiv',
     'lv.v10.desc':'Erstveröffentlichung · Alle Kernfunktionen',
+    'lv.v12.tag':'v1.2','lv.v12.desc':'Mehrsprachigkeit (EN/DE/PL) · Lasergeschwindigkeit · GitHub-Changelog',
     'lv.load':'Laden',
     'lv.hint':'Ältere Versionen sind im Ordner versions/ im Repository archiviert. Das Laden öffnet die Version in einem neuen Tab.',
     'vh.title':'⚠ Version nicht verfügbar',
@@ -576,12 +620,14 @@ const LANGS={
     'cfg.title':'Konfiguracja',
     'cfg.sec.field':'Pole bitwy','cfg.sec.visual':'Grafika',
     'cfg.sec.formation':'Formacja','cfg.sec.gameplay':'Rozgrywka',
-    'cfg.preset.small':'Małe','cfg.preset.medium':'Średnie','cfg.preset.large':'Duże',
     'cfg.wrapWorld':'Świat okrągły',
     'cfg.scrollStars':'Ruchome gwiazdy',
     'cfg.formation':'Lot w formacji',
     'cfg.breakTrigger':'Rozpad formacji',
-    'cfg.breakRange':'Zasięg kontaktu (px)',
+    'cfg.break.never':'Nigdy',
+    'cfg.breakRange':'Zasięg kontaktu (%)',
+    'cfg.fireMode':'Tryb ognia',
+    'cfg.fire.hold':'Wstrzymaj ogień','cfg.fire.atwill':'Ogień dowolny','cfg.fire.return':'Odpowiedz ogniem',
     'cfg.breakStagger':'Opóźnienie (kl)',
     'cfg.ship.xwing':'X-Wing — Rebelia',
     'cfg.ship.awing':'A-Wing — Rebelia',
@@ -601,9 +647,6 @@ const LANGS={
     'cl.v11.e3':'Dodano ekran "O grze" — tabela statków, przegląd formacji, podsumowanie konfiguracji',
     'cl.v11.e4':'Dodano ekran wczytywania wersji — lista zarchiwizowanych wersji z opisami',
     'cl.v11.e5':'Dodano obsługę wielu języków — angielski, niemiecki, polski; przełącznik języka w menu głównym',
-    'cl.v11b.tag':'v1.1','cl.v11b.date':'2026-04-21',
-    'cl.v11b.e1':'Naprawiono błąd: pauza podczas końca rundy powodowała trwałe zawieszenie',
-    'cl.v11b.e2':'Dodano ekrany historii zmian, O grze i wczytywania wersji do menu głównego',
     'cl.v10.tag':'v1.0','cl.v10.date':'2026-04-21 · pierwsze wydanie',
     'cl.v10.e1':'4 typy statków piksel-art — X-Wing, A-Wing, TIE Fighter, TIE Bomber',
     'cl.v10.e2':'6 typów formacji na statek — Delta, Linia, Rój, Klin, Kolumna, Kleszcze',
@@ -617,7 +660,7 @@ const LANGS={
     'cl.v10.e10':'8-bitowy dźwięk proceduralny — ogień laserowy, eksplozje, fanfara końca rundy, wyciszenie',
     'cl.v10.e11':'Konfiguracja zapisana w localStorage, zachowywana między sesjami',
     'cl.v10.e12':'Pojedynczy plik HTML, brak zależności, ~44KB',
-    'rm.title':'Gwiezdne Wojny','rm.sub':'Pikselowy Symulator Bitwy — v1.2',
+    'rm.title':'Gwiezdne Wojny','rm.sub':'Pikselowy Symulator Bitwy — v1.3',
     'rm.sec.what':'Co to jest?',
     'rm.what.p1':'Autonomiczna pikselowa bitwa kosmiczna między Rebelią a Imperium. Dwie floty rodzą się, walczą i odradzają bez końca. Skonfiguruj wszystko, a Moc zdecyduje.',
     'rm.what.p2':'Zbudowane w jednym pliku HTML — brak serwera, brak zależności, brak instalacji. Otwórz i graj.',
@@ -639,10 +682,11 @@ const LANGS={
     'rm.sec.roadmap':'Plan rozwoju',
     'rm.roadmap.p':'Tryb kampanii: zbuduj flotę za kredyty, zwalczaj predefiniowane eskadry Imperium w kolejnych misjach, zdobywaj kredyty za zwycięstwo, ulepszaj statki między rundami.',
     'lv.title':'Wczytaj wersję',
-    'lv.current.tag':'v1.2 — aktualna',
+    'lv.current.tag':'v1.3 — aktualna',
     'lv.current.desc':'Naprawa pauzy · Historia zmian · O grze · Wczytaj wersję · Wielojęzyczność',
     'lv.current.btn':'Aktywna',
     'lv.v10.desc':'Pierwsze wydanie · Wszystkie funkcje',
+    'lv.v12.tag':'v1.2','lv.v12.desc':'Wielojęzyczność (EN/DE/PL) · Prędkość lasera · Link do changelogu GitHub',
     'lv.load':'Wczytaj',
     'lv.hint':'Starsze wersje są zarchiwizowane w folderze versions/ w repozytorium. Wczytanie otwiera wersję w nowej karcie.',
     'vh.title':'⚠ Nie można otworzyć wersji',
@@ -687,16 +731,11 @@ const FORMATIONS={
   pincer(n){return Array.from({length:n},(_,i)=>{const sd=i%2===0?-1:1,r=Math.floor(i/2);return{par:rand(-10,10),perp:sd*(30+r*20)+rand(-4,4),da:rand(-0.12,0.12)};});},
 };
 const FORMATION_NAMES=['delta','line','swarm','wedge','column','pincer'];
-const BREAK_TRIGGERS=['contact','hit','both'];
+const BREAK_TRIGGERS=['contact','hit','both','never'];
+const FIRE_MODES=['hold','atwill','returnfire'];
 
 // ── FIELD PRESETS ─────────────────────────────────────────────────────────────
-const PRESETS={small:{W:480,H:320},medium:{W:680,H:426},large:{W:900,H:560}};
-let currentPreset='medium';
-let W=680,H=426;
-function setPreset(name){
-  currentPreset=name;W=PRESETS[name].W;H=PRESETS[name].H;
-  ['small','medium','large'].forEach(p=>document.getElementById('ps-'+p).classList.toggle('active',p===name));
-}
+let W=680,H=426; // will be overridden by calcGameSize on load
 
 // ── CANVASES ──────────────────────────────────────────────────────────────────
 const starCv=document.getElementById('starCanvas');
@@ -706,24 +745,47 @@ const ctx=cv.getContext('2d');
 ctx.imageSmoothingEnabled=false;starCtx.imageSmoothingEnabled=false;
 function resizeCanvases(){
   const app=document.getElementById('app');
-  app.style.width=W+'px';app.style.height=(H+54)+'px';
+  // lock to exact px so rotation/resize doesn't stretch during a game
+  app.style.width=W+'px';
+  app.style.height=(H+54)+'px';
+  app.style.minWidth='';
+  app.style.minHeight='';
   cv.width=W;cv.height=H;cv.style.width=W+'px';cv.style.height=H+'px';
-  starCv.width=W;starCv.height=H;starCv.style.width=W+'px';starCv.style.height=H+'px';
+  starCv.width=W;starCv.height=H;
 }
-resizeCanvases();
+
+function unlockAppSize(){
+  const app=document.getElementById('app');
+  // use explicit px so resize listener can update cleanly
+  app.style.width=window.innerWidth+'px';
+  app.style.height=window.innerHeight+'px';
+  app.style.minWidth='';
+  app.style.minHeight='';
+}
+// set app container to full viewport immediately
+(function(){
+  const app=document.getElementById('app');
+  app.style.width=window.innerWidth+'px';
+  app.style.height=window.innerHeight+'px';
+})();
+calcGameSize();starCv.width=window.innerWidth;starCv.height=window.innerHeight;resizeCanvases();
 
 // ── STARFIELD ─────────────────────────────────────────────────────────────────
 let stars=[];let starScrollX=0;
 function initStars(){
   stars=[];
-  for(let i=0;i<Math.floor(W*H/1600);i++)
-    stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()>0.72?1.5:0.8,spd:Math.random()*0.3+0.05});
+  const sw=starCv.width||W, sh=starCv.height||H;
+  // cap density to W*H so performance stays consistent regardless of starCv buffer size
+  const count=Math.floor(W*H/1600);
+  for(let i=0;i<count;i++)
+    stars.push({x:Math.random()*sw,y:Math.random()*sh,r:Math.random()>0.72?1.5:0.8,spd:Math.random()*0.3+0.05});
 }
 function drawStars(){
-  starCtx.fillStyle='#03030d';starCtx.fillRect(0,0,W,H);
+  const sw=starCv.width,sh=starCv.height;
+  starCtx.fillStyle='#03030d';starCtx.fillRect(0,0,sw,sh);
   for(const s of stars){
     const b=s.r>1?255:140;starCtx.fillStyle=`rgb(${b},${b},${b})`;
-    const sx=((s.x-starScrollX*s.spd)%W+W)%W;
+    const sx=((s.x-starScrollX*s.spd)%sw+sw)%sw;
     starCtx.fillRect(Math.round(sx),Math.round(s.y),s.r>1?2:1,1);
   }
   if(CFG.scrollStars)starScrollX+=0.3;
@@ -755,17 +817,18 @@ function drawSpriteWrapped(type,cx,cy,angle){
     if(cx<m)drawSprite(type,cx+W,cy,angle);if(cx>W-m)drawSprite(type,cx-W,cy,angle);
     if(cy<m)drawSprite(type,cx,cy+H,angle);if(cy>H-m)drawSprite(type,cx,cy-H,angle);
   }
+  // no ghost sprites in bounded world
 }
 function drawLaser(l){ctx.save();ctx.translate(Math.round(l.x),Math.round(l.y));ctx.rotate(l.angle);ctx.fillStyle=l.color;ctx.fillRect(-5,-1,10,2);ctx.globalAlpha=0.35;ctx.fillRect(-9,-1,4,2);ctx.restore();ctx.globalAlpha=1;}
 
 // ── CONFIG ────────────────────────────────────────────────────────────────────
 const DEFAULTS={
-  xwing:{hp:6,maxHp:6,spd:1.4,turnRate:0.04,cd:55,dmg:1,count:3,ttl:2.0,formation:'delta',laserSpd:12},
-  awing:{hp:2,maxHp:2,spd:2.3,turnRate:0.07,cd:35,dmg:1,count:2,ttl:2.0,formation:'delta',laserSpd:14},
-  tie:  {hp:1,maxHp:1,spd:1.6,turnRate:0.03,cd:30,dmg:1,count:6,ttl:2.0,formation:'swarm',laserSpd:12},
-  tiein:{hp:2,maxHp:2,spd:2.2,turnRate:0.065,cd:50,dmg:2,count:2,ttl:2.0,formation:'line',laserSpd:10},
-  formation:false,scrollStars:false,wrapWorld:false,preset:'medium',
-  breakTrigger:'both',breakRange:120,breakStagger:15,
+  xwing:{hp:6,maxHp:6,spd:1.4,turnRate:0.04,cd:55,dmg:1,count:3,ttl:2.0,formation:'delta',laserSpd:12,fireMode:'atwill',breakTrigger:'both'},
+  awing:{hp:2,maxHp:2,spd:2.3,turnRate:0.07,cd:35,dmg:1,count:2,ttl:2.0,formation:'delta',laserSpd:14,fireMode:'atwill',breakTrigger:'both'},
+  tie:  {hp:1,maxHp:1,spd:1.6,turnRate:0.03,cd:30,dmg:1,count:6,ttl:2.0,formation:'swarm',laserSpd:12,fireMode:'atwill',breakTrigger:'both'},
+  tiein:{hp:2,maxHp:2,spd:2.2,turnRate:0.065,cd:50,dmg:2,count:2,ttl:2.0,formation:'line',laserSpd:10,fireMode:'atwill',breakTrigger:'both'},
+  formation:false,scrollStars:false,wrapWorld:false,
+  breakRange:25,breakStagger:15,
 };
 let CFG=JSON.parse(JSON.stringify(DEFAULTS));
 try{
@@ -774,6 +837,8 @@ try{
     const p=JSON.parse(s);
     CFG=Object.assign({},DEFAULTS,p);
     for(const t of ['xwing','awing','tie','tiein']) CFG[t]=Object.assign({},DEFAULTS[t],p[t]||{});
+  // clamp breakRange in case old px value (e.g. 200) was saved
+  CFG.breakRange=Math.min(50,Math.max(5,CFG.breakRange));
   }
 }catch(e){}
 
@@ -794,13 +859,47 @@ function buildFormationPills(){
       c.appendChild(b);
     });
   }
-  // break trigger pills
-  const bc=document.getElementById('fp-breakTrigger');bc.innerHTML='';
-  BREAK_TRIGGERS.forEach(fn=>{
-    const b=document.createElement('button');b.className='fpill'+(CFG.breakTrigger===fn?' active':'');
-    b.textContent=fn;b.onclick=()=>{CFG.breakTrigger=fn;bc.querySelectorAll('.fpill').forEach(x=>x.classList.remove('active'));b.classList.add('active');};
-    bc.appendChild(b);
-  });
+  // per-ship break trigger pills
+  const breakLabels={'never':t('cfg.break.never')||'Never'};
+  for(const ship of ['xwing','awing','tie','tiein']){
+    const bc=document.getElementById('fp-break-'+ship);
+    if(!bc)continue;
+    bc.innerHTML='';
+    BREAK_TRIGGERS.forEach(fn=>{
+      const b=document.createElement('button');
+      b.className='fpill'+((CFG[ship].breakTrigger||'both')===fn?' active':'');
+      b.textContent=breakLabels[fn]||fn;
+      b.onclick=(()=>{const _s=ship,_fn=fn;return()=>{
+        CFG[_s].breakTrigger=_fn;
+        bc.querySelectorAll('.fpill').forEach(x=>x.classList.remove('active'));
+        b.classList.add('active');
+      }})();
+      bc.appendChild(b);
+    });
+  }
+
+  // per-ship fire mode pills
+  const fireModeLabels={
+    'hold':    t('cfg.fire.hold')    ||'Hold Fire',
+    'atwill':  t('cfg.fire.atwill')  ||'Fire at Will',
+    'returnfire': t('cfg.fire.return')||'Return Fire'
+  };
+  for(const ship of ['xwing','awing','tie','tiein']){
+    const fc=document.getElementById('fp-fire-'+ship);
+    if(!fc)continue;
+    fc.innerHTML='';
+    FIRE_MODES.forEach(fn=>{
+      const b=document.createElement('button');
+      b.className='fpill'+(CFG[ship].fireMode===fn?' active':'');
+      b.textContent=fireModeLabels[fn]||fn;
+      b.onclick=(()=>{const _ship=ship,_fn=fn;return()=>{
+        CFG[_ship].fireMode=_fn;
+        fc.querySelectorAll('.fpill').forEach(x=>x.classList.remove('active'));
+        b.classList.add('active');markUnsaved();
+      }})();
+      fc.appendChild(b);
+    });
+  }
 }
 
 function toggleOpt(key){
@@ -809,6 +908,7 @@ function toggleOpt(key){
   const lbl=document.getElementById('v-'+key);
   if(tog)tog.classList.toggle('on',CFG[key]);
   if(lbl){lbl.textContent=CFG[key]?t('cfg.on'):t('cfg.off');lbl.style.color=CFG[key]?'#00cc44':'#556677';}
+  markUnsaved();
 }
 
 function syncToggles(){
@@ -823,7 +923,8 @@ function syncToggles(){
 function cfgUpdateDirect(key,el,dec){
   CFG[key]=parseFloat(el.value);
   const vEl=document.getElementById('v-'+key);
-  if(vEl)vEl.textContent=CFG[key].toFixed(dec);
+  if(vEl)vEl.textContent=CFG[key].toFixed(dec)+(key==='breakRange'?'%':'');
+  markUnsaved();
 }
 
 function loadSlidersFromCfg(){
@@ -834,9 +935,9 @@ function loadSlidersFromCfg(){
       if(el&&vEl){el.value=CFG[ship][key];const dec=key==='ttl'?1:key==='spd'||key==='turnRate'?3:0;vEl.textContent=parseFloat(CFG[ship][key]).toFixed(dec);}
     }
   }
-  const brEl=document.getElementById('sl-breakRange');if(brEl){brEl.value=CFG.breakRange;document.getElementById('v-breakRange').textContent=CFG.breakRange;}
+  const brEl=document.getElementById('sl-breakRange');if(brEl){brEl.value=CFG.breakRange;document.getElementById('v-breakRange').textContent=CFG.breakRange+'%';}
   const bsEl=document.getElementById('sl-breakStagger');if(bsEl){bsEl.value=CFG.breakStagger;document.getElementById('v-breakStagger').textContent=CFG.breakStagger;}
-  syncToggles();setPreset(CFG.preset||'medium');buildFormationPills();
+  syncToggles();buildFormationPills();
 }
 
 function cfgUpdate(el){
@@ -844,14 +945,19 @@ function cfgUpdate(el){
   CFG[ship][key]=val;if(key==='hp')CFG[ship].maxHp=val;
   const vEl=document.getElementById(`v-${ship}-${key}`);
   if(vEl){const dec=key==='ttl'?1:key==='spd'||key==='turnRate'?3:0;vEl.textContent=val.toFixed(dec);}
+  markUnsaved();
+}
+
+function markUnsaved(){
+  const btn=document.querySelector('.cfg-btn.save');
+  if(btn){btn.textContent=t('cfg.btn.save');btn.style.color='';}
 }
 
 function saveConfig(){
-  CFG.preset=currentPreset;
   try{localStorage.setItem('swBattleCfgV5',JSON.stringify(CFG));}catch(e){}
   const btn=document.querySelector('.cfg-btn.save');
-  const orig=btn.textContent;btn.textContent=t('cfg.saved');btn.style.color='#00cc44';
-  setTimeout(()=>{btn.textContent=t('cfg.btn.save');btn.style.color='';},1500);
+  btn.textContent=t('cfg.saved');btn.style.color='#00cc44';
+  setTimeout(()=>{showMenu();},800);
 }
 function resetConfig(){CFG=JSON.parse(JSON.stringify(DEFAULTS));setPreset('medium');loadSlidersFromCfg();}
 
@@ -887,7 +993,8 @@ function getAngleTo(f,t){
 }
 
 function showScreen(id){['menuScreen','configScreen','pauseScreen','loadScreen','readmeScreen'].forEach(s=>document.getElementById(s).classList.add('hidden'));if(id)document.getElementById(id).classList.remove('hidden');}
-function showMenu(){stopGame();showScreen('menuScreen');document.getElementById('hud').classList.add('hidden');document.getElementById('legend').classList.add('hidden');ctx.clearRect(0,0,W,H);if(!menuAnimId)menuStarLoop();}
+function showMenu(){stopGame();unlockAppSize();showScreen('menuScreen');
+document.getElementById('hud').classList.add('hidden');document.getElementById('legend').classList.add('hidden');ctx.clearRect(0,0,W,H);if(!menuAnimId)menuStarLoop();}
 function showConfig(){showScreen('configScreen');loadSlidersFromCfg();}
 function showReadme(){showScreen('readmeScreen');}
 function loadVersion(){showScreen('loadScreen');}
@@ -913,47 +1020,17 @@ function menuStarLoop(){if(gameRunning)return;drawStars();menuAnimId=requestAnim
 // Each ship in formation has a breakDelay — counted down before it actually breaks
 // Ships closer to front of formation (lower index) break first
 
-function triggerGroupBreak(groupId){
-  // find all formation ships in this group, sort by formationIndex (front first)
-  const group=ships.filter(s=>s.formationMode&&s.formationGroupId===groupId);
-  group.sort((a,b)=>a.formationIndex-b.formationIndex);
-  group.forEach((s,rank)=>{
-    s.breakDelay=rank*CFG.breakStagger; // stagger by rank
-  });
+// ── FORMATION SPAWN ───────────────────────────────────────────────────────────
+// Returns bounding radius of a formation (max distance from center to any slot)
+function formationRadius(name, count){
+  if(name==='swarm') return 50;
+  const slots = (FORMATIONS[name]||FORMATIONS.line)(count);
+  let maxR = 0;
+  for(const s of slots) maxR = Math.max(maxR, Math.sqrt(s.par*s.par+s.perp*s.perp));
+  return maxR + 30; // +30px safety margin
 }
 
-function checkFormationBreak(s){
-  if(!s.formationMode)return;
-  const trigger=CFG.breakTrigger;
-
-  // contact trigger: nearest foe within breakRange
-  if(trigger==='contact'||trigger==='both'){
-    const foes=ships.filter(o=>o.team!==s.team);
-    if(foes.length){
-      const nearest=foes.reduce((a,b)=>getDist2(a,s)<getDist2(b,s)?a:b);
-      if(Math.sqrt(getDist2(nearest,s))<CFG.breakRange){
-        triggerGroupBreak(s.formationGroupId);
-        return;
-      }
-    }
-  }
-}
-
-function onShipHit(s){
-  // hit trigger
-  if(s.formationMode&&(CFG.breakTrigger==='hit'||CFG.breakTrigger==='both')){
-    triggerGroupBreak(s.formationGroupId);
-  }
-}
-
-// ── SPAWN ─────────────────────────────────────────────────────────────────────
-const GROUP_ANCHORS={
-  xwing:()=>({cx:W*0.13,cy:H*0.27,angle:0}),
-  awing:()=>({cx:W*0.13,cy:H*0.73,angle:0}),
-  tie:  ()=>({cx:W*0.87,cy:H*0.27,angle:Math.PI}),
-  tiein:()=>({cx:W*0.87,cy:H*0.73,angle:Math.PI}),
-};
-
+// Safe anchor: place group so entire formation fits inside map with SAFE_MARGIN
 function makeShip(type,x,y,angle){
   const t=getType(type);
   return{type,team:t.team,x,y,
@@ -962,54 +1039,135 @@ function makeShip(type,x,y,angle){
     cd:Math.floor(rand(0,t.cd)),id:Math.random(),
     evadeDir:(Math.random()>0.5?1:-1),evadeTimer:0,
     snapFoeDist:9999,snapTimer:0,kickTimer:0,kickAngle:0,
-    formationMode:false,formationGroupId:null,formationIndex:0,breakDelay:0
+    formationMode:false,formationGroupId:null,formationIndex:0,breakDelay:0,wasHit:false
   };
 }
 
-function spawnGroup(type,count,formationName,cx,cy,angle,groupId){
-  if(count===0)return[];
-  const result=[];
-  const acx=cx+rand(-10,10),acy=cy+rand(-10,10);
-  const fa=angle+rand(-0.15,0.15);
+function safeAnchor(side, verticalZone, formName, count){
+  const SAFE = 80; // min px from any edge
+  const r = formationRadius(formName, count);
+  const pad = SAFE + r;
 
-  if(!CFG.formation||formationName==='swarm'){
-    const spread=CFG.formation?45:Math.min(W,H)*0.15;
-    for(let i=0;i<count;i++){
-      const s=makeShip(type,acx+rand(-spread,spread),acy+rand(-spread,spread),fa+rand(-0.3,0.3));
-      result.push(s);
+  let cx, cy, angle;
+  if(side === 'left'){
+    cx = pad;
+    angle = 0; // flying right
+  } else {
+    cx = W - pad;
+    angle = Math.PI; // flying left
+  }
+  // verticalZone: 'top' or 'bottom'
+  if(verticalZone === 'top'){
+    cy = Math.max(pad, H * 0.28);
+  } else {
+    cy = Math.min(H - pad, H * 0.72);
+  }
+  // add small random jitter
+  cx += rand(-15,15);
+  cy += rand(-15,15);
+  // final clamp
+  cx = Math.max(pad, Math.min(W-pad, cx));
+  cy = Math.max(pad, Math.min(H-pad, cy));
+  return {cx, cy, angle};
+}
+
+function triggerGroupBreak(groupId){
+  const group = ships.filter(s => s.formationMode && s.formationGroupId === groupId);
+  group.sort((a,b) => a.formationIndex - b.formationIndex);
+  group.forEach((s, rank) => { s.breakDelay = rank * CFG.breakStagger; });
+}
+
+function checkFormationBreak(s){
+  if(!s.formationMode) return;
+  const trigger = getType(s.type).breakTrigger||'both';
+  if(trigger === 'never') return;
+  if(trigger === 'contact' || trigger === 'both'){
+    const foes = ships.filter(o => o.team !== s.team);
+    if(foes.length){
+      const nearest = foes.reduce((a,b) => getDist2(a,s) < getDist2(b,s) ? a : b);
+      const scaledRange=Math.min(W,H)*(CFG.breakRange/100);
+      if(Math.sqrt(getDist2(nearest,s)) < scaledRange){
+        triggerGroupBreak(s.formationGroupId);
+      }
+    }
+  }
+}
+
+function onShipHit(s){
+  // mark ship and entire formation group so returnfire mode activates
+  s.wasHit=true;
+  if(s.formationGroupId!==null){
+    ships.filter(o=>o.formationGroupId===s.formationGroupId)
+         .forEach(o=>o.wasHit=true);
+  }
+  const bt=getType(s.type).breakTrigger||'both';
+  if(s.formationMode && bt !== 'never' && (bt === 'hit' || bt === 'both')){
+    triggerGroupBreak(s.formationGroupId);
+  }
+}
+
+function spawnGroup(type, count, formationName, side, verticalZone, groupId){
+  if(count === 0) return [];
+  const result = [];
+
+  if(!CFG.formation || formationName === 'swarm'){
+    // random scatter in safe zone on the correct side
+    const SAFE = 80;
+    const xMin = side === 'left' ? SAFE : W * 0.6;
+    const xMax = side === 'left' ? W * 0.4 : W - SAFE;
+    for(let i = 0; i < count; i++){
+      const x = rand(xMin, xMax);
+      const y = rand(SAFE, H - SAFE);
+      const angle = side === 'left' ? rand(-0.3,0.3) : Math.PI + rand(-0.3,0.3);
+      result.push(makeShip(type, x, y, angle));
     }
     return result;
   }
 
-  const slots=(FORMATIONS[formationName]||FORMATIONS.line)(count);
-  const px=-Math.sin(fa),py=Math.cos(fa),fx=Math.cos(fa),fy=Math.sin(fa);
+  // compute safe anchor for this formation
+  const {cx, cy, angle} = safeAnchor(side, verticalZone, formationName, count);
+  const fa = angle + rand(-0.1, 0.1);
 
-  slots.forEach((slot,i)=>{
-    const x=acx+px*slot.perp+fx*slot.par;
-    const y=acy+py*slot.perp+fy*slot.par;
-    const s=makeShip(type,x,y,fa+(slot.da||0));
-    s.formationMode=true;
-    s.formationGroupId=groupId;
-    s.formationIndex=i; // 0=front (tip of delta etc)
-    s.breakDelay=-1;    // -1 = not yet triggered
+  const slots = (FORMATIONS[formationName] || FORMATIONS.line)(count);
+  // perp axis = perpendicular to flight, par axis = along flight
+  const px = -Math.sin(fa), py = Math.cos(fa);
+  const fx =  Math.cos(fa), fy = Math.sin(fa);
+
+  const SAFE = 60;
+  slots.forEach((slot, i) => {
+    let x = cx + px*slot.perp + fx*slot.par;
+    let y = cy + py*slot.perp + fy*slot.par;
+    // hard clamp — no ship ever outside safe zone
+    x = Math.max(SAFE, Math.min(W-SAFE, x));
+    y = Math.max(SAFE, Math.min(H-SAFE, y));
+    const s = makeShip(type, x, y, fa + (slot.da||0));
+    s.formationMode = true;
+    s.formationGroupId = groupId;
+    s.formationIndex = i;
+    s.breakDelay = -1; // -1 = not yet triggered
     result.push(s);
   });
   return result;
 }
 
 function spawnAll(){
-  ships=[];lasers=[];explosions=[];roundOver=false;respawnCounter=0;
-  let gid=0;
-  for(const type of ['xwing','awing','tie','tiein']){
-    const c=CFG[type].count;if(c===0)continue;
-    const {cx,cy,angle}=GROUP_ANCHORS[type]();
-    ships.push(...spawnGroup(type,c,CFG[type].formation,cx,cy,angle,gid++));
-  }
+  ships=[]; lasers=[]; explosions=[]; roundOver=false; respawnCounter=0;
+  let gid = 0;
+  // Rebellion: left side — X-Wings top, A-Wings bottom
+  if(CFG.xwing.count > 0)
+    ships.push(...spawnGroup('xwing', CFG.xwing.count, CFG.xwing.formation, 'left',  'top',    gid++));
+  if(CFG.awing.count > 0)
+    ships.push(...spawnGroup('awing', CFG.awing.count, CFG.awing.formation, 'left',  'bottom', gid++));
+  // Empire: right side — TIE Fighters top, Bombers bottom
+  if(CFG.tie.count > 0)
+    ships.push(...spawnGroup('tie',   CFG.tie.count,   CFG.tie.formation,   'right', 'top',    gid++));
+  if(CFG.tiein.count > 0)
+    ships.push(...spawnGroup('tiein', CFG.tiein.count, CFG.tiein.formation, 'right', 'bottom', gid++));
 }
 
 function startGame(){
   try{getAudio();}catch(e){}
-  W=PRESETS[currentPreset].W;H=PRESETS[currentPreset].H;
+  calcGameSize();
   resizeCanvases();initStars();
   if(menuAnimId){cancelAnimationFrame(menuAnimId);menuAnimId=null;}
   xScore=0;tScore=0;
@@ -1043,17 +1201,35 @@ function moveBoid(s){
     if(s.breakDelay>=0){
       s.breakDelay--;
       if(s.breakDelay<0){
-        s.formationMode=false; // actually break
+        if(CFG.breakTrigger==='never'){s.breakDelay=-1;} // reset — never break
+        else s.formationMode=false; // actually break
       }
     }
 
     if(s.formationMode){
-      // still in formation — hold heading, gentle separation
+      let steerF=s.angle;
+
+      // gentle ally separation
       for(const f of friends){
         const dx=f.x-s.x,dy=f.y-s.y,d=Math.sqrt(dx*dx+dy*dy)||1;
-        if(d<22){const aw=Math.atan2(-dy,-dx);s.angle+=angleDiff(aw,s.angle)*0.04;}
+        if(d<24){steerF+=angleDiff(Math.atan2(-dy,-dx),steerF)*0.06;}
       }
-      s.vx+=Math.cos(s.angle)*t.spd*0.06;s.vy+=Math.sin(s.angle)*t.spd*0.06;
+
+      // boundary avoidance — steer toward map center, stronger closer to wall
+      if(!CFG.wrapWorld){
+        const WALL=Math.min(W,H)*0.25; // 25% of shorter dimension
+        const dL=s.x, dR=W-s.x, dT=s.y, dB=H-s.y;
+        const minD=Math.min(dL,dR,dT,dB);
+        if(minD<WALL){
+          const toCenter=Math.atan2(H/2-s.y,W/2-s.x);
+          const strength=Math.min(0.95,(1-minD/WALL)*1.2);
+          steerF+=angleDiff(toCenter,steerF)*strength;
+        }
+      }
+
+      s.angle+=angleDiff(steerF,s.angle)*Math.max(t.turnRate,0.05);
+      s.vx+=Math.cos(s.angle)*t.spd*0.06;
+      s.vy+=Math.sin(s.angle)*t.spd*0.06;
       s.vx*=0.96;s.vy*=0.96;s.x+=s.vx;s.y+=s.vy;
       wrapOrBounce(s);return;
     }
@@ -1089,10 +1265,25 @@ function moveBoid(s){
     }
     // boundary steering for non-wrap
     if(!CFG.wrapWorld){
-      const m=40;
-      if(s.x<m)steer+=0.18*(m-s.x)/m;if(s.x>W-m)steer-=0.18*(s.x-(W-m))/m;
-      if(s.y<m)steer+=angleDiff(0,s.angle)>0?0.18:-0.18;
-      if(s.y>H-m)steer+=angleDiff(Math.PI,s.angle)>0?0.18:-0.18;
+      // proper boundary repulsion — steer toward center from each wall
+      const m=60; // repulsion zone in px
+      const cx2=W/2, cy2=H/2;
+      if(s.x<m){
+        const away=Math.atan2(cy2-s.y,cx2-s.x);
+        steer+=angleDiff(away,steer)*(0.4*(1-s.x/m));
+      }
+      if(s.x>W-m){
+        const away=Math.atan2(cy2-s.y,cx2-s.x);
+        steer+=angleDiff(away,steer)*(0.4*(1-(W-s.x)/m));
+      }
+      if(s.y<m){
+        const away=Math.atan2(cy2-s.y,cx2-s.x);
+        steer+=angleDiff(away,steer)*(0.4*(1-s.y/m));
+      }
+      if(s.y>H-m){
+        const away=Math.atan2(cy2-s.y,cx2-s.x);
+        steer+=angleDiff(away,steer)*(0.4*(1-(H-s.y)/m));
+      }
     }
   }
 
@@ -1104,15 +1295,34 @@ function moveBoid(s){
 
 function shoot(s){
   if(s.cd>0){s.cd--;return;}
-  if(s.formationMode||s.kickTimer>0)return;
+  if(s.kickTimer>0)return;
   const t=getType(s.type);
   const foes=ships.filter(o=>o.team!==s.team);if(!foes.length)return;
   const tgt=foes.reduce((a,b)=>getDist2(a,s)<getDist2(b,s)?a:b);
   const aTgt=getAngleTo(s,tgt);
+  const lspd=t.laserSpd||12,shots=s.type==='tiein'?2:1,ttlF=Math.round((t.ttl||2)*60);
+
+  if(s.formationMode){
+    const fm=t.fireMode||'atwill';
+    if(fm==='hold') return;
+    if(fm==='returnfire'&&!s.wasHit) return;
+    // atwill / returnfire (triggered): fire toward target from any angle
+    // but not if target is almost directly behind (>108° off)
+    if(Math.abs(angleDiff(aTgt,s.angle))>Math.PI*0.6) return;
+    s.cd=t.cd+Math.floor(rand(-8,8));
+    playLaser(s.team);
+    for(let i=0;i<shots;i++){
+      const sp=shots>1?(i===0?-0.06:0.06):0;
+      lasers.push({x:s.x,y:s.y,vx:Math.cos(aTgt+sp)*lspd,vy:Math.sin(aTgt+sp)*lspd,
+        angle:aTgt+sp,team:s.team,color:t.laser,dmg:t.dmg,life:ttlF});
+    }
+    return;
+  }
+
+  // normal (non-formation) shooting — must face target within ~15°
   if(Math.abs(angleDiff(aTgt,s.angle))>0.26)return;
   s.cd=t.cd+Math.floor(rand(-8,8));
   playLaser(s.team);
-  const lspd=t.laserSpd||12,shots=s.type==='tiein'?2:1,ttlF=Math.round((t.ttl||2)*60);
   for(let i=0;i<shots;i++){
     const sp=shots>1?(i===0?-0.06:0.06):0,a=s.angle+sp;
     lasers.push({x:s.x,y:s.y,vx:Math.cos(a)*lspd,vy:Math.sin(a)*lspd,angle:a,team:s.team,color:t.laser,dmg:t.dmg,life:ttlF});
@@ -1188,6 +1398,23 @@ function loop(){
   for(const s of ships){drawSpriteWrapped(s.type,s.x,s.y,s.angle);drawHP(s);}
   animId=requestAnimationFrame(loop);
 }
+
+// ── GAME SIZE — always fills full viewport ────────────────────────────────────
+function calcGameSize(){
+  W=window.innerWidth;
+  H=window.innerHeight-54;
+  if(W%2!==0)W--;
+  if(H%2!==0)H--;
+}
+
+window.addEventListener('resize',()=>{
+  if(gameRunning)return; // locked during game
+  // update app container size
+  const app=document.getElementById('app');
+  app.style.width=window.innerWidth+'px';
+  app.style.height=window.innerHeight+'px';
+  calcGameSize();resizeCanvases();initStars();drawStars();
+});
 
 loadSprites(()=>{
   // restore saved language
