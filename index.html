@@ -26,12 +26,12 @@ canvas{display:block;image-rendering:pixelated;position:absolute;top:32px;left:0
 #legend{position:absolute;bottom:0;left:0;right:0;height:22px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:#06060f;border-top:1px solid #1a1a2a;font-size:9px;letter-spacing:1px;font-family:monospace;z-index:10;}
 #legend.hidden{display:none;}
 #configScreen{overflow-y:auto;justify-content:flex-start;padding:14px 22px;align-items:center;}
-.cfg-title{font-size:13px;letter-spacing:3px;color:#fff;text-transform:uppercase;margin-bottom:10px;width:100%;text-align:center;}
+.cfg-title{font-size:16px;letter-spacing:3px;color:#fff;text-transform:uppercase;margin-bottom:10px;width:100%;text-align:center;}
 .cfg-sec{width:100%;margin-bottom:10px;}
-.cfg-sec-title{font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;padding-bottom:3px;border-bottom:1px solid #1a1a2a;color:#667788;}
-.cfg-row{display:flex;align-items:center;margin-bottom:4px;gap:8px;}
-.cfg-lbl{font-size:10px;color:#889aaa;width:150px;flex-shrink:0;}
-.cfg-val{font-size:10px;color:#fff;width:34px;text-align:right;flex-shrink:0;}
+.cfg-sec-title{font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;padding-bottom:3px;border-bottom:1px solid #1a1a2a;color:#667788;}
+.cfg-row{display:flex;align-items:center;margin-bottom:8px;gap:8px;}
+.cfg-lbl{font-size:13px;color:#889aaa;width:170px;flex-shrink:0;}
+.cfg-val{font-size:13px;color:#fff;width:40px;text-align:right;flex-shrink:0;}
 input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 .cfg-btns{display:flex;gap:10px;justify-content:center;margin-top:8px;width:100%;}
 .cfg-btn{background:#0a0a1a;border:1px solid #334455;color:#aabbcc;font-family:monospace;font-size:10px;letter-spacing:2px;padding:7px 18px;cursor:pointer;text-transform:uppercase;}
@@ -50,12 +50,12 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 .cl-fix{color:#7aaa8a;}
 .cl-divider{border:none;border-top:1px solid #1a1a2a;margin:14px 0;}
 /* readme */
-#readmeScreen{overflow-y:auto;justify-content:flex-start;padding:20px 28px;background:#03030d;}
-.rm-header{font-size:13px;letter-spacing:3px;color:#fff;text-transform:uppercase;margin-bottom:4px;width:100%;text-align:center;}
-.rm-sub{font-size:9px;letter-spacing:2px;color:#445566;text-align:center;margin-bottom:16px;text-transform:uppercase;}
-.rm-sec{margin-bottom:14px;}
+#readmeScreen{overflow-y:auto;justify-content:flex-start;padding:20px 28px;background:#03030d;align-items:center;}
+.rm-header{font-size:13px;letter-spacing:3px;color:#fff;text-transform:uppercase;margin-bottom:4px;width:100%;max-width:640px;text-align:center;}
+.rm-sub{font-size:9px;letter-spacing:2px;color:#445566;text-align:center;margin-bottom:16px;text-transform:uppercase;width:100%;max-width:640px;}
+.rm-sec{margin-bottom:14px;width:100%;max-width:640px;}
 .rm-sec-title{font-size:9px;letter-spacing:2px;color:#4fa3e0;text-transform:uppercase;margin-bottom:7px;padding-bottom:3px;border-bottom:1px solid #1a2a3a;}
-.rm-p{font-size:10px;color:#778899;line-height:1.7;margin-bottom:6px;}
+.rm-p{font-size:10px;color:#778899;line-height:1.7;margin-bottom:6px;text-align:left;}
 .rm-row{display:flex;gap:0;margin-bottom:2px;font-size:10px;}
 .rm-cell-h{color:#4fa3e0;padding:3px 8px;background:#080814;border:1px solid #1a2a3a;font-size:9px;letter-spacing:1px;text-transform:uppercase;flex:1;}
 .rm-cell{color:#889aaa;padding:3px 8px;border:1px solid #111122;font-size:9px;flex:1;}
@@ -90,9 +90,9 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 .toggle::after{content:'';position:absolute;width:12px;height:12px;border-radius:50%;background:#556677;top:2px;left:2px;transition:left .15s,background .15s;}
 .toggle.on::after{left:20px;background:#00cc44;}
 .form-row{display:flex;align-items:center;margin-bottom:4px;gap:6px;}
-.form-lbl{font-size:10px;color:#889aaa;width:150px;flex-shrink:0;}
+.form-lbl{font-size:13px;color:#889aaa;width:170px;flex-shrink:0;}
 .form-pills{display:flex;gap:4px;flex:1;flex-wrap:wrap;}
-.fpill{padding:3px 7px;background:#0a0a1a;border:1px solid #334455;color:#778899;font-family:monospace;font-size:8px;letter-spacing:1px;cursor:pointer;text-transform:uppercase;border-radius:3px;}
+.fpill{padding:4px 9px;background:#0a0a1a;border:1px solid #334455;color:#778899;font-family:monospace;font-size:11px;letter-spacing:1px;cursor:pointer;text-transform:uppercase;border-radius:3px;}
 .fpill:hover{border-color:#4fa3e0;color:#fff;}
 .fpill.active{border-color:#4fa3e0;color:#fff;background:#0f1a2a;}
 /* language pills */
@@ -114,7 +114,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
   .cfg-sec-title{font-size:8px;margin-bottom:4px;}
   .cfg-lbl{font-size:9px;width:110px;}
   .cfg-val{font-size:9px;width:28px;}
-  .cfg-row{margin-bottom:2px;}
+  .cfg-row{margin-bottom:10px;}
   .cfg-btn{padding:5px 10px;font-size:8px;}
   .form-lbl{font-size:9px;width:110px;}
   .fpill{font-size:7px;padding:2px 5px;}
@@ -131,6 +131,10 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 /* config layout — max width, centered */
 #cfgInner{width:100%;max-width:700px;}
 #cfgShips{display:block;}
+
+@media (max-width:500px),(max-height:500px){
+  input[type=range]{height:6px;cursor:pointer;}
+}
 </style>
 </head>
 <body>
@@ -152,7 +156,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
     <button class="btn" onclick="window.open('https://github.com/OberstRolex123/Star-Wars-Battle-Simulator/blob/main/CHANGELOG.md','_blank')" data-i18n="menu.changelog">Changelog</button>
     <button class="btn" onclick="showReadme()" data-i18n="menu.about">About</button>
     <button class="btn" style="border-color:#334455;color:#aaaaaa;" onclick="loadVersion()" data-i18n="menu.loadVersion">Load Version</button>
-    <div style="font-size:9px;letter-spacing:2px;color:#ffffff;text-transform:uppercase;margin-top:4px;opacity:0.4;" data-i18n="menu.madeWith">v1.3 — made with Claude</div>
+    <div style="font-size:9px;letter-spacing:2px;color:#ffffff;text-transform:uppercase;margin-top:4px;opacity:0.4;" data-i18n="menu.madeWith">v1.3.1 — made with Claude</div>
   </div>
 </div>
 
@@ -278,7 +282,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 <!-- README / ABOUT -->
 <div id="readmeScreen" class="screen hidden">
   <div class="rm-header" data-i18n="rm.title">Star Wars</div>
-  <div class="rm-sub" data-i18n="rm.sub">Pixel Battle Simulator — v1.2</div>
+  <div class="rm-sub" data-i18n="rm.sub">Pixel Battle Simulator — v1.3</div>
   <div class="rm-sec">
     <div class="rm-sec-title" data-i18n="rm.sec.what">What is this</div>
     <div class="rm-p" data-i18n="rm.what.p1">An autonomous pixel-art space battle...</div>
@@ -326,6 +330,10 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
       <span class="rm-tag sys">Column</span><span class="rm-tag sys">Pincer</span>
     </div>
     <div class="rm-p" data-i18n="rm.formations.p">Formations hold until triggered...</div>
+  </div>
+  <div class="rm-sec">
+    <div class="rm-sec-title" data-i18n="rm.sec.firemode">Fire Mode</div>
+    <div class="rm-p" data-i18n="rm.firemode.p">Per ship: Hold Fire · Fire at Will · Return Fire</div>
   </div>
   <div class="rm-sec">
     <div class="rm-sec-title" data-i18n="rm.sec.config">Configuration</div>
@@ -418,7 +426,7 @@ const LANGS={
     'menu.title':'Star Wars','menu.subtitle':'Pixel Battle Simulator',
     'menu.newGame':'New Game','menu.config':'Configuration',
     'menu.changelog':'Changelog','menu.about':'About',
-    'menu.loadVersion':'Load Version','menu.madeWith':'v1.3 — made with Claude',
+    'menu.loadVersion':'Load Version','menu.madeWith':'v1.3.1 — made with Claude',
     // hud
     'hud.rebellion':'Rebellion','hud.empire':'Empire',
     'hud.pause':'|| Pause','hud.mute.on':'♪ On','hud.mute.off':'♪ Off',
@@ -474,7 +482,7 @@ const LANGS={
     'cl.v10.e11':'Config saved to localStorage, persists between sessions',
     'cl.v10.e12':'Single HTML file, zero dependencies, ~44KB',
     // about / readme screen
-    'rm.title':'Star Wars','rm.sub':'Pixel Battle Simulator — v1.3',
+    'rm.title':'Star Wars','rm.sub':'Pixel Battle Simulator — v1.3.1',
     'rm.sec.what':'What is this',
     'rm.what.p1':'An autonomous pixel-art space battle between the Rebellion and the Empire. Two fleets spawn, fight, and respawn endlessly. Configure everything, watch the Force decide.',
     'rm.what.p2':'Built entirely in a single HTML file — no server, no dependencies, no install. Open and play.',
@@ -485,10 +493,12 @@ const LANGS={
     'rm.role.xwing':'All-rounder, 4 cannons','rm.role.awing':'Interceptor, fast, evasive',
     'rm.role.tie':'Cannon fodder, swarm','rm.role.tiein':'Heavy, double shot',
     'rm.sec.formations':'Formations',
-    'rm.formations.p':'Formations hold until triggered — by enemy contact, taking a hit, or both. Ships dissolve front-to-back with a configurable stagger delay.',
+    'rm.formations.p':'6 types per ship: Delta · Line · Swarm · Wedge · Column · Pincer. Each breaks individually on contact, hit, both, or never. Ships dissolve front-to-back with stagger delay.',
+    'rm.sec.firemode':'Fire Mode',
+    'rm.firemode.p':'Per ship: Hold Fire (never shoot in formation) · Fire at Will (shoot toward target from any heading) · Return Fire (fire when any group member is hit, whole group activates together)',
     'rm.sec.config':'Configuration',
-    'rm.config.perShip':'Per ship: HP · Speed · Turn Rate · Fire Rate · Laser Speed · Laser TTL · Damage · Count · Formation',
-    'rm.config.global':'Global: Field size · Wrap-around world · Scrolling starfield · Formation break trigger · Contact range · Stagger delay',
+    'rm.config.perShip':'Per ship: HP · Speed · Turn Rate · Fire Rate · Laser Speed · Laser TTL · Damage · Count · Formation · Break Trigger · Fire Mode',
+    'rm.config.global':'Global: Wrap-around world · Scrolling starfield · Formation flying · Contact range (%) · Stagger delay',
     'rm.config.saved':'All settings are saved automatically to localStorage.',
     'rm.sec.tech':'Tech',
     'rm.tech.stack':'Vanilla HTML · Canvas 2D · Web Audio API · localStorage · Base64 sprites · ~58KB single file',
@@ -497,8 +507,8 @@ const LANGS={
     'rm.roadmap.p':'Campaign mode: build your fleet with credits, face escalating Imperial squadrons across missions, earn credits on victory, upgrade ships between rounds.',
     // load version screen
     'lv.title':'Load Version',
-    'lv.current.tag':'v1.3 — current',
-    'lv.current.desc':'Mobile · Formations · Fire mode · Break trigger per ship',
+    'lv.current.tag':'v1.3.1 — current',
+    'lv.current.desc':'Mobile · Formations · Fire mode · UI polish',
     'lv.current.btn':'Playing',
     'lv.v10.desc':'Initial release · All core features',
     'lv.v12.tag':'v1.2','lv.v12.desc':'Multi-language (EN/DE/PL) · Laser speed config · GitHub changelog link',
@@ -518,7 +528,7 @@ const LANGS={
     'menu.title':'Krieg der Sterne','menu.subtitle':'Pixel Kampfsimulator',
     'menu.newGame':'Neues Spiel','menu.config':'Konfiguration',
     'menu.changelog':'Changelog','menu.about':'Über das Spiel',
-    'menu.loadVersion':'Version laden','menu.madeWith':'v1.3 — made with Claude',
+    'menu.loadVersion':'Version laden','menu.madeWith':'v1.3.1 — made with Claude',
     'hud.rebellion':'Rebellion','hud.empire':'Imperium',
     'hud.pause':'|| Pause','hud.mute.on':'♪ An','hud.mute.off':'♪ Aus',
     'legend.rebels':'A-Wing · X-Wing — Rebellion',
@@ -568,7 +578,7 @@ const LANGS={
     'cl.v10.e10':'8-Bit-Prozeduraler Sound — Laserfeuer, Explosionen, Rundenabschluss-Fanfare, Stummschalter',
     'cl.v10.e11':'Konfiguration in localStorage gespeichert, bleibt zwischen Sitzungen erhalten',
     'cl.v10.e12':'Einzelne HTML-Datei, keine Abhängigkeiten, ~44KB',
-    'rm.title':'Krieg der Sterne','rm.sub':'Pixel Kampfsimulator — v1.3',
+    'rm.title':'Krieg der Sterne','rm.sub':'Pixel Kampfsimulator — v1.3.1',
     'rm.sec.what':'Was ist das?',
     'rm.what.p1':'Ein autonomer Pixel-Art-Weltraumkampf zwischen der Rebellion und dem Imperium. Zwei Flotten spawnen, kämpfen und respawnen endlos. Alles konfigurierbar — die Macht entscheidet.',
     'rm.what.p2':'Komplett in einer einzigen HTML-Datei — kein Server, keine Abhängigkeiten, keine Installation. Öffnen und spielen.',
@@ -579,10 +589,12 @@ const LANGS={
     'rm.role.xwing':'Allrounder, 4 Kanonen','rm.role.awing':'Abfangjäger, schnell, ausweichend',
     'rm.role.tie':'Kanonenfutter, Schwarm','rm.role.tiein':'Schwer, Doppelschuss',
     'rm.sec.formations':'Formationen',
-    'rm.formations.p':'Formationen halten bis sie ausgelöst werden — durch Feindkontakt, Treffer oder beides. Schiffe lösen sich von vorne nach hinten mit konfigurierbarer Staffelverzögerung auf.',
+    'rm.formations.p':'6 Typen pro Schiff: Delta · Linie · Schwarm · Keil · Kolonne · Zange. Jede bricht individuell bei Kontakt, Treffer, beides oder nie. Auflösung von vorne nach hinten mit Staffelverzögerung.',
+    'rm.sec.firemode':'Feuermodus',
+    'rm.firemode.p':'Pro Schiff: Feuer halten (nie in Formation schießen) · Freies Feuer (schießt auf Ziel aus beliebiger Richtung) · Feuer erwidern (feuert wenn ein Gruppenmitglied getroffen wird)',
     'rm.sec.config':'Konfiguration',
-    'rm.config.perShip':'Pro Schiff: TP · Geschw. · Wenderate · Feuerrate · Lasergeschw. · Laser-TTL · Schaden · Anzahl · Formation',
-    'rm.config.global':'Global: Feldgröße · Endlose Welt · Scrollendes Sternfeld · Formationsauflösung · Kontaktreichweite · Staffelverzögerung',
+    'rm.config.perShip':'Pro Schiff: TP · Geschw. · Wenderate · Feuerrate · Lasergeschw. · Laser-TTL · Schaden · Anzahl · Formation · Auslösung · Feuermodus',
+    'rm.config.global':'Global: Endlose Welt · Scrollendes Sternfeld · Formationsflug · Kontaktreichweite (%) · Staffelverzögerung',
     'rm.config.saved':'Alle Einstellungen werden automatisch in localStorage gespeichert.',
     'rm.sec.tech':'Technik',
     'rm.tech.stack':'Vanilla HTML · Canvas 2D · Web Audio API · localStorage · Base64-Sprites · ~58KB Einzeldatei',
@@ -590,8 +602,8 @@ const LANGS={
     'rm.sec.roadmap':'Ausblick',
     'rm.roadmap.p':'Kampagnenmodus: Flotte mit Credits zusammenstellen, vordefinierte Imperiumsstaffeln über Missionen besiegen, Credits verdienen, Schiffe zwischen Runden aufrüsten.',
     'lv.title':'Version laden',
-    'lv.current.tag':'v1.3 — aktuell',
-    'lv.current.desc':'Mobile · Formationen · Feuermodus · Auslösung pro Schiff',
+    'lv.current.tag':'v1.3.1 — aktuell',
+    'lv.current.desc':'Mobile · Formationen · Feuermodus · UI-Verbesserungen',
     'lv.current.btn':'Aktiv',
     'lv.v10.desc':'Erstveröffentlichung · Alle Kernfunktionen',
     'lv.v12.tag':'v1.2','lv.v12.desc':'Mehrsprachigkeit (EN/DE/PL) · Lasergeschwindigkeit · GitHub-Changelog',
@@ -660,7 +672,7 @@ const LANGS={
     'cl.v10.e10':'8-bitowy dźwięk proceduralny — ogień laserowy, eksplozje, fanfara końca rundy, wyciszenie',
     'cl.v10.e11':'Konfiguracja zapisana w localStorage, zachowywana między sesjami',
     'cl.v10.e12':'Pojedynczy plik HTML, brak zależności, ~44KB',
-    'rm.title':'Gwiezdne Wojny','rm.sub':'Pikselowy Symulator Bitwy — v1.3',
+    'rm.title':'Gwiezdne Wojny','rm.sub':'Pikselowy Symulator Bitwy — v1.3.1',
     'rm.sec.what':'Co to jest?',
     'rm.what.p1':'Autonomiczna pikselowa bitwa kosmiczna między Rebelią a Imperium. Dwie floty rodzą się, walczą i odradzają bez końca. Skonfiguruj wszystko, a Moc zdecyduje.',
     'rm.what.p2':'Zbudowane w jednym pliku HTML — brak serwera, brak zależności, brak instalacji. Otwórz i graj.',
@@ -671,10 +683,12 @@ const LANGS={
     'rm.role.xwing':'Wszechstronny, 4 działa','rm.role.awing':'Przechwytywacz, szybki, zwrotny',
     'rm.role.tie':'Mięso armatnie, rój','rm.role.tiein':'Ciężki, podwójny strzał',
     'rm.sec.formations':'Formacje',
-    'rm.formations.p':'Formacje utrzymują się do momentu wyzwolenia — przez kontakt z wrogiem, trafienie lub oba. Statki rozpadają się od przodu do tyłu z konfigurowalnym opóźnieniem.',
+    'rm.formations.p':'6 typów na statek: Delta · Linia · Rój · Klin · Kolumna · Kleszcze. Każda rozpada się indywidualnie przy kontakcie, trafieniu, obu lub nigdy. Rozpad od przodu z opóźnieniem.',
+    'rm.sec.firemode':'Tryb ognia',
+    'rm.firemode.p':'Na statek: Wstrzymaj ogień · Ogień dowolny (strzela w kierunku celu z dowolnego kąta) · Odpowiedz ogniem (cała grupa aktywuje się gdy jeden statek zostanie trafiony)',
     'rm.sec.config':'Konfiguracja',
-    'rm.config.perShip':'Na statek: PW · Prędkość · Zwrotność · Szybkostrzelność · Prędkość lasera · Czas życia · Obrażenia · Liczba · Formacja',
-    'rm.config.global':'Globalne: Rozmiar pola · Świat okrągły · Ruchome gwiazdy · Rozpad formacji · Zasięg kontaktu · Opóźnienie',
+    'rm.config.perShip':'Na statek: PW · Prędkość · Zwrotność · Szybkostrzelność · Prędkość lasera · Czas życia · Obrażenia · Liczba · Formacja · Wyzwalacz · Tryb ognia',
+    'rm.config.global':'Globalne: Świat okrągły · Ruchome gwiazdy · Lot w formacji · Zasięg kontaktu (%) · Opóźnienie',
     'rm.config.saved':'Wszystkie ustawienia są automatycznie zapisywane w localStorage.',
     'rm.sec.tech':'Technologia',
     'rm.tech.stack':'Vanilla HTML · Canvas 2D · Web Audio API · localStorage · Sprite Base64 · ~58KB pojedynczy plik',
@@ -682,7 +696,7 @@ const LANGS={
     'rm.sec.roadmap':'Plan rozwoju',
     'rm.roadmap.p':'Tryb kampanii: zbuduj flotę za kredyty, zwalczaj predefiniowane eskadry Imperium w kolejnych misjach, zdobywaj kredyty za zwycięstwo, ulepszaj statki między rundami.',
     'lv.title':'Wczytaj wersję',
-    'lv.current.tag':'v1.3 — aktualna',
+    'lv.current.tag':'v1.3.1 — aktualna',
     'lv.current.desc':'Naprawa pauzy · Historia zmian · O grze · Wczytaj wersję · Wielojęzyczność',
     'lv.current.btn':'Aktywna',
     'lv.v10.desc':'Pierwsze wydanie · Wszystkie funkcje',
