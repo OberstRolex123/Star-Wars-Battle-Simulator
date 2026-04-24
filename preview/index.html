@@ -2069,7 +2069,7 @@ function skipCrawl(){
   function resize(){
     W=canvas.width=innerWidth; H=canvas.height=innerHeight;
     VPx=W/2; VPy=H*VANISHING_Y;
-    STRIP_W=Math.min(W, 900); V0_BOTTOM=FOCAL; // max 900px wide — wider = more starfield on sides
+    STRIP_W=Math.min(W, 1100); V0_BOTTOM=FOCAL; // max 900px wide — wider = more starfield on sides
     buildOffscreen();
   }
 
