@@ -2006,8 +2006,9 @@ function skipCrawl(){
   }
 
   function buildOffscreen(){
+    const RENDER_W=Math.round(STRIP_W*1.33); // 1/3 wider text canvas for more words per line
     const tmp=document.createElement('canvas');
-    tmp.width=STRIP_W; tmp.height=10;
+    tmp.width=RENDER_W; tmp.height=10;
     const tc=tmp.getContext('2d');
     const rendered=[];
     for(const line of LINES){
@@ -2019,7 +2020,7 @@ function skipCrawl(){
       const words=line.text.split(' ');let current='';
       for(const word of words){
         const test=current?current+' '+word:word;
-        if(tc.measureText(test).width>STRIP_W&&current){rendered.push({text:current,sz,align:line.align,bold:isBold});current=word;}
+        if(tc.measureText(test).width>RENDER_W&&current){rendered.push({text:current,sz,align:line.align,bold:isBold});current=word;}
         else current=test;
       }
       if(current) rendered.push({text:current,sz,align:line.align,bold:isBold});
@@ -2030,7 +2031,7 @@ function skipCrawl(){
     for(const r of rendered) totalH+=r.sz*LINE_H_MUL;
     totalH+=padding*5;
     offscreen=document.createElement('canvas');
-    offscreen.width=STRIP_W; offscreen.height=Math.ceil(totalH);
+    offscreen.width=RENDER_W; offscreen.height=Math.ceil(totalH);
     offCtx=offscreen.getContext('2d');
     let y=padding+getBaseSize();
     for(const r of rendered){
@@ -2041,18 +2042,18 @@ function skipCrawl(){
         // auto-shrink font if text exceeds strip width
         let renderSz=r.sz;
         offCtx.font=`${r.bold?'bold ':''}${renderSz}px ${FONT_NORMAL}`;
-        while(offCtx.measureText(r.text).width>STRIP_W*0.95&&renderSz>16){
+        while(offCtx.measureText(r.text).width>RENDER_W*0.95&&renderSz>16){
           renderSz-=2;
           offCtx.font=`${r.bold?'bold ':''}${renderSz}px ${FONT_NORMAL}`;
         }
-        offCtx.textAlign='center';offCtx.fillText(r.text,STRIP_W/2,y);
+        offCtx.textAlign='center';offCtx.fillText(r.text,RENDER_W/2,y);
       }
       else{
         const words=r.text.split(' ');
         if(words.length<=1){offCtx.textAlign='left';offCtx.fillText(r.text,0,y);}
         else{
           const totalWordW=words.reduce((a,w)=>a+offCtx.measureText(w).width,0);
-          const gap=(STRIP_W-totalWordW)/(words.length-1);
+          const gap=(RENDER_W-totalWordW)/(words.length-1);
           let x=0;
           for(const w of words){offCtx.textAlign='left';offCtx.fillText(w,x,y);x+=offCtx.measureText(w).width+gap;}
         }
@@ -2069,7 +2070,7 @@ function skipCrawl(){
   function resize(){
     W=canvas.width=innerWidth; H=canvas.height=innerHeight;
     VPx=W/2; VPy=H*VANISHING_Y;
-    STRIP_W=Math.min(W, 1500); V0_BOTTOM=FOCAL; // max 900px wide — wider = more starfield on sides
+    STRIP_W=Math.min(W, 1100); V0_BOTTOM=FOCAL;
     buildOffscreen();
   }
 
