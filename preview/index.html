@@ -398,9 +398,9 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
   <div class="cfg-sec">
     <div class="cfg-sec-title" data-i18n="cfg.sec.visual">Visual</div>
     <div class="toggle-row">
-      <div class="toggle" id="tog-musicEnabled" onclick="toggleOpt('musicEnabled')"></div>
+      <div class="toggle on" id="tog-musicEnabled" onclick="toggleOpt('musicEnabled')"></div>
       <span class="cfg-lbl" data-i18n="cfg.music">Music</span>
-      <span class="cfg-val" id="v-musicEnabled" style="color:#556677">Off</span>
+      <span class="cfg-val" id="v-musicEnabled" style="color:#00cc44">On</span>
     </div>
     <div class="toggle-row">
       <div class="toggle" id="tog-scrollStars" onclick="toggleOpt('scrollStars')"></div>
@@ -1261,7 +1261,7 @@ const DEFAULTS={
   awing:{hp:2,maxHp:2,spd:2.3,turnRate:0.07,cd:35,dmg:1,count:2,ttl:2.0,formation:'delta',laserSpd:14,fireMode:'atwill',breakTrigger:'both'},
   tie:  {hp:1,maxHp:1,spd:1.6,turnRate:0.03,cd:30,dmg:1,count:6,ttl:2.0,formation:'swarm',laserSpd:12,fireMode:'atwill',breakTrigger:'both'},
   tiein:{hp:2,maxHp:2,spd:2.2,turnRate:0.065,cd:50,dmg:2,count:2,ttl:2.0,formation:'line',laserSpd:10,fireMode:'atwill',breakTrigger:'both'},
-  formation:false,scrollStars:false,wrapWorld:false,
+  formation:false,scrollStars:false,wrapWorld:false,musicEnabled:true,
   breakRange:25,breakStagger:15,
 };
 let CFG=JSON.parse(JSON.stringify(DEFAULTS));
