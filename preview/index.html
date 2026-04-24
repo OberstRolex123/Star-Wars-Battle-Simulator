@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -90,7 +89,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 .toggle-row{display:flex;align-items:center;margin-bottom:4px;gap:8px;}
 .toggle{width:36px;height:18px;border:1px solid #334455;border-radius:9px;position:relative;cursor:pointer;background:#0a0a1a;flex-shrink:0;transition:background .15s,border-color .15s;}
 .toggle.on{background:#0f3020;border-color:#00cc44;}
-.toggle::after{content:’’;position:absolute;width:12px;height:12px;border-radius:50%;background:#556677;top:2px;left:2px;transition:left .15s,background .15s;}
+.toggle::after{content:'';position:absolute;width:12px;height:12px;border-radius:50%;background:#556677;top:2px;left:2px;transition:left .15s,background .15s;}
 .toggle.on::after{left:20px;background:#00cc44;}
 .form-row{display:flex;align-items:center;margin-bottom:4px;gap:6px;}
 .form-lbl{font-size:13px;color:#889aaa;width:170px;flex-shrink:0;}
@@ -106,29 +105,29 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 
 /* ── MOBILE ─────────────────────────────────────────────────────────────────── */
 @media (max-width: 500px), (max-height: 500px) {
-.title{font-size:16px;letter-spacing:3px;margin-bottom:2px;}
-.subtitle{font-size:8px;margin-bottom:12px;}
-.btn{width:160px;padding:7px 0;font-size:9px;letter-spacing:1px;margin-bottom:6px;}
-.lang-row{margin-bottom:12px;gap:4px;}
-.lang-pill{padding:3px 8px;font-size:8px;}
-#configScreen{padding:8px 14px;}
-.cfg-title{font-size:10px;margin-bottom:6px;}
-.cfg-sec{margin-bottom:6px;}
-.cfg-sec-title{font-size:8px;margin-bottom:4px;}
-.cfg-lbl{font-size:9px;width:110px;}
-.cfg-val{font-size:9px;width:28px;}
-.cfg-row{margin-bottom:10px;}
-.cfg-btn{padding:5px 10px;font-size:8px;}
-.form-lbl{font-size:9px;width:110px;}
-.fpill{font-size:7px;padding:2px 5px;}
-.cl-header,.lv-header,.rm-header{font-size:10px;}
-.cl-entry{font-size:9px;}
-.rm-p{font-size:9px;}
-.rm-cell,.rm-cell-h{font-size:8px;padding:2px 4px;}
-.hud-lbl{font-size:8px;}
-.hud-sc{font-size:11px;}
-.hud-btn{font-size:8px;padding:2px 5px;}
-#legend{font-size:8px;}
+  .title{font-size:16px;letter-spacing:3px;margin-bottom:2px;}
+  .subtitle{font-size:8px;margin-bottom:12px;}
+  .btn{width:160px;padding:7px 0;font-size:9px;letter-spacing:1px;margin-bottom:6px;}
+  .lang-row{margin-bottom:12px;gap:4px;}
+  .lang-pill{padding:3px 8px;font-size:8px;}
+  #configScreen{padding:8px 14px;}
+  .cfg-title{font-size:10px;margin-bottom:6px;}
+  .cfg-sec{margin-bottom:6px;}
+  .cfg-sec-title{font-size:8px;margin-bottom:4px;}
+  .cfg-lbl{font-size:9px;width:110px;}
+  .cfg-val{font-size:9px;width:28px;}
+  .cfg-row{margin-bottom:10px;}
+  .cfg-btn{padding:5px 10px;font-size:8px;}
+  .form-lbl{font-size:9px;width:110px;}
+  .fpill{font-size:7px;padding:2px 5px;}
+  .cl-header,.lv-header,.rm-header{font-size:10px;}
+  .cl-entry{font-size:9px;}
+  .rm-p{font-size:9px;}
+  .rm-cell,.rm-cell-h{font-size:8px;padding:2px 4px;}
+  .hud-lbl{font-size:8px;}
+  .hud-sc{font-size:11px;}
+  .hud-btn{font-size:8px;padding:2px 5px;}
+  #legend{font-size:8px;}
 }
 
 /* config layout — max width, centered */
@@ -136,119 +135,119 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 #cfgShips{display:block;}
 
 @media (max-width:500px),(max-height:500px){
-input[type=range]{height:6px;cursor:pointer;}
+  input[type=range]{height:6px;cursor:pointer;}
 }
 
-```
-@import url('https://fonts.googleapis.com/css2?family=News+Cycle:wght@400;700&display=swap');
 
-#crawl-screen { position:fixed;inset:0;z-index:1000;background:#000; }
-#crawl-screen.hidden { display:none; }
-#crawl-starfield    { position: fixed; inset: 0; z-index: 0; }
-#crawl-canvas-el { position: fixed; inset: 0; z-index: 2; }
+    @import url('https://fonts.googleapis.com/css2?family=News+Cycle:wght@400;700&display=swap');
 
-.crawl-fade-top {
-  position: fixed; top: 0; left: 0; right: 0; height: 30%;
-  background: linear-gradient(to bottom, #000 35%, transparent);
-  z-index: 3; pointer-events: none;
-}
+    #crawl-screen { position:fixed;inset:0;z-index:1000;background:#000; }
+    #crawl-screen.hidden { display:none; }
+    #crawl-starfield    { position: fixed; inset: 0; z-index: 0; }
+    #crawl-canvas-el { position: fixed; inset: 0; z-index: 2; }
 
-.crawl-intro {
-  position: fixed; top: 50%; left: 10%; right: 10%;
-  transform: translateY(-50%);
-  color: #4a9eff;
-  font-family: 'News Cycle', 'Arial Narrow', Arial, sans-serif;
-  font-size: clamp(1.6rem, 4.5vw, 4rem);
-  font-weight: 900;
-  -webkit-text-stroke: 2px #4a9eff;
-  letter-spacing: 0.06em;
-  text-align: center;
-  z-index: 20;
-  animation: crawlIntroFade 5.5s ease forwards;
-}
-@keyframes crawlIntroFade {
-  0%   { opacity: 0; }
-  12%  { opacity: 1; }
-  72%  { opacity: 1; }
-  100% { opacity: 0; }
-}
+    .crawl-fade-top {
+      position: fixed; top: 0; left: 0; right: 0; height: 30%;
+      background: linear-gradient(to bottom, #000 35%, transparent);
+      z-index: 3; pointer-events: none;
+    }
 
-#crawl-logo-el {
-  position: fixed;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: clamp(220px, 46vw, 560px);
-  will-change: transform, opacity;
-  z-index: 20;
-  opacity: 0;
-  animation: crawlLogoAnim 8.5s cubic-bezier(.16,.84,.44,1) forwards;
-  animation-delay: 5.2s;
-}
-#crawl-logo-el svg { width: 100%; height: auto; display: block; }
-@keyframes crawlLogoAnim {
-  0%   { opacity: 0; transform: translate(-50%,-50%) scale(2.8); }
-  14%  { opacity: 1; transform: translate(-50%,-50%) scale(1);   }
-  58%  { opacity: 1; transform: translate(-50%,-50%) scale(0.3); }
-  100% { opacity: 0; transform: translate(-50%,-50%) scale(0.02);}
-}
+    .crawl-intro {
+      position: fixed; top: 50%; left: 10%; right: 10%;
+      transform: translateY(-50%);
+      color: #4a9eff;
+      font-family: 'News Cycle', 'Arial Narrow', Arial, sans-serif;
+      font-size: clamp(1.6rem, 4.5vw, 4rem);
+      font-weight: 900;
+      -webkit-text-stroke: 2px #4a9eff;
+      letter-spacing: 0.06em;
+      text-align: center;
+      z-index: 20;
+      animation: crawlIntroFade 5.5s ease forwards;
+    }
+    @keyframes crawlIntroFade {
+      0%   { opacity: 0; }
+      12%  { opacity: 1; }
+      72%  { opacity: 1; }
+      100% { opacity: 0; }
+    }
 
-.crawl-skip {
-  position: fixed; bottom: 1.1rem; right: 1.4rem;
-  background: transparent;
-  border: 1px solid rgba(255,232,31,.28);
-  color: rgba(255,232,31,.45);
-  font-family: 'News Cycle', Arial, sans-serif;
-  font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
-  padding: 0.45em 1.2em; cursor: pointer; z-index: 40;
-  transition: color .3s, border-color .3s;
-}
-.crawl-skip:hover { color: #FFE81F; border-color: #FFE81F; }
-```
+    #crawl-logo-el {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: clamp(220px, 46vw, 560px);
+      will-change: transform, opacity;
+      z-index: 20;
+      opacity: 0;
+      animation: crawlLogoAnim 8.5s cubic-bezier(.16,.84,.44,1) forwards;
+      animation-delay: 5.2s;
+    }
+    #crawl-logo-el svg { width: 100%; height: auto; display: block; }
+    @keyframes crawlLogoAnim {
+      0%   { opacity: 0; transform: translate(-50%,-50%) scale(2.8); }
+      14%  { opacity: 1; transform: translate(-50%,-50%) scale(1);   }
+      58%  { opacity: 1; transform: translate(-50%,-50%) scale(0.3); }
+      100% { opacity: 0; transform: translate(-50%,-50%) scale(0.02);}
+    }
+
+    .crawl-skip {
+      position: fixed; bottom: 1.1rem; right: 1.4rem;
+      background: transparent;
+      border: 1px solid rgba(255,232,31,.28);
+      color: rgba(255,232,31,.45);
+      font-family: 'News Cycle', Arial, sans-serif;
+      font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+      padding: 0.45em 1.2em; cursor: pointer; z-index: 40;
+      transition: color .3s, border-color .3s;
+    }
+    .crawl-skip:hover { color: #FFE81F; border-color: #FFE81F; }
+
 
 /* ── MENU RESPONSIVE ─────────────────────────────────────────────────────────
-Portrait: btn width = 90vw, font/padding scale proportionally
-Landscape: all buttons must fit in 90vh total, scale down accordingly     */
+   Portrait: btn width = 90vw, font/padding scale proportionally
+   Landscape: all buttons must fit in 90vh total, scale down accordingly     */
 
 /* Portrait — width-driven scaling */
 @media (orientation: portrait) and (max-width: 600px) {
-#menuScreen .btn {
-width: 80vw;
-font-size: 3.8vw;
-letter-spacing: 0.5vw;
-padding: 2.5vw 0;
-margin-bottom: 1.5vw;
-}
-#menuScreen .lang-row { margin-bottom: 3vw; }
-#menuScreen .lang-pill { padding: 1vw 2.5vw; font-size: 2.8vw; }
-#menuScreen .title { font-size: 7vw; }
-#menuScreen .subtitle { font-size: 2.5vw; margin-bottom: 3vw; }
+  #menuScreen .btn {
+    width: 80vw;
+    font-size: 3.8vw;
+    letter-spacing: 0.5vw;
+    padding: 2.5vw 0;
+    margin-bottom: 1.5vw;
+  }
+  #menuScreen .lang-row { margin-bottom: 3vw; }
+  #menuScreen .lang-pill { padding: 1vw 2.5vw; font-size: 2.8vw; }
+  #menuScreen .title { font-size: 7vw; }
+  #menuScreen .subtitle { font-size: 2.5vw; margin-bottom: 3vw; }
 }
 
 /* Landscape mobile — height-driven scaling */
 @media (orientation: landscape) and (max-width: 1024px) {
-#menuScreen .title { font-size: 4.5vw; margin-bottom: 0.8vh; }
-#menuScreen .subtitle { font-size: 1.8vw; margin-bottom: 1.5vh; }
-#menuScreen .lang-row { margin-bottom: 1.5vh; gap: 1vw; }
-#menuScreen .lang-pill { padding: 0.8vh 1.5vw; font-size: 1.6vw; }
-/* 2-column grid — 15% margin each side = 70vw total */
-#menuBtnGrid {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 1.2vh 2vw;
-width: 70vw;
-}
-#menuScreen .btn {
-width: 100%;
-font-size: 2.2vw;
-letter-spacing: 0.25vw;
-padding: 2.5vh 0;
-margin-bottom: 0;
-}
+  #menuScreen .title { font-size: 4.5vw; margin-bottom: 0.8vh; }
+  #menuScreen .subtitle { font-size: 1.8vw; margin-bottom: 1.5vh; }
+  #menuScreen .lang-row { margin-bottom: 1.5vh; gap: 1vw; }
+  #menuScreen .lang-pill { padding: 0.8vh 1.5vw; font-size: 1.6vw; }
+  /* 2-column grid — 15% margin each side = 70vw total */
+  #menuBtnGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2vh 2vw;
+    width: 70vw;
+  }
+  #menuScreen .btn {
+    width: 100%;
+    font-size: 2.2vw;
+    letter-spacing: 0.25vw;
+    padding: 2.5vh 0;
+    margin-bottom: 0;
+  }
 }
 </style>
-
 </head>
 <body>
+
 
 <div id="crawl-screen">
 <canvas id="crawl-starfield"></canvas>
@@ -345,8 +344,7 @@ margin-bottom: 0;
   </svg>
 </div>
 
-<button class="crawl-skip" onclick="skipCrawl()">Skip ▶</button>
-
+<button class="crawl-skip" onclick="skipCrawl()">Skip &#9654;</button>
 </div>
 
 <div id="app">
@@ -406,19 +404,16 @@ margin-bottom: 0;
       <div class="form-pills" id="fp-breakTrigger"></div>
     </div>
 
-```
-<div class="cfg-row">
-  <span class="cfg-lbl" data-i18n="cfg.breakRange">Contact range (%)</span>
-  <input type="range" min="5" max="50" step="5" id="sl-breakRange" oninput="cfgUpdateDirect('breakRange',this,0)">
-  <span class="cfg-val" id="v-breakRange">25%</span>
-</div>
-<div class="cfg-row">
-  <span class="cfg-lbl" data-i18n="cfg.breakStagger">Stagger delay (fr)</span>
-  <input type="range" min="0" max="60" step="5" id="sl-breakStagger" oninput="cfgUpdateDirect('breakStagger',this,0)">
-  <span class="cfg-val" id="v-breakStagger">15</span>
-</div>
-```
-
+    <div class="cfg-row">
+      <span class="cfg-lbl" data-i18n="cfg.breakRange">Contact range (%)</span>
+      <input type="range" min="5" max="50" step="5" id="sl-breakRange" oninput="cfgUpdateDirect('breakRange',this,0)">
+      <span class="cfg-val" id="v-breakRange">25%</span>
+    </div>
+    <div class="cfg-row">
+      <span class="cfg-lbl" data-i18n="cfg.breakStagger">Stagger delay (fr)</span>
+      <input type="range" min="0" max="60" step="5" id="sl-breakStagger" oninput="cfgUpdateDirect('breakStagger',this,0)">
+      <span class="cfg-val" id="v-breakStagger">15</span>
+    </div>
   </div>
   <div id="cfgShips">
   <!-- X-Wing -->
@@ -498,7 +493,6 @@ margin-bottom: 0;
 </div>
 
 <!-- README / ABOUT -->
-
 <div id="readmeScreen" class="screen hidden">
   <div class="rm-header" data-i18n="rm.title">Star Wars</div>
   <div class="rm-sub" data-i18n="rm.sub">Pixel Battle Simulator — v1.3</div>
@@ -575,7 +569,6 @@ margin-bottom: 0;
 </div>
 
 <!-- LOAD VERSION -->
-
 <div id="loadScreen" class="screen hidden">
   <div class="lv-header" data-i18n="lv.title">Load Version</div>
   <div class="lv-entry lv-current">
@@ -621,7 +614,6 @@ margin-bottom: 0;
 </div>
 
 <!-- VERSION HINT OVERLAY -->
-
 <div id="versionHint" class="hidden">
   <div class="vh-title" data-i18n="vh.title">⚠ Cannot open version</div>
   <div class="vh-box">
@@ -1870,6 +1862,8 @@ window.addEventListener('resize',()=>{
 function showCrawl(){
   // stop any running loop first
   if(window._crawlAnimStop) window._crawlAnimStop();
+  const _cs=document.getElementById('crawl-screen');
+  _cs.style.display=''; // clear inline style set by skipCrawl
 
   // reset CSS animations by removing and re-adding elements
   const intro = document.getElementById('crawl-intro-text');
@@ -1891,7 +1885,9 @@ function showCrawl(){
 }
 
 function skipCrawl(){
-  document.getElementById('crawl-screen').classList.add('hidden');
+  const el=document.getElementById('crawl-screen');
+  el.classList.add('hidden');
+  el.style.display='none'; // belt-and-suspenders for GitHub Pages
   if(window._crawlAnimStop) window._crawlAnimStop();
 }
 
@@ -2154,6 +2150,5 @@ loadSprites(()=>{
 });
 
 </script>
-
 </body>
 </html>
