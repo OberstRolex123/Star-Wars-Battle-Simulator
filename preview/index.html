@@ -495,6 +495,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
   </div><!-- /cfgShips -->
   <div class="cfg-btns">
     <button class="cfg-btn" onclick="resetConfig()" data-i18n="cfg.btn.reset">Reset</button>
+    <button class="cfg-btn danger" onclick="resetAll()" data-i18n="cfg.btn.resetAll">Reset All</button>
     <button class="cfg-btn save" onclick="saveConfig()" data-i18n="cfg.btn.save">Save</button>
     <button class="cfg-btn" onclick="showMenu()" data-i18n="cfg.btn.back">Back</button>
   </div>
@@ -692,7 +693,8 @@ const LANGS={
     'cfg.hp':'HP','cfg.spd':'Speed','cfg.cd':'Fire Rate (cd)',
     'cfg.laserSpd':'Laser Speed','cfg.ttl':'Laser TTL (s)',
     'cfg.dmg':'Damage','cfg.turnRate':'Turn Rate','cfg.count':'Count',
-    'cfg.btn.reset':'Reset','cfg.btn.save':'Save','cfg.btn.back':'Back',
+    'cfg.btn.reset':'Reset',
+    'cfg.btn.resetAll':'Reset All','cfg.btn.save':'Save','cfg.btn.back':'Back',
     'cfg.saved':'✓ Saved',
     'cfg.on':'On','cfg.off':'Off',
     // changelog screen
@@ -795,7 +797,8 @@ const LANGS={
     'cfg.hp':'TP','cfg.spd':'Geschwindigkeit','cfg.cd':'Feuerrate (CD)',
     'cfg.laserSpd':'Lasergeschw.','cfg.ttl':'Laser-TTL (s)',
     'cfg.dmg':'Schaden','cfg.turnRate':'Wenderate','cfg.count':'Anzahl',
-    'cfg.btn.reset':'Zurücksetzen','cfg.btn.save':'Speichern','cfg.btn.back':'Zurück',
+    'cfg.btn.reset':'Zurücksetzen',
+    'cfg.btn.resetAll':'Alles zurücksetzen','cfg.btn.save':'Speichern','cfg.btn.back':'Zurück',
     'cfg.saved':'✓ Gespeichert',
     'cfg.on':'An','cfg.off':'Aus',
     'cl.title':'Changelog',
@@ -894,7 +897,8 @@ const LANGS={
     'cfg.hp':'PW','cfg.spd':'Prędkość','cfg.cd':'Szybkostrzelność',
     'cfg.laserSpd':'Prędkość lasera','cfg.ttl':'Czas życia lasera (s)',
     'cfg.dmg':'Obrażenia','cfg.turnRate':'Zwrotność','cfg.count':'Liczba',
-    'cfg.btn.reset':'Resetuj','cfg.btn.save':'Zapisz','cfg.btn.back':'Wróć',
+    'cfg.btn.reset':'Resetuj',
+    'cfg.btn.resetAll':'Resetuj wszystko','cfg.btn.save':'Zapisz','cfg.btn.back':'Wróć',
     'cfg.saved':'✓ Zapisano',
     'cfg.on':'Wł','cfg.off':'Wył',
     'cl.title':'Historia zmian',
@@ -1393,7 +1397,11 @@ function saveConfig(){
   btn.textContent=t('cfg.saved');btn.style.color='#00cc44';
   setTimeout(()=>{showMenu();},800);
 }
-function resetConfig(){CFG=JSON.parse(JSON.stringify(DEFAULTS));setPreset('medium');loadSlidersFromCfg();}
+function resetConfig(){CFG=JSON.parse(JSON.stringify(DEFAULTS));loadSlidersFromCfg();}
+function resetAll(){
+  try{localStorage.removeItem('swBattleCfgV5');localStorage.removeItem('swLang');}catch(e){}
+  location.reload();
+}
 
 // ── GAME STATE ────────────────────────────────────────────────────────────────
 let ships=[],lasers=[],explosions=[];
