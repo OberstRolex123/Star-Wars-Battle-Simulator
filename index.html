@@ -416,7 +416,24 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
       <div class="lv-tag">v1.3.3</div>
       <div class="lv-desc">Volume fix · Music stop fix · Crawl width</div>
     </div>
-    <button class="lv-btn" style="width:60px;text-align:center;" onclick="openVersion('versions/v1.3.3.html')" data-i18n="lv.load">Load</button>
+    <button class="lv-btn" style="width:60px;text-align:center;" onclick="openVersion('versions/v1.3.html')" data-i18n="lv.load">Load</button>
+  </div>
+  <div class="lv-entry">
+    <div class="lv-info">
+      <div class="lv-tag" data-i18n="lv.v12.tag">v1.2</div>
+      <div class="lv-desc" data-i18n="lv.v12.desc">Multi-language · Laser speed config · GitHub changelog</div>
+    </div>
+    <button class="lv-btn" style="width:60px;text-align:center;" onclick="openVersion('versions/v1.2.html')" data-i18n="lv.load">Load</button>
+  </div>
+  <div class="lv-entry">
+    <div class="lv-info">
+      <div class="lv-tag">v1.0</div>
+      <div class="lv-desc" data-i18n="lv.v10.desc">Initial release · All core features</div>
+    </div>
+    <button class="lv-btn" style="width:60px;text-align:center;" onclick="openVersion('versions/v1.0.html')" data-i18n="lv.load">Load</button>
+  </div>
+  <div style="margin-top:14px;padding:10px 12px;border:1px solid #1a1a2a;border-radius:4px;background:#06060f;">
+    <div class="lv-desc" style="line-height:1.7;" data-i18n="lv.hint">Older versions are archived in versions/...</div>
   </div>
   <div style="display:flex;justify-content:center;margin-top:12px;">
     <button class="cfg-btn" onclick="showMenu()" data-i18n="cfg.btn.back">Back</button>
@@ -526,6 +543,9 @@ const LANGS={
     'lv.title':'Load Version','lv.current.tag':'v1.4.0 — current',
     'lv.current.desc':'Boost System · Particles · Glow',
     'lv.current.btn':'Playing','lv.load':'Load',
+    'lv.v12.tag':'v1.2','lv.v12.desc':'Multi-language (EN/DE/PL) · Laser speed config · GitHub changelog',
+    'lv.v10.desc':'Initial release · All core features',
+    'lv.hint':'Older versions are archived in versions/ in the repository. Loading opens the version in a new tab.',
     'vh.title':'⚠ Cannot open version',
     'vh.line1':'You\'re running locally via file://.','vh.line2':'Run a local server:',
     'vh.line3':'→ python3 -m http.server 8080','vh.line4':'→ http://localhost:8080',
@@ -602,6 +622,9 @@ const LANGS={
     'lv.title':'Version laden','lv.current.tag':'v1.4.0 — aktuell',
     'lv.current.desc':'Boost-System · Partikel · Glow',
     'lv.current.btn':'Aktiv','lv.load':'Laden',
+    'lv.v12.tag':'v1.2','lv.v12.desc':'Mehrsprachigkeit (EN/DE/PL) · Lasergeschwindigkeit · GitHub-Changelog',
+    'lv.v10.desc':'Erstveröffentlichung · Alle Kernfunktionen',
+    'lv.hint':'Ältere Versionen sind im Ordner versions/ im Repository archiviert. Das Laden öffnet die Version in einem neuen Tab.',
     'vh.title':'⚠ Version nicht verfügbar',
     'vh.line1':'Lokaler Betrieb via file://.','vh.line2':'Lokalen Server starten:',
     'vh.line3':'→ python3 -m http.server 8080','vh.line4':'→ http://localhost:8080',
@@ -678,6 +701,9 @@ const LANGS={
     'lv.title':'Wczytaj wersję','lv.current.tag':'v1.4.0 — aktualna',
     'lv.current.desc':'System Dopalacza · Cząsteczki · Poświata',
     'lv.current.btn':'Aktywna','lv.load':'Wczytaj',
+    'lv.v12.tag':'v1.2','lv.v12.desc':'Wielojęzyczność (EN/DE/PL) · Prędkość lasera · Link do changelogu GitHub',
+    'lv.v10.desc':'Pierwsze wydanie · Wszystkie funkcje',
+    'lv.hint':'Starsze wersje są zarchiwizowane w folderze versions/ w repozytorium. Wczytanie otwiera wersję w nowej karcie.',
     'vh.title':'⚠ Nie można otworzyć wersji',
     'vh.line1':'Gra działa lokalnie przez file://.','vh.line2':'Uruchom lokalny serwer:',
     'vh.line3':'→ python3 -m http.server 8080','vh.line4':'→ http://localhost:8080',
