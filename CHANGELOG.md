@@ -1,107 +1,66 @@
-# Changelog
-
-All notable changes to **Star Wars — Pixel Battle Simulator** are documented here.
+# Changelog — Star Wars Pixel Battle Simulator
 
 ---
 
-## v1.3.3 — 2026-04-22
+## [v1.4.0] — 2026-04-28
 
 ### Added
-- **Crawl music** — Star Wars Main Theme starts automatically when the logo appears (5.2s into the crawl)
-- **Stop/Start Music button** in the crawl (bottom left, next to Skip) — stops or restarts the theme independently of the game mute
-- **♫ Music button** in the in-game HUD — toggle music on/off during a round without affecting sound effects
-- **Music toggle in Config** (Visual section) — persisted to `localStorage`; disabling stops any currently playing music
+- **Boost System** — 4 directions: `forward`, `back`, `left`, `right`
+- Energy tank per ship with continuous regeneration over time; cooldown (0.4s) prevents spam
+- **Boost AI** — ships use boost tactically:
+  - Incoming laser on collision course → dodge sideways
+  - Enemy close + HP < 40% → boost back (create distance)
+  - Enemy far + facing target → boost forward (close gap)
+  - Enemy aiming at us → dodge sideways
+- **Boost Particles** — 12 exhaust particles + glow ring burst on activation
+  - Rebel ships: blue tones (`#88ccff`) · Empire ships: green tones (`#88ffcc`)
+  - Dedicated particle canvas with `shadowBlur` glow effect
+- **Boost Config** — global on/off toggle in Configuration screen
+  - Per-ship sliders: Max Energy · Cost/boost · Regen/s · Force
+  - Slider blocks dimmed and disabled when boost is globally off
+- **Boost Energy Bar** — thin bar below HP indicator (blue = Rebel, green = Empire), only shown when boost enabled
+- **Boost Sound** — short sawtooth engine burst on activation, distinct tone per team
+
+---
+
+## [v1.3.3] — 2026-04-21
 
 ### Fixed
-- Music stop button now works reliably — master gain set to 0 immediately on stop; all oscillators terminated with `stop(0)`
-- Music no longer replays from the beginning when Stop is pressed — complete rewrite of music engine (`musicPlay` / `musicStop` / `musicIsPlaying`)
-- Missing note frequencies `C3` and `F3` added — bass voice was throwing `AudioParam NaN` error and silently failing
-- Music volume significantly reduced — master gain 0.25, voice gains at ~20% of original
+- Pause during round-end caused permanent deadlock — respawn now uses a frame counter instead of `setTimeout` so it correctly freezes while paused
+
+### Added
+- **Changelog screen** — in-game styled with version tags and feature entries (this screen)
+- **About / README screen** — ship roster table, formations overview, config summary, tech stack, roadmap
+- **Load Version screen** — lists all archived versions with descriptions, opens in new tab
+- **Multi-language support** — English, German, Polish; language toggle in main menu (`EN · DE · PL`)
+- **Opening Crawl** — full Star Wars intro with starfield, logo animation, music sync at 5.2s, skip button, mute button, language-aware text
+- **Star Wars Main Theme** — 4-voice sawtooth synthesis via Web Audio API with reverb; plays during crawl and menu
+- **Fire modes** per ship — `Hold Fire` · `Fire at Will` · `Return Fire`
+- **Per-ship Break Trigger** — `contact` · `hit` · `both` · `never` configurable individually per ship type
+- **Laser Speed** config slider per ship (4–30)
+- **Laser TTL** config slider per ship (0.5–5s)
+- Scrolling starfield toggle
+- Version hint overlay for `file://` protocol users
 
 ### Changed
-- Play Music button removed from main menu — music accessible via crawl and in-game HUD button only
-- `MUSIC_TRACKS` dictionary introduced for future in-game tracks
+- Config saved under new key `swBattleCfgV5`
+- Menu responsive layout: portrait (80vw buttons) and landscape (2-column grid) breakpoints
+- `calcGameSize()` fills full viewport dynamically; canvas locked during game, unlocked on return to menu
 
 ---
 
-## v1.3.2 — 2026-04-22
+## [v1.0.0] — 2026-04-21 · Initial Release
 
 ### Added
-- **Opening Crawl** — authentic Star Wars text crawl with perspective projection, logo animation and blue intro text; appears on first load; re-playable via "Show Intro" button
-- **Show Intro button** in main menu
-- **Crawl language** — reads saved language from `localStorage` on first load
-
-### Fixed
-- Crawl scroll speed frame-rate independent (delta-time, 45px/s)
-- CSS animations restart correctly when crawl is re-opened
-- "EINE NEUE HOFFNUNG" auto-shrinks font to avoid cropping
-- Blue intro text centered on all screen sizes
-
-### Changed
-- Mobile menu Portrait: `80vw` buttons (10% side margin), pure `vw` sizing
-- Mobile menu Landscape: 2-column grid, `70vw`, `vw`-based font — readable on iPhone 13
-- Crawl font scales with viewport (`innerWidth × 104/1200`, capped 32–120px)
-- Crawl text strip capped at 1100px — wider screens show more starfield on sides
-
----
-
-## v1.3.1 — 2026-04-22
-
-### Fixed & Polished
-- Config menu font sizes increased on desktop
-- Slider row spacing increased — thumb no longer overlaps adjacent rows
-- About screen aligned to max-width 640px, paragraphs left-aligned
-- Save button resets when unsaved changes are made
-- Config save auto-returns to main menu
-
----
-
-## v1.3 — 2026-04-22
-
-### Added
-- **Mobile support** — full viewport, portrait and landscape; canvas locks on game start
-- **Fire mode per ship** — Hold Fire / Fire at Will / Return Fire
-- **Break trigger per ship** — contact / hit / both / never
-- **Config save → auto back**
-
-### Changed
-- Field size presets removed — game always fills the screen
-- Contact range: px → % of shorter map dimension (default 25%)
-- Config max-width 700px
-
-### Fixed
-- Boundary steering rewritten with proper center-repulsion
-- Formation spawn guaranteed safe via `formationRadius()`
-- Ghost sprites hidden when wrap-around is off
-
----
-
-## v1.2 — 2026-04-21
-
-### Added
-- Multi-language support — EN / DE / PL
-- Laser Speed configurable per ship
-- Changelog links to GitHub
-
----
-
-## v1.1 — 2026-04-21
-
-### Fixed
-- Pause-during-round-end deadlock
-
-### Added
-- Changelog, About and Load Version screens
-
----
-
-## v1.0 — 2026-04-21 — Initial Release
-
-- 4 pixel-art ships, 6 formations, inertia physics, directional shooting
-- Wrap-around world, scrolling starfield, HP bars, pixel explosions
-- 8-bit procedural sound, per-ship config, localStorage persistence
-- Single `.html` file, zero dependencies
-
----
-
-*May the Force be with you.*
+- 4 pixel-art ship types — X-Wing, A-Wing, TIE Fighter, TIE Bomber (base64 embedded sprites, SCALE=2)
+- 6 formation types per ship — Delta · Line · Swarm · Wedge · Column · Pincer
+- Smart formation break — contact range, hit trigger, or both; staggered front-to-back dissolution with configurable delay
+- Inertia-based flight physics with deadlock detection and random kick
+- Directional shooting — ships must face target within ~15° to fire
+- Per-ship configuration — HP (1–50) · Speed · Turn Rate · Fire Rate · Damage · Count (1–20)
+- Wrap-around world (toroidal space), toggleable
+- Scrolling parallax starfield, toggleable
+- 8-bit procedural sound — laser fire (team-distinct), explosions, round-end fanfare, mute toggle
+- Score tracking (Rebellion vs Empire, persistent across rounds)
+- Config persisted to `localStorage`, survives page reload
+- Single HTML file, zero dependencies, no server required
