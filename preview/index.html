@@ -8,7 +8,7 @@
 <title>Star Wars — Pixel Battle Simulator</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;height:100dvh;width:100vw;font-family:monospace;overflow:hidden;margin:0;}
+body{background:#000;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;height:100vh;height:100dvh;width:100vw;font-family:monospace;overflow:hidden;margin:0;}
 #app{position:relative;overflow:hidden;background:#03030d;border-radius:0;}
 canvas{display:block;image-rendering:pixelated;position:absolute;top:32px;left:0;}
 #starCanvas{position:absolute;top:0;left:0;width:100%!important;height:100%!important;}
@@ -22,9 +22,9 @@ canvas{display:block;image-rendering:pixelated;position:absolute;top:32px;left:0
 .btn.danger:hover{border-color:#e04f4f;color:#e04f4f;}
 #hud{position:absolute;top:0;left:0;right:0;min-height:32px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:#06060f;border-bottom:1px solid #1a1a2a;z-index:10;}
 #hud.hidden{display:none;}
-.hud-lbl{font-size:9px;letter-spacing:1px;text-transform:uppercase;}
-.hud-sc{font-size:14px;font-weight:bold;letter-spacing:3px;}
-.hud-btn{background:#06060f;border:1px solid #2a2a3a;color:#556677;font-family:monospace;font-size:9px;letter-spacing:1px;padding:3px 8px;cursor:pointer;text-transform:uppercase;}
+.hud-lbl{font-size:clamp(10px,1.2vw,13px);letter-spacing:1px;text-transform:uppercase;}
+.hud-sc{font-size:clamp(16px,2.2vw,26px);font-weight:bold;letter-spacing:3px;}
+.hud-btn{background:#06060f;border:1px solid #2a2a3a;color:#556677;font-family:monospace;font-size:clamp(10px,1.1vw,13px);letter-spacing:1px;padding:4px 10px;cursor:pointer;text-transform:uppercase;}
 .hud-btn:hover{border-color:#4fa3e0;color:#fff;}
 #legend{position:absolute;bottom:0;left:0;right:0;height:22px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:#06060f;border-top:1px solid #1a1a2a;font-size:9px;letter-spacing:1px;font-family:monospace;z-index:10;}
 #legend.hidden{display:none;}
@@ -249,7 +249,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
     <button class="btn" onclick="showCrawl()" data-i18n="menu.showCrawl">Show Intro</button>
     <button class="btn" style="border-color:#334455;color:#aaaaaa;" onclick="loadVersion()" data-i18n="menu.loadVersion">Load Version</button>
     </div>
-    <div style="font-size:9px;letter-spacing:2px;color:#ffffff;text-transform:uppercase;margin-top:4px;opacity:0.4;" data-i18n="menu.madeWith">v1.5.0 — made with Claude</div>
+    <div style="font-size:9px;letter-spacing:2px;color:#ffffff;text-transform:uppercase;margin-top:4px;opacity:0.4;" data-i18n="menu.madeWith">v1.5.1 — made with Claude</div>
   </div>
 </div>
 
@@ -490,7 +490,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 
 <div id="readmeScreen" class="screen hidden">
   <div class="rm-header" data-i18n="rm.title">Star Wars</div>
-  <div class="rm-sub" data-i18n="rm.sub">Pixel Battle Simulator — v1.5.0</div>
+  <div class="rm-sub" data-i18n="rm.sub">Pixel Battle Simulator — v1.5.1</div>
   <div class="rm-sec">
     <div class="rm-sec-title" data-i18n="rm.sec.what">What is this</div>
     <div class="rm-p" data-i18n="rm.what.p1">An autonomous pixel-art space battle...</div>
@@ -519,7 +519,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
   <div class="lv-header" data-i18n="lv.title">Load Version</div>
   <div class="lv-entry lv-current">
     <div class="lv-info">
-      <div class="lv-tag" data-i18n="lv.current.tag">v1.5.0 — current</div>
+      <div class="lv-tag" data-i18n="lv.current.tag">v1.5.1 — current</div>
       <div class="lv-desc" data-i18n="lv.current.desc">Boost System · Particles · Glow</div>
     </div>
     <button class="lv-btn" data-i18n="lv.current.btn">Playing</button>
@@ -609,7 +609,7 @@ const LANGS={
     'menu.newGame':'New Game','menu.config':'Configuration',
     'menu.changelog':'Changelog','menu.about':'About',
     'cl.title':'Changelog',
-    'cl.v14.tag':'v1.5.0','cl.v14.date':'2026-04-28 · current',
+    'cl.v14.tag':'v1.5.1','cl.v14.date':'2026-04-28 · current',
     'cl.v14.e1':'Boost system — 4 directions (forward · back · left · right), energy tank per ship with regeneration, cooldown prevents spam',
     'cl.v14.e2':'Boost AI — tactical: dodge incoming lasers sideways, retreat when low HP, close gap on distant enemies, evade when targeted',
     'cl.v14.e3':'Boost particles — 12 exhaust particles + glow ring burst; Rebel blue · Empire green; separate canvas with shadowBlur',
@@ -633,7 +633,7 @@ const LANGS={
     'cl.v10.e8':'Single HTML file, zero dependencies',
     'menu.showCrawl':'Show Intro',
     'menu.playMusic':'Play Music','menu.stopMusic':'Stop Music',
-    'menu.loadVersion':'Load Version','menu.madeWith':'v1.5.0 — made with Claude',
+    'menu.loadVersion':'Load Version','menu.madeWith':'v1.5.1 — made with Claude',
     'hud.rebellion':'Rebellion','hud.empire':'Empire',
     'hud.pause':'|| Pause','hud.mute.on':'♪ On','hud.mute.off':'♪ Off',
     'hud.music.on':'♫ Music','hud.music.off':'♫ Off',
@@ -662,7 +662,7 @@ const LANGS={
     'cfg.dmg':'Damage','cfg.turnRate':'Turn Rate','cfg.count':'Count',
     'cfg.btn.reset':'Reset','cfg.btn.resetAll':'Reset All','cfg.btn.save':'Save','cfg.btn.back':'Back',
     'cfg.saved':'✓ Saved','cfg.on':'On','cfg.off':'Off',
-    'rm.title':'Star Wars','rm.sub':'Pixel Battle Simulator — v1.5.0',
+    'rm.title':'Star Wars','rm.sub':'Pixel Battle Simulator — v1.5.1',
     'rm.sec.what':'What is this',
     'rm.what.p1':'An autonomous pixel-art space battle between the Rebellion and the Empire.',
     'rm.what.p2':'Built entirely in a single HTML file — no server, no dependencies.',
@@ -672,7 +672,7 @@ const LANGS={
     'rm.team.rebel':'Rebel','rm.team.empire':'Empire',
     'rm.role.xwing':'All-rounder, 4 cannons','rm.role.awing':'Interceptor, fast, evasive',
     'rm.role.tie':'Cannon fodder, swarm','rm.role.tiein':'Heavy, double shot',
-    'lv.title':'Load Version','lv.current.tag':'v1.5.0 — current',
+    'lv.title':'Load Version','lv.current.tag':'v1.5.1 — current',
     'lv.current.desc':'Boost System · Particles · Glow',
     'lv.current.btn':'Playing','lv.load':'Load',
     'lv.v12.tag':'v1.2','lv.v12.desc':'Multi-language (EN/DE/PL) · Laser speed config · GitHub changelog',
@@ -689,7 +689,7 @@ const LANGS={
     'menu.newGame':'Neues Spiel','menu.config':'Konfiguration',
     'menu.changelog':'Changelog','menu.about':'Über das Spiel',
     'cl.title':'Changelog',
-    'cl.v14.tag':'v1.5.0','cl.v14.date':'2026-04-28 · aktuell',
+    'cl.v14.tag':'v1.5.1','cl.v14.date':'2026-04-28 · aktuell',
     'cl.v14.e1':'Boost-System — 4 Richtungen (vorwärts · rückwärts · links · rechts), Energie-Tank mit Regeneration, Cooldown verhindert Spam',
     'cl.v14.e2':'Boost-KI — taktisch: weicht einkommenden Lasern aus, zieht sich bei niedrigen TP zurück, schließt Lücke zu weit entfernten Feinden',
     'cl.v14.e3':'Boost-Partikel — 12 Abgas-Partikel + Glow-Ring-Burst; Rebellion blau · Imperium grün; separates Canvas mit shadowBlur',
@@ -713,7 +713,7 @@ const LANGS={
     'cl.v10.e8':'Einzelne HTML-Datei, keine Abhängigkeiten',
     'menu.showCrawl':'Intro anzeigen',
     'menu.playMusic':'Musik abspielen','menu.stopMusic':'Musik stoppen',
-    'menu.loadVersion':'Version laden','menu.madeWith':'v1.5.0 — made with Claude',
+    'menu.loadVersion':'Version laden','menu.madeWith':'v1.5.1 — made with Claude',
     'hud.rebellion':'Rebellion','hud.empire':'Imperium',
     'hud.pause':'|| Pause','hud.mute.on':'♪ An','hud.mute.off':'♪ Aus',
     'hud.music.on':'♫ Musik','hud.music.off':'♫ Aus',
@@ -742,7 +742,7 @@ const LANGS={
     'cfg.dmg':'Schaden','cfg.turnRate':'Wenderate','cfg.count':'Anzahl',
     'cfg.btn.reset':'Zurücksetzen','cfg.btn.resetAll':'Alles zurücksetzen','cfg.btn.save':'Speichern','cfg.btn.back':'Zurück',
     'cfg.saved':'✓ Gespeichert','cfg.on':'An','cfg.off':'Aus',
-    'rm.title':'Krieg der Sterne','rm.sub':'Pixel Kampfsimulator — v1.5.0',
+    'rm.title':'Krieg der Sterne','rm.sub':'Pixel Kampfsimulator — v1.5.1',
     'rm.sec.what':'Was ist das?',
     'rm.what.p1':'Ein autonomer Pixel-Art-Weltraumkampf zwischen der Rebellion und dem Imperium.',
     'rm.what.p2':'Komplett in einer einzigen HTML-Datei.',
@@ -752,7 +752,7 @@ const LANGS={
     'rm.team.rebel':'Rebellen','rm.team.empire':'Imperium',
     'rm.role.xwing':'Allrounder, 4 Kanonen','rm.role.awing':'Abfangjäger, schnell',
     'rm.role.tie':'Kanonenfutter, Schwarm','rm.role.tiein':'Schwer, Doppelschuss',
-    'lv.title':'Version laden','lv.current.tag':'v1.5.0 — aktuell',
+    'lv.title':'Version laden','lv.current.tag':'v1.5.1 — aktuell',
     'lv.current.desc':'Boost-System · Partikel · Glow',
     'lv.current.btn':'Aktiv','lv.load':'Laden',
     'lv.v12.tag':'v1.2','lv.v12.desc':'Mehrsprachigkeit (EN/DE/PL) · Lasergeschwindigkeit · GitHub-Changelog',
@@ -769,7 +769,7 @@ const LANGS={
     'menu.newGame':'Nowa Gra','menu.config':'Konfiguracja',
     'menu.changelog':'Historia zmian','menu.about':'O grze',
     'cl.title':'Historia zmian',
-    'cl.v14.tag':'v1.5.0','cl.v14.date':'2026-04-28 · aktualna',
+    'cl.v14.tag':'v1.5.1','cl.v14.date':'2026-04-28 · aktualna',
     'cl.v14.e1':'System dopalacza — 4 kierunki (przód · tył · lewo · prawo), tank energii z regeneracją, cooldown zapobiega spamowi',
     'cl.v14.e2':'AI dopalacza — taktyczne użycie: unikanie laserów, odwrót przy niskim PW, doganianie odległych wrogów',
     'cl.v14.e3':'Cząsteczki dopalacza — 12 cząsteczek spalin + rozbłysk pierścienia; Rebelia niebieska · Imperium zielone',
@@ -793,7 +793,7 @@ const LANGS={
     'cl.v10.e8':'Pojedynczy plik HTML, brak zależności',
     'menu.showCrawl':'Pokaż intro',
     'menu.playMusic':'Odtwórz muzykę','menu.stopMusic':'Zatrzymaj muzykę',
-    'menu.loadVersion':'Wczytaj wersję','menu.madeWith':'v1.5.0 — stworzone z Claude',
+    'menu.loadVersion':'Wczytaj wersję','menu.madeWith':'v1.5.1 — stworzone z Claude',
     'hud.rebellion':'Rebelia','hud.empire':'Imperium',
     'hud.pause':'|| Pauza','hud.mute.on':'♪ Wł','hud.mute.off':'♪ Wył',
     'hud.music.on':'♫ Muzyka','hud.music.off':'♫ Wył',
@@ -822,7 +822,7 @@ const LANGS={
     'cfg.dmg':'Obrażenia','cfg.turnRate':'Zwrotność','cfg.count':'Liczba',
     'cfg.btn.reset':'Resetuj','cfg.btn.resetAll':'Resetuj wszystko','cfg.btn.save':'Zapisz','cfg.btn.back':'Wróć',
     'cfg.saved':'✓ Zapisano','cfg.on':'Wł','cfg.off':'Wył',
-    'rm.title':'Gwiezdne Wojny','rm.sub':'Pikselowy Symulator Bitwy — v1.5.0',
+    'rm.title':'Gwiezdne Wojny','rm.sub':'Pikselowy Symulator Bitwy — v1.5.1',
     'rm.sec.what':'Co to jest?',
     'rm.what.p1':'Autonomiczna pikselowa bitwa kosmiczna między Rebelią a Imperium.',
     'rm.what.p2':'Zbudowane w jednym pliku HTML.',
@@ -832,7 +832,7 @@ const LANGS={
     'rm.team.rebel':'Rebelia','rm.team.empire':'Imperium',
     'rm.role.xwing':'Wszechstronny, 4 działa','rm.role.awing':'Przechwytywacz, szybki',
     'rm.role.tie':'Mięso armatnie, rój','rm.role.tiein':'Ciężki, podwójny strzał',
-    'lv.title':'Wczytaj wersję','lv.current.tag':'v1.5.0 — aktualna',
+    'lv.title':'Wczytaj wersję','lv.current.tag':'v1.5.1 — aktualna',
     'lv.current.desc':'System Dopalacza · Cząsteczki · Poświata',
     'lv.current.btn':'Aktywna','lv.load':'Wczytaj',
     'lv.v12.tag':'v1.2','lv.v12.desc':'Wielojęzyczność (EN/DE/PL) · Prędkość lasera · Link do changelogu GitHub',
@@ -892,8 +892,13 @@ function resizeCanvases(){
   partCv.width=W;partCv.height=H;partCv.style.width=W+'px';partCv.style.height=H+'px';
 }
 function unlockAppSize(){
+  const panel = document.getElementById('brainPanel');
+  const panelVisible = panel && panel.classList.contains('visible');
+  const panelCollapsed = panel && panel.classList.contains('collapsed');
+  const panelW = panelVisible ? (panelCollapsed ? 28 : bpPanelWidth) : 0;
   const app=document.getElementById('app');
-  app.style.width=window.innerWidth+'px';app.style.height=window.innerHeight+'px';
+  app.style.width=(window.innerWidth-panelW)+'px';
+  app.style.height=window.innerHeight+'px';
   app.style.minWidth='';app.style.minHeight='';
 }
 (function(){const app=document.getElementById('app');app.style.width=window.innerWidth+'px';app.style.height=window.innerHeight+'px';})();
