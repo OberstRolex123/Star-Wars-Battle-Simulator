@@ -117,14 +117,16 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 .brain-btn:hover{border-color:#4fa3e0;color:#fff;}
 .brain-label{font-size:10px;color:#4fa3e0;letter-spacing:2px;text-transform:uppercase;}
 /* ── LIVE BRAIN EDITOR PANEL ─────────────────────────────────────────────── */
-#brainPanel{position:fixed;top:0;right:0;bottom:0;width:300px;background:#06060f;border-left:1px solid #1a2a3a;z-index:200;display:none;flex-direction:column;font-family:monospace;}
+#brainPanel{position:fixed;top:0;right:0;bottom:0;width:300px;background:#06060f;border-left:1px solid #1a2a3a;z-index:200;display:none;flex-direction:column;font-family:monospace;box-sizing:border-box;}
+#brainPanel::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#1a2a3a 0%,#4fa3e0 50%,#1a2a3a 100%);opacity:0.4;pointer-events:none;}
 #brainPanel.visible{display:flex;}
 #brainPanel.collapsed{width:28px!important;}
-#brainDragHandle{position:absolute;left:0;top:0;bottom:0;width:5px;cursor:col-resize;background:transparent;z-index:10;}
-#brainDragHandle:hover{background:rgba(79,163,224,0.25);}
+#brainDragHandle{position:absolute;left:0;top:0;bottom:0;width:8px;cursor:col-resize;background:transparent;z-index:20;}
+#brainDragHandle:hover{background:rgba(79,163,224,0.3);}
+#brainDragHandle:active{background:rgba(79,163,224,0.5);}
 #brainCollapseTab{position:absolute;left:-22px;top:50%;transform:translateY(-50%);width:22px;height:60px;background:#06060f;border:1px solid #1a2a3a;border-right:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#4fa3e0;font-size:10px;writing-mode:vertical-rl;border-radius:4px 0 0 4px;user-select:none;letter-spacing:2px;}
 #brainCollapseTab:hover{background:#0a0a1a;color:#fff;}
-#brainPanelInner{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:8px 10px 8px 14px;min-width:0;}
+#brainPanelInner{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:8px 10px 8px 16px;min-width:0;}
 #brainPanel.collapsed #brainPanelInner{display:none;}
 .bp-header{font-size:9px;letter-spacing:2px;color:#4fa3e0;text-transform:uppercase;margin-bottom:8px;border-bottom:1px solid #1a2a3a;padding-bottom:6px;}
 .bp-row{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
@@ -141,6 +143,10 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 .bp-btn.apply:hover{background:#0a2a14;border-color:#00cc44;}
 .bp-btn.danger:hover{border-color:#e04f4f;color:#e04f4f;}
 @media(max-width:900px){#brainPanel{display:none!important;}}
+/* countdown */
+#countdown{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:50;pointer-events:none;}
+#countdown.hidden{display:none;}
+#countdownText{font-size:clamp(60px,12vw,120px);font-weight:bold;letter-spacing:8px;color:#fff;text-transform:uppercase;font-family:monospace;text-shadow:0 0 40px rgba(79,163,224,0.8),0 0 80px rgba(79,163,224,0.4);}
 
 @media (max-width: 500px), (max-height: 500px) {
   .title{font-size:16px;letter-spacing:3px;margin-bottom:2px;}
@@ -231,6 +237,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 <canvas id="starCanvas"></canvas>
 <canvas id="c"></canvas>
 <canvas id="particleCanvas"></canvas>
+<div id="countdown" class="hidden"><span id="countdownText"></span></div>
 
 <div id="menuScreen" class="screen" style="background:transparent;">
   <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;">
@@ -249,7 +256,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
     <button class="btn" onclick="showCrawl()" data-i18n="menu.showCrawl">Show Intro</button>
     <button class="btn" style="border-color:#334455;color:#aaaaaa;" onclick="loadVersion()" data-i18n="menu.loadVersion">Load Version</button>
     </div>
-    <div style="font-size:9px;letter-spacing:2px;color:#ffffff;text-transform:uppercase;margin-top:4px;opacity:0.4;" data-i18n="menu.madeWith">v1.5.1 — made with Claude</div>
+    <div style="font-size:9px;letter-spacing:2px;color:#ffffff;text-transform:uppercase;margin-top:4px;opacity:0.4;" data-i18n="menu.madeWith">v1.5.2 — made with Claude</div>
   </div>
 </div>
 
@@ -323,7 +330,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.laserSpd">Laser Speed</span><input type="range" min="4" max="30" step="1" data-ship="xwing" data-key="laserSpd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-laserSpd">12</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.ttl">Laser TTL (s)</span><input type="range" min="0.5" max="5" step="0.5" data-ship="xwing" data-key="ttl" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-ttl">2.0</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.dmg">Damage</span><input type="range" min="1" max="10" step="1" data-ship="xwing" data-key="dmg" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-dmg">1</span></div>
-    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.turnRate">Turn Rate</span><input type="range" min="0.01" max="0.15" step="0.005" data-ship="xwing" data-key="turnRate" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-turnRate">0.040</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.turnRate">Turn Rate</span><input type="range" min="0.01" max="0.3" step="0.005" data-ship="xwing" data-key="turnRate" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-turnRate">0.040</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.count">Count</span><input type="range" min="1" max="20" step="1" data-ship="xwing" data-key="count" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-count">3</span></div>
     <div class="boost-cfg-block" id="boost-block-xwing">
       <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.boost.energy">Boost Energy</span><input type="range" min="40" max="200" step="10" data-ship="xwing" data-key="boostEnergy" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-boostEnergy">100</span></div>
@@ -366,7 +373,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.laserSpd">Laser Speed</span><input type="range" min="4" max="30" step="1" data-ship="awing" data-key="laserSpd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-laserSpd">14</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.ttl">Laser TTL (s)</span><input type="range" min="0.5" max="5" step="0.5" data-ship="awing" data-key="ttl" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-ttl">2.0</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.dmg">Damage</span><input type="range" min="1" max="10" step="1" data-ship="awing" data-key="dmg" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-dmg">1</span></div>
-    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.turnRate">Turn Rate</span><input type="range" min="0.01" max="0.15" step="0.005" data-ship="awing" data-key="turnRate" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-turnRate">0.070</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.turnRate">Turn Rate</span><input type="range" min="0.01" max="0.3" step="0.005" data-ship="awing" data-key="turnRate" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-turnRate">0.070</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.count">Count</span><input type="range" min="1" max="20" step="1" data-ship="awing" data-key="count" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-count">2</span></div>
     <div class="boost-cfg-block" id="boost-block-awing">
       <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.boost.energy">Boost Energy</span><input type="range" min="40" max="200" step="10" data-ship="awing" data-key="boostEnergy" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-boostEnergy">80</span></div>
@@ -405,7 +412,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.laserSpd">Laser Speed</span><input type="range" min="4" max="30" step="1" data-ship="tie" data-key="laserSpd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-laserSpd">12</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.ttl">Laser TTL (s)</span><input type="range" min="0.5" max="5" step="0.5" data-ship="tie" data-key="ttl" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-ttl">2.0</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.dmg">Damage</span><input type="range" min="1" max="10" step="1" data-ship="tie" data-key="dmg" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-dmg">1</span></div>
-    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.turnRate">Turn Rate</span><input type="range" min="0.01" max="0.15" step="0.005" data-ship="tie" data-key="turnRate" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-turnRate">0.030</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.turnRate">Turn Rate</span><input type="range" min="0.01" max="0.3" step="0.005" data-ship="tie" data-key="turnRate" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-turnRate">0.030</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.count">Count</span><input type="range" min="1" max="20" step="1" data-ship="tie" data-key="count" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-count">6</span></div>
     <div class="boost-cfg-block" id="boost-block-tie">
       <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.boost.energy">Boost Energy</span><input type="range" min="40" max="200" step="10" data-ship="tie" data-key="boostEnergy" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-boostEnergy">60</span></div>
@@ -444,7 +451,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.laserSpd">Laser Speed</span><input type="range" min="4" max="30" step="1" data-ship="tiein" data-key="laserSpd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-laserSpd">10</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.ttl">Laser TTL (s)</span><input type="range" min="0.5" max="5" step="0.5" data-ship="tiein" data-key="ttl" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-ttl">2.0</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.dmg">Damage</span><input type="range" min="1" max="10" step="1" data-ship="tiein" data-key="dmg" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-dmg">2</span></div>
-    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.turnRate">Turn Rate</span><input type="range" min="0.01" max="0.15" step="0.005" data-ship="tiein" data-key="turnRate" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-turnRate">0.065</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.turnRate">Turn Rate</span><input type="range" min="0.01" max="0.3" step="0.005" data-ship="tiein" data-key="turnRate" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-turnRate">0.065</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.count">Count</span><input type="range" min="1" max="20" step="1" data-ship="tiein" data-key="count" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-count">2</span></div>
     <div class="boost-cfg-block" id="boost-block-tiein">
       <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.boost.energy">Boost Energy</span><input type="range" min="40" max="200" step="10" data-ship="tiein" data-key="boostEnergy" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-boostEnergy">120</span></div>
@@ -490,7 +497,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 
 <div id="readmeScreen" class="screen hidden">
   <div class="rm-header" data-i18n="rm.title">Star Wars</div>
-  <div class="rm-sub" data-i18n="rm.sub">Pixel Battle Simulator — v1.5.1</div>
+  <div class="rm-sub" data-i18n="rm.sub">Pixel Battle Simulator — v1.5.2</div>
   <div class="rm-sec">
     <div class="rm-sec-title" data-i18n="rm.sec.what">What is this</div>
     <div class="rm-p" data-i18n="rm.what.p1">An autonomous pixel-art space battle...</div>
@@ -519,7 +526,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
   <div class="lv-header" data-i18n="lv.title">Load Version</div>
   <div class="lv-entry lv-current">
     <div class="lv-info">
-      <div class="lv-tag" data-i18n="lv.current.tag">v1.5.1 — current</div>
+      <div class="lv-tag" data-i18n="lv.current.tag">v1.5.2 — current</div>
       <div class="lv-desc" data-i18n="lv.current.desc">Boost System · Particles · Glow</div>
     </div>
     <button class="lv-btn" data-i18n="lv.current.btn">Playing</button>
@@ -563,6 +570,15 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
       <button class="hud-btn" id="pauseBtn" onclick="togglePause()">|| Pause</button>
       <button class="hud-btn" id="exitBtn" onclick="goMenu()" style="border-color:#442222;color:#884444;">✕ Exit</button>
     </div>
+    <!-- global speed slider (visible when debug OFF) -->
+    <div id="globalSpeedControl" style="width:100%;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:9px;letter-spacing:1px;color:#556677;text-transform:uppercase;white-space:nowrap;">Speed</span>
+      <input type="range" id="globalSpeedSlider" min="0" max="9" step="1" value="4"
+        oninput="setGlobalSpeed(this.value)"
+        style="flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;">
+      <span id="globalSpeedVal" style="font-size:9px;color:#4fa3e0;letter-spacing:1px;width:30px;text-align:right;">1x</span>
+    </div>
+    <!-- debug speed slider (visible when debug ON) -->
     <div id="speedControl" style="display:none;width:100%;align-items:center;gap:8px;">
       <span style="font-size:9px;letter-spacing:1px;color:#556677;text-transform:uppercase;white-space:nowrap;">Speed</span>
       <input type="range" id="speedSlider" min="0" max="5" step="1" value="5"
@@ -609,7 +625,7 @@ const LANGS={
     'menu.newGame':'New Game','menu.config':'Configuration',
     'menu.changelog':'Changelog','menu.about':'About',
     'cl.title':'Changelog',
-    'cl.v14.tag':'v1.5.1','cl.v14.date':'2026-04-28 · current',
+    'cl.v14.tag':'v1.5.2','cl.v14.date':'2026-04-28 · current',
     'cl.v14.e1':'Boost system — 4 directions (forward · back · left · right), energy tank per ship with regeneration, cooldown prevents spam',
     'cl.v14.e2':'Boost AI — tactical: dodge incoming lasers sideways, retreat when low HP, close gap on distant enemies, evade when targeted',
     'cl.v14.e3':'Boost particles — 12 exhaust particles + glow ring burst; Rebel blue · Empire green; separate canvas with shadowBlur',
@@ -633,7 +649,7 @@ const LANGS={
     'cl.v10.e8':'Single HTML file, zero dependencies',
     'menu.showCrawl':'Show Intro',
     'menu.playMusic':'Play Music','menu.stopMusic':'Stop Music',
-    'menu.loadVersion':'Load Version','menu.madeWith':'v1.5.1 — made with Claude',
+    'menu.loadVersion':'Load Version','menu.madeWith':'v1.5.2 — made with Claude',
     'hud.rebellion':'Rebellion','hud.empire':'Empire',
     'hud.pause':'|| Pause','hud.mute.on':'♪ On','hud.mute.off':'♪ Off',
     'hud.music.on':'♫ Music','hud.music.off':'♫ Off',
@@ -662,7 +678,7 @@ const LANGS={
     'cfg.dmg':'Damage','cfg.turnRate':'Turn Rate','cfg.count':'Count',
     'cfg.btn.reset':'Reset','cfg.btn.resetAll':'Reset All','cfg.btn.save':'Save','cfg.btn.back':'Back',
     'cfg.saved':'✓ Saved','cfg.on':'On','cfg.off':'Off',
-    'rm.title':'Star Wars','rm.sub':'Pixel Battle Simulator — v1.5.1',
+    'rm.title':'Star Wars','rm.sub':'Pixel Battle Simulator — v1.5.2',
     'rm.sec.what':'What is this',
     'rm.what.p1':'An autonomous pixel-art space battle between the Rebellion and the Empire.',
     'rm.what.p2':'Built entirely in a single HTML file — no server, no dependencies.',
@@ -672,7 +688,7 @@ const LANGS={
     'rm.team.rebel':'Rebel','rm.team.empire':'Empire',
     'rm.role.xwing':'All-rounder, 4 cannons','rm.role.awing':'Interceptor, fast, evasive',
     'rm.role.tie':'Cannon fodder, swarm','rm.role.tiein':'Heavy, double shot',
-    'lv.title':'Load Version','lv.current.tag':'v1.5.1 — current',
+    'lv.title':'Load Version','lv.current.tag':'v1.5.2 — current',
     'lv.current.desc':'Boost System · Particles · Glow',
     'lv.current.btn':'Playing','lv.load':'Load',
     'lv.v12.tag':'v1.2','lv.v12.desc':'Multi-language (EN/DE/PL) · Laser speed config · GitHub changelog',
@@ -689,7 +705,7 @@ const LANGS={
     'menu.newGame':'Neues Spiel','menu.config':'Konfiguration',
     'menu.changelog':'Changelog','menu.about':'Über das Spiel',
     'cl.title':'Changelog',
-    'cl.v14.tag':'v1.5.1','cl.v14.date':'2026-04-28 · aktuell',
+    'cl.v14.tag':'v1.5.2','cl.v14.date':'2026-04-28 · aktuell',
     'cl.v14.e1':'Boost-System — 4 Richtungen (vorwärts · rückwärts · links · rechts), Energie-Tank mit Regeneration, Cooldown verhindert Spam',
     'cl.v14.e2':'Boost-KI — taktisch: weicht einkommenden Lasern aus, zieht sich bei niedrigen TP zurück, schließt Lücke zu weit entfernten Feinden',
     'cl.v14.e3':'Boost-Partikel — 12 Abgas-Partikel + Glow-Ring-Burst; Rebellion blau · Imperium grün; separates Canvas mit shadowBlur',
@@ -713,7 +729,7 @@ const LANGS={
     'cl.v10.e8':'Einzelne HTML-Datei, keine Abhängigkeiten',
     'menu.showCrawl':'Intro anzeigen',
     'menu.playMusic':'Musik abspielen','menu.stopMusic':'Musik stoppen',
-    'menu.loadVersion':'Version laden','menu.madeWith':'v1.5.1 — made with Claude',
+    'menu.loadVersion':'Version laden','menu.madeWith':'v1.5.2 — made with Claude',
     'hud.rebellion':'Rebellion','hud.empire':'Imperium',
     'hud.pause':'|| Pause','hud.mute.on':'♪ An','hud.mute.off':'♪ Aus',
     'hud.music.on':'♫ Musik','hud.music.off':'♫ Aus',
@@ -742,7 +758,7 @@ const LANGS={
     'cfg.dmg':'Schaden','cfg.turnRate':'Wenderate','cfg.count':'Anzahl',
     'cfg.btn.reset':'Zurücksetzen','cfg.btn.resetAll':'Alles zurücksetzen','cfg.btn.save':'Speichern','cfg.btn.back':'Zurück',
     'cfg.saved':'✓ Gespeichert','cfg.on':'An','cfg.off':'Aus',
-    'rm.title':'Krieg der Sterne','rm.sub':'Pixel Kampfsimulator — v1.5.1',
+    'rm.title':'Krieg der Sterne','rm.sub':'Pixel Kampfsimulator — v1.5.2',
     'rm.sec.what':'Was ist das?',
     'rm.what.p1':'Ein autonomer Pixel-Art-Weltraumkampf zwischen der Rebellion und dem Imperium.',
     'rm.what.p2':'Komplett in einer einzigen HTML-Datei.',
@@ -752,7 +768,7 @@ const LANGS={
     'rm.team.rebel':'Rebellen','rm.team.empire':'Imperium',
     'rm.role.xwing':'Allrounder, 4 Kanonen','rm.role.awing':'Abfangjäger, schnell',
     'rm.role.tie':'Kanonenfutter, Schwarm','rm.role.tiein':'Schwer, Doppelschuss',
-    'lv.title':'Version laden','lv.current.tag':'v1.5.1 — aktuell',
+    'lv.title':'Version laden','lv.current.tag':'v1.5.2 — aktuell',
     'lv.current.desc':'Boost-System · Partikel · Glow',
     'lv.current.btn':'Aktiv','lv.load':'Laden',
     'lv.v12.tag':'v1.2','lv.v12.desc':'Mehrsprachigkeit (EN/DE/PL) · Lasergeschwindigkeit · GitHub-Changelog',
@@ -769,7 +785,7 @@ const LANGS={
     'menu.newGame':'Nowa Gra','menu.config':'Konfiguracja',
     'menu.changelog':'Historia zmian','menu.about':'O grze',
     'cl.title':'Historia zmian',
-    'cl.v14.tag':'v1.5.1','cl.v14.date':'2026-04-28 · aktualna',
+    'cl.v14.tag':'v1.5.2','cl.v14.date':'2026-04-28 · aktualna',
     'cl.v14.e1':'System dopalacza — 4 kierunki (przód · tył · lewo · prawo), tank energii z regeneracją, cooldown zapobiega spamowi',
     'cl.v14.e2':'AI dopalacza — taktyczne użycie: unikanie laserów, odwrót przy niskim PW, doganianie odległych wrogów',
     'cl.v14.e3':'Cząsteczki dopalacza — 12 cząsteczek spalin + rozbłysk pierścienia; Rebelia niebieska · Imperium zielone',
@@ -793,7 +809,7 @@ const LANGS={
     'cl.v10.e8':'Pojedynczy plik HTML, brak zależności',
     'menu.showCrawl':'Pokaż intro',
     'menu.playMusic':'Odtwórz muzykę','menu.stopMusic':'Zatrzymaj muzykę',
-    'menu.loadVersion':'Wczytaj wersję','menu.madeWith':'v1.5.1 — stworzone z Claude',
+    'menu.loadVersion':'Wczytaj wersję','menu.madeWith':'v1.5.2 — stworzone z Claude',
     'hud.rebellion':'Rebelia','hud.empire':'Imperium',
     'hud.pause':'|| Pauza','hud.mute.on':'♪ Wł','hud.mute.off':'♪ Wył',
     'hud.music.on':'♫ Muzyka','hud.music.off':'♫ Wył',
@@ -822,7 +838,7 @@ const LANGS={
     'cfg.dmg':'Obrażenia','cfg.turnRate':'Zwrotność','cfg.count':'Liczba',
     'cfg.btn.reset':'Resetuj','cfg.btn.resetAll':'Resetuj wszystko','cfg.btn.save':'Zapisz','cfg.btn.back':'Wróć',
     'cfg.saved':'✓ Zapisano','cfg.on':'Wł','cfg.off':'Wył',
-    'rm.title':'Gwiezdne Wojny','rm.sub':'Pikselowy Symulator Bitwy — v1.5.1',
+    'rm.title':'Gwiezdne Wojny','rm.sub':'Pikselowy Symulator Bitwy — v1.5.2',
     'rm.sec.what':'Co to jest?',
     'rm.what.p1':'Autonomiczna pikselowa bitwa kosmiczna między Rebelią a Imperium.',
     'rm.what.p2':'Zbudowane w jednym pliku HTML.',
@@ -832,7 +848,7 @@ const LANGS={
     'rm.team.rebel':'Rebelia','rm.team.empire':'Imperium',
     'rm.role.xwing':'Wszechstronny, 4 działa','rm.role.awing':'Przechwytywacz, szybki',
     'rm.role.tie':'Mięso armatnie, rój','rm.role.tiein':'Ciężki, podwójny strzał',
-    'lv.title':'Wczytaj wersję','lv.current.tag':'v1.5.1 — aktualna',
+    'lv.title':'Wczytaj wersję','lv.current.tag':'v1.5.2 — aktualna',
     'lv.current.desc':'System Dopalacza · Cząsteczki · Poświata',
     'lv.current.btn':'Aktywna','lv.load':'Wczytaj',
     'lv.v12.tag':'v1.2','lv.v12.desc':'Wielojęzyczność (EN/DE/PL) · Prędkość lasera · Link do changelogu GitHub',
@@ -1192,7 +1208,7 @@ function loadSlidersFromCfg(){
     for(const key of ['hp','spd','cd','dmg','turnRate','count','ttl','laserSpd','boostEnergy','boostCost','boostRegen','boostForce']){
       const el=document.querySelector(`input[data-ship="${ship}"][data-key="${key}"]`);
       const vEl=document.getElementById(`v-${ship}-${key}`);
-      if(el&&vEl){el.value=CFG[ship][key];const dec=key==='ttl'?1:key==='spd'||key==='turnRate'||key==='boostForce'?1:0;vEl.textContent=parseFloat(CFG[ship][key]).toFixed(dec);}
+      if(el&&vEl){el.value=CFG[ship][key];const dec=key==='ttl'?1:key==='spd'||key==='boostForce'?1:key==='turnRate'?4:0;vEl.textContent=parseFloat(CFG[ship][key]).toFixed(dec);}
     }
   }
   const brEl=document.getElementById('sl-breakRange');if(brEl){brEl.value=CFG.breakRange;document.getElementById('v-breakRange').textContent=CFG.breakRange+'%';}
@@ -1204,7 +1220,7 @@ function cfgUpdate(el){
   const ship=el.dataset.ship,key=el.dataset.key,val=parseFloat(el.value);
   CFG[ship][key]=val;if(key==='hp')CFG[ship].maxHp=val;
   const vEl=document.getElementById(`v-${ship}-${key}`);
-  if(vEl){const dec=key==='ttl'?1:key==='spd'||key==='turnRate'||key==='boostForce'?1:0;vEl.textContent=val.toFixed(dec);}
+  if(vEl){const dec=key==='ttl'?1:key==='spd'||key==='boostForce'?1:key==='turnRate'?4:0;vEl.textContent=val.toFixed(dec);}
   markUnsaved();
 }
 
@@ -1537,7 +1553,7 @@ const HIT=10;
 function loop(){
   if(!gameRunning||paused)return;
 
-  // respawn counter always runs at full speed regardless of gameSpeed
+  // respawn counter always runs at full speed
   if(respawnCounter>0){
     respawnCounter--;
     if(respawnCounter===0) spawnAll();
@@ -1547,12 +1563,26 @@ function loop(){
     return;
   }
 
-  // speed control — 0 = freeze gameplay, <1 = skip frames
-  if(gameSpeed === 0){ animId=requestAnimationFrame(loop); return; }
-  if(gameSpeed < 1.0){
-    _speedAccum += gameSpeed;
+  // determine effective speed:
+  // debug mode uses gameSpeed (0–1), otherwise use globalGameSpeed (0.1–10)
+  const effectiveSpeed = debugMode ? gameSpeed : globalGameSpeed;
+
+  if(effectiveSpeed === 0){ animId=requestAnimationFrame(loop); return; }
+  if(effectiveSpeed < 1.0){
+    _speedAccum += effectiveSpeed;
     if(_speedAccum < 1.0){ animId=requestAnimationFrame(loop); return; }
     _speedAccum -= 1.0;
+  } else if(effectiveSpeed > 1.0){
+    // run multiple ticks per frame for speeds > 1
+    const ticks = Math.floor(effectiveSpeed);
+    const remainder = effectiveSpeed - ticks;
+    _globalSpeedAccum += remainder;
+    const extra = _globalSpeedAccum >= 1.0 ? 1 : 0;
+    if(extra) _globalSpeedAccum -= 1.0;
+    // run extra ticks (skip draw for them)
+    for(let i=0;i<ticks-1+extra;i++){
+      tickOnce();
+    }
   }
   drawStars();ctx.clearRect(0,0,W,H);
   const ra=ships.filter(s=>s.team==='rebel').length;
@@ -1601,30 +1631,73 @@ function calcGameSize(){
   if(H%2!==0) H--;
 }
 
+function runCountdown(cb){
+  const el=document.getElementById('countdown');
+  const txt=document.getElementById('countdownText');
+  if(!el||!txt){cb();return;}
+  const steps=['3','2','1','FIGHT!'];
+  const colors=['#4fa3e0','#4fa3e0','#4fa3e0','#00cc44'];
+  const glows=[
+    '0 0 40px rgba(79,163,224,0.9),0 0 80px rgba(79,163,224,0.4)',
+    '0 0 40px rgba(79,163,224,0.9),0 0 80px rgba(79,163,224,0.4)',
+    '0 0 40px rgba(79,163,224,0.9),0 0 80px rgba(79,163,224,0.4)',
+    '0 0 40px rgba(0,204,68,0.9),0 0 80px rgba(0,204,68,0.4)',
+  ];
+  let i=0;
+  el.classList.remove('hidden');
+  function showStep(){
+    if(i>=steps.length){el.classList.add('hidden');cb();return;}
+    txt.textContent=steps[i];
+    txt.style.color=colors[i];
+    txt.style.textShadow=glows[i];
+    txt.style.transition='none';
+    txt.style.transform='scale(1.8)';
+    txt.style.opacity='0';
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      txt.style.transition='transform 0.22s cubic-bezier(.17,.67,.35,1.3),opacity 0.15s';
+      txt.style.transform='scale(1)';
+      txt.style.opacity='1';
+    }));
+    const dur=steps[i]==='FIGHT!'?700:850;
+    setTimeout(()=>{
+      txt.style.transition='transform 0.18s ease-in,opacity 0.18s';
+      txt.style.transform='scale(0.6)';
+      txt.style.opacity='0';
+      setTimeout(()=>{i++;showStep();},200);
+    },dur-200);
+  }
+  showStep();
+}
+
 function startGame(){
   try{getAudio();}catch(e){}
   calcGameSize();resizeCanvases();initStars();
   if(menuAnimId){cancelAnimationFrame(menuAnimId);menuAnimId=null;}
+  if(animId){cancelAnimationFrame(animId);animId=null;}
   xScore=0;tScore=0;
   document.getElementById('hudXS').textContent='0';
   document.getElementById('hudTS').textContent='0';
   showScreen(null);
   document.getElementById('hud').classList.remove('hidden');
   document.getElementById('legend').classList.remove('hidden');
-  gameRunning=true;paused=false;musicStop();updateMusicBtn();respawnCounter=0;particles=[];
+  gameRunning=false;paused=false;musicStop();updateMusicBtn();respawnCounter=0;particles=[];
   stateBuffer=[];stepCursor=-1;stepFrameCount=0;
-  gameSpeed=1.0;_speedAccum=0;
-  const sl=document.getElementById('speedSlider');if(sl)sl.value=5;
-  const slbl=document.getElementById('speedVal');if(slbl)slbl.textContent='1.0x';
+  _speedAccum=0;_globalSpeedAccum=0;
   const sc=document.getElementById('speedControl');if(sc)sc.style.display='none';
   const stc=document.getElementById('stepControl');if(stc)stc.style.display='none';
+  // show global speed slider only when debug is off
+  const gsc=document.getElementById('globalSpeedControl');
+  if(gsc) gsc.style.display=debugMode?'none':'flex';
   const pb=document.getElementById('pauseBtn');if(pb)pb.textContent='|| Pause';
   updateDebugBtn();
-  spawnAll();
-  if(animId)cancelAnimationFrame(animId);
-  loop();
-  // show brain panel if debug mode is on
-  if(debugMode) setTimeout(()=>bpShow(), 50);
+  // draw stars during countdown
+  (function starLoop(){ if(gameRunning)return; drawStars(); requestAnimationFrame(starLoop); })();
+  runCountdown(()=>{
+    spawnAll();
+    gameRunning=true;
+    loop();
+    if(debugMode) setTimeout(()=>bpShow(), 50);
+  });
 }
 function stopGame(){gameRunning=false;if(animId){cancelAnimationFrame(animId);animId=null;}}
 function togglePause(){
@@ -1865,10 +1938,10 @@ function resetBrain(ship){
 }
 
 function saveBrains(){
-  // sync textarea content to BRAINS before saving
+  // sync from config-screen textareas (but don't overwrite if panel already set the value)
   for(const ship of ['xwing','awing','tie','tiein']){
     const ta = document.getElementById('brain-'+ship);
-    if(ta) BRAINS[ship].script = ta.value;
+    if(ta && document.activeElement === ta) BRAINS[ship].script = ta.value;
   }
   try{ localStorage.setItem(BRAIN_KEY, JSON.stringify(BRAINS)); }catch(e){}
   // recompile all
@@ -1898,6 +1971,15 @@ let gameSpeed = 1.0;
 let _speedAccum = 0; // sub-frame accumulator for speeds < 1
 
 const SPEED_STEPS = [0, 0.1, 0.25, 0.5, 0.75, 1.0];
+const GLOBAL_SPEED_STEPS = [0.1, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 2, 5, 10];
+let globalGameSpeed = 1.0;
+let _globalSpeedAccum = 0;
+
+function setGlobalSpeed(val){
+  globalGameSpeed = GLOBAL_SPEED_STEPS[parseInt(val)];
+  const lbl = document.getElementById('globalSpeedVal');
+  if(lbl) lbl.textContent = globalGameSpeed % 1 === 0 ? globalGameSpeed+'x' : globalGameSpeed+'x';
+}
 
 // ── STATE BUFFER (bidirectional timeline) ─────────────────────────────────────
 // stateBuffer is a linear timeline of snapshots.
@@ -2047,6 +2129,9 @@ function toggleDebug(){
     // hide step control too
     const stc = document.getElementById('stepControl');
     if(stc) stc.style.display = 'none';
+    // show global speed slider
+    const gsc = document.getElementById('globalSpeedControl');
+    if(gsc) gsc.style.display = 'flex';
   } else {
     // Fix 1: debug just turned on — restore slider state from current gameSpeed
     const sl = document.getElementById('speedSlider');
@@ -2057,6 +2142,9 @@ function toggleDebug(){
     // show step control if currently at speed 0
     const stc = document.getElementById('stepControl');
     if(stc) stc.style.display = gameSpeed === 0 ? 'flex' : 'none';
+    // hide global speed slider
+    const gsc = document.getElementById('globalSpeedControl');
+    if(gsc) gsc.style.display = 'none';
   }
 }
 
@@ -2083,63 +2171,83 @@ function updateDebugBtn(){
   }
 }
 
+function drawArrow(x1, y1, angle, length, color, alpha){
+  const x2 = x1 + Math.cos(angle) * length;
+  const y2 = y1 + Math.sin(angle) * length;
+  const headLen = 8;
+  const headAngle = 0.4;
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.strokeStyle = color;
+  ctx.fillStyle = color;
+  ctx.lineWidth = 2;
+  // shaft
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+  // arrowhead
+  ctx.beginPath();
+  ctx.moveTo(x2, y2);
+  ctx.lineTo(x2 - Math.cos(angle - headAngle)*headLen, y2 - Math.sin(angle - headAngle)*headLen);
+  ctx.lineTo(x2 - Math.cos(angle + headAngle)*headLen, y2 - Math.sin(angle + headAngle)*headLen);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
 function drawDebug(){
   if(!debugMode) return;
   for(const s of ships){
     if(!BRAINS[s.type]?.enabled) continue;
-    // steering line
-    const steerAngle = s._debugSteer ?? s.angle;
-    ctx.save();
-    ctx.globalAlpha = 0.7;
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = s.team==='rebel' ? '#4488ff' : '#00cc44';
-    ctx.beginPath();
-    ctx.moveTo(s.x, s.y);
-    ctx.lineTo(s.x + Math.cos(steerAngle)*30, s.y + Math.sin(steerAngle)*30);
-    ctx.stroke();
-    ctx.restore();
-    // line from this ship to its target foe
+
+    // steering direction arrow — blue (rebel) / green (empire)
+    const steerColor = s.team==='rebel' ? '#4499ff' : '#00dd44';
+    drawArrow(s.x, s.y, s._debugSteer ?? s.angle, 40, steerColor, 0.85);
+
+    // target line — dashed red from ship to foe, arrow pointing at foe
     if(s._debugFoeX !== undefined){
       ctx.save();
-      ctx.globalAlpha = 0.5;
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = '#ff4444';
-      ctx.setLineDash([3, 3]);
+      ctx.globalAlpha = 0.55;
+      ctx.strokeStyle = '#ff3333';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 4]);
       ctx.beginPath();
       ctx.moveTo(s.x, s.y);
       ctx.lineTo(s._debugFoeX, s._debugFoeY);
       ctx.stroke();
-      // small dot on the target
       ctx.setLineDash([]);
-      ctx.globalAlpha = 0.7;
+      // arrowhead pointing AT the foe
+      const aTgt = Math.atan2(s._debugFoeY - s.y, s._debugFoeX - s.x);
+      const hLen = 9, hAng = 0.4;
+      const tx = s._debugFoeX, ty = s._debugFoeY;
+      ctx.globalAlpha = 0.85;
+      ctx.fillStyle = '#ff3333';
       ctx.beginPath();
-      ctx.arc(s._debugFoeX, s._debugFoeY, 4, 0, Math.PI*2);
-      ctx.stroke();
+      ctx.moveTo(tx, ty);
+      ctx.lineTo(tx - Math.cos(aTgt - hAng)*hLen, ty - Math.sin(aTgt - hAng)*hLen);
+      ctx.lineTo(tx - Math.cos(aTgt + hAng)*hLen, ty - Math.sin(aTgt + hAng)*hLen);
+      ctx.closePath();
+      ctx.fill();
       ctx.restore();
     }
-    // boost direction arrow
-    if(s._debugBoost && s._debugBoost!==false){
+
+    // boost arrow — yellow, larger
+    if(s._debugBoost && s._debugBoost !== false){
       let bAngle = s.angle;
-      if(s._debugBoost==='back') bAngle+=Math.PI;
-      else if(s._debugBoost==='left') bAngle-=Math.PI/2;
-      else if(s._debugBoost==='right') bAngle+=Math.PI/2;
-      ctx.save();
-      ctx.globalAlpha = 0.9;
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = '#ffcc00';
-      ctx.beginPath();
-      ctx.moveTo(s.x, s.y);
-      ctx.lineTo(s.x+Math.cos(bAngle)*18, s.y+Math.sin(bAngle)*18);
-      ctx.stroke();
-      ctx.restore();
+      if(s._debugBoost==='back')   bAngle += Math.PI;
+      else if(s._debugBoost==='left')  bAngle -= Math.PI/2;
+      else if(s._debugBoost==='right') bAngle += Math.PI/2;
+      drawArrow(s.x, s.y, bAngle, 28, '#ffdd00', 0.95);
     }
-    // brain error text
+
+    // error indicator
     if(s.brainError){
       ctx.save();
       ctx.globalAlpha = 0.9;
       ctx.fillStyle = '#ff4444';
-      ctx.font = '8px monospace';
-      ctx.fillText('err', s.x+10, s.y-14);
+      ctx.font = 'bold 9px monospace';
+      ctx.fillText('ERR', s.x + 10, s.y - 12);
       ctx.restore();
     }
   }
@@ -2243,24 +2351,22 @@ function bpApply(){
   const ta = document.getElementById('bp-textarea');
   const err = document.getElementById('bp-error');
   if(!ta) return;
-  // save script
+  // save script from panel textarea
   BRAINS[ship].script = ta.value;
   BRAINS[ship].enabled = true;
-  // update toggle UI
+  // update panel toggle UI
   const tog = document.getElementById('bp-brain-toggle');
   if(tog) tog.classList.add('on');
   const status = document.getElementById('bp-brain-status');
   if(status) status.textContent = 'Brain On';
-  // compile & check
-  compileBrain(ship);
   if(err) err.textContent = '';
-  saveBrains();
-  // sync config-screen
-  loadBrainUI();
+  // compile and persist
+  compileBrain(ship);
+  try{ localStorage.setItem(BRAIN_KEY, JSON.stringify(BRAINS)); }catch(e){}
   updateDebugBtn();
   // start new game immediately
   startGame();
-  // re-show panel after startGame (which hides it)
+  // re-show panel — bpSyncToShip will read BRAINS[ship].script which is already set correctly
   setTimeout(()=>{ bpShow(); }, 50);
 }
 
@@ -2281,6 +2387,7 @@ function bpInitDrag(){
     document.body.style.cursor = 'col-resize';
     document.body.style.userSelect = 'none';
     e.preventDefault();
+    e.stopPropagation();
   });
   document.addEventListener('mousemove', e=>{
     if(!bpDragging) return;
