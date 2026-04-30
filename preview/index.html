@@ -136,6 +136,32 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 #bp-textarea{flex:1;background:#03030d;border:1px solid #1a3a5a;color:#88ccff;font-family:monospace;font-size:11px;line-height:1.55;padding:8px;resize:none;outline:none;letter-spacing:0.3px;min-height:0;}
 #bp-textarea:focus{border-color:#4fa3e0;}
 #bp-error{font-size:9px;color:#ff4444;letter-spacing:1px;margin-top:4px;min-height:14px;font-family:monospace;word-break:break-all;}
+/* stats panel */
+#bp-stats{margin-top:6px;border:1px solid #1a2a3a;border-radius:2px;background:#03030d;padding:6px 8px;font-family:monospace;font-size:9px;color:#445566;letter-spacing:1px;flex-shrink:0;}
+.bp-stats-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.bp-stats-title{font-size:9px;color:#4fa3e0;letter-spacing:2px;text-transform:uppercase;}
+.bp-stats-reset{font-size:8px;color:#334455;border:1px solid #1a2a3a;background:transparent;font-family:monospace;padding:1px 6px;cursor:pointer;letter-spacing:1px;text-transform:uppercase;}
+.bp-stats-reset:hover{color:#ff4444;border-color:#ff4444;}
+.bp-stats-divider{border:none;border-top:1px solid #1a2a3a;margin:4px 0;}
+/* comparison table */
+#bp-stats-scroll{overflow-x:auto;overflow-y:hidden;margin-top:4px;}
+#bp-stats-scroll::-webkit-scrollbar{height:4px;}
+#bp-stats-scroll::-webkit-scrollbar-track{background:#06060f;}
+#bp-stats-scroll::-webkit-scrollbar-thumb{background:#1a2a3a;border-radius:2px;}
+.bp-stats-table{border-collapse:collapse;width:max-content;min-width:100%;}
+.bp-stats-table td,.bp-stats-table th{padding:2px 8px;white-space:nowrap;font-size:9px;font-family:monospace;}
+.bp-stats-table .col-label{color:#445566;padding-right:10px;text-align:left;position:sticky;left:0;background:#03030d;z-index:1;min-width:90px;}
+.bp-stats-table .col-run{text-align:right;color:#556677;min-width:52px;}
+.bp-stats-table .col-run.current{color:#aabbcc;border-left:1px solid #1a3a5a;}
+.bp-stats-table .col-run.current td{background:#06060f;}
+.bp-stats-table tr.divider td{border-top:1px solid #1a2a3a;padding-top:4px;}
+.bp-stats-table .row-header th{color:#334455;font-size:8px;letter-spacing:1px;padding-bottom:3px;border-bottom:1px solid #1a2a3a;}
+.bp-stats-table .row-header .col-run.current{color:#4fa3e0;}
+.val-good{color:#00cc44 !important;}
+.val-warn{color:#ffaa00 !important;}
+.val-up{color:#00cc44 !important;}
+.val-down{color:#ff4444 !important;}
+.trend{font-size:8px;opacity:0.7;}
 .bp-footer{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;}
 .bp-btn{background:#0a0a1a;border:1px solid #334455;color:#aabbcc;font-family:monospace;font-size:9px;letter-spacing:1px;padding:4px 10px;cursor:pointer;text-transform:uppercase;flex:1;}
 .bp-btn:hover{border-color:#4fa3e0;color:#fff;}
@@ -266,7 +292,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
     <button class="btn" onclick="showCrawl()" data-i18n="menu.showCrawl">Show Intro</button>
     <button class="btn" style="border-color:#334455;color:#aaaaaa;" onclick="loadVersion()" data-i18n="menu.loadVersion">Load Version</button>
     </div>
-    <div style="font-size:9px;letter-spacing:2px;color:#ffffff;text-transform:uppercase;margin-top:4px;opacity:0.4;" data-i18n="menu.madeWith">v1.5.3 — made with Claude</div>
+    <div style="font-size:9px;letter-spacing:2px;color:#ffffff;text-transform:uppercase;margin-top:4px;opacity:0.4;" data-i18n="menu.madeWith">v1.5.4 — made with Claude</div>
   </div>
 </div>
 
@@ -360,6 +386,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
           <option value="flanker">Flanker</option>
           <option value="coward">Coward</option>
           <option value="default">Default AI</option>
+          <option value="leadshot">Lead Shot</option>
         </select>
         <button class="brain-btn" onclick="resetBrain('xwing')" data-i18n="cfg.brain.reset">Reset</button>
         <a href="https://github.com/OberstRolex123/Star-Wars-Battle-Simulator/blob/main/BRAIN_DOCUMENTATION.md"
@@ -403,6 +430,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
           <option value="flanker">Flanker</option>
           <option value="coward">Coward</option>
           <option value="default">Default AI</option>
+          <option value="leadshot">Lead Shot</option>
         </select>
         <button class="brain-btn" onclick="resetBrain('awing')" data-i18n="cfg.brain.reset">Reset</button>
       </div>
@@ -442,6 +470,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
           <option value="flanker">Flanker</option>
           <option value="coward">Coward</option>
           <option value="default">Default AI</option>
+          <option value="leadshot">Lead Shot</option>
         </select>
         <button class="brain-btn" onclick="resetBrain('tie')" data-i18n="cfg.brain.reset">Reset</button>
       </div>
@@ -481,6 +510,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
           <option value="flanker">Flanker</option>
           <option value="coward">Coward</option>
           <option value="default">Default AI</option>
+          <option value="leadshot">Lead Shot</option>
         </select>
         <button class="brain-btn" onclick="resetBrain('tiein')" data-i18n="cfg.brain.reset">Reset</button>
       </div>
@@ -507,7 +537,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 
 <div id="readmeScreen" class="screen hidden">
   <div class="rm-header" data-i18n="rm.title">Star Wars</div>
-  <div class="rm-sub" data-i18n="rm.sub">Pixel Battle Simulator — v1.5.3</div>
+  <div class="rm-sub" data-i18n="rm.sub">Pixel Battle Simulator — v1.5.4</div>
   <div class="rm-sec">
     <div class="rm-sec-title" data-i18n="rm.sec.what">What is this</div>
     <div class="rm-p" data-i18n="rm.what.p1">An autonomous pixel-art space battle...</div>
@@ -536,7 +566,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
   <div class="lv-header" data-i18n="lv.title">Load Version</div>
   <div class="lv-entry lv-current">
     <div class="lv-info">
-      <div class="lv-tag" data-i18n="lv.current.tag">v1.5.3 — current</div>
+      <div class="lv-tag" data-i18n="lv.current.tag">v1.5.4 — current</div>
       <div class="lv-desc" data-i18n="lv.current.desc">Boost System · Particles · Glow</div>
     </div>
     <button class="lv-btn" data-i18n="lv.current.btn">Playing</button>
@@ -591,7 +621,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
     <!-- debug speed slider (visible when debug ON) -->
     <div id="speedControl" style="display:none;width:100%;align-items:center;gap:8px;">
       <span style="font-size:9px;letter-spacing:1px;color:#556677;text-transform:uppercase;white-space:nowrap;">Speed</span>
-      <input type="range" id="speedSlider" min="0" max="5" step="1" value="5"
+      <input type="range" id="speedSlider" min="0" max="8" step="1" value="5"
         oninput="setGameSpeed(this.value)"
         style="flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;">
       <span id="speedVal" style="font-size:9px;color:#4fa3e0;letter-spacing:1px;width:26px;text-align:right;">1.0x</span>
@@ -636,7 +666,7 @@ const LANGS={
     'menu.newGame':'New Simulation','menu.config':'Configuration',
     'menu.changelog':'Changelog','menu.about':'About',
     'cl.title':'Changelog',
-    'cl.v14.tag':'v1.5.3','cl.v14.date':'2026-04-28 · current',
+    'cl.v14.tag':'v1.5.4','cl.v14.date':'2026-04-28 · current',
     'cl.v14.e1':'Boost system — 4 directions (forward · back · left · right), energy tank per ship with regeneration, cooldown prevents spam',
     'cl.v14.e2':'Boost AI — tactical: dodge incoming lasers sideways, retreat when low HP, close gap on distant enemies, evade when targeted',
     'cl.v14.e3':'Boost particles — 12 exhaust particles + glow ring burst; Rebel blue · Empire green; separate canvas with shadowBlur',
@@ -660,7 +690,7 @@ const LANGS={
     'cl.v10.e8':'Single HTML file, zero dependencies',
     'menu.showCrawl':'Show Intro',
     'menu.playMusic':'Play Music','menu.stopMusic':'Stop Music',
-    'menu.loadVersion':'Load Version','menu.madeWith':'v1.5.3 — made with Claude',
+    'menu.loadVersion':'Load Version','menu.madeWith':'v1.5.4 — made with Claude',
     'hud.rebellion':'Rebellion','hud.empire':'Empire',
     'hud.pause':'|| Pause','hud.mute.on':'♪ On','hud.mute.off':'♪ Off',
     'hud.music.on':'♫ Music','hud.music.off':'♫ Off',
@@ -689,7 +719,7 @@ const LANGS={
     'cfg.dmg':'Damage','cfg.turnRate':'Turn Rate','cfg.count':'Count',
     'cfg.btn.reset':'Reset','cfg.btn.resetAll':'Reset All','cfg.btn.save':'Save','cfg.btn.back':'Back',
     'cfg.saved':'✓ Saved','cfg.on':'On','cfg.off':'Off',
-    'rm.title':'Star Wars','rm.sub':'Pixel Battle Simulator — v1.5.3',
+    'rm.title':'Star Wars','rm.sub':'Pixel Battle Simulator — v1.5.4',
     'rm.sec.what':'What is this',
     'rm.what.p1':'An autonomous pixel-art space battle between the Rebellion and the Empire.',
     'rm.what.p2':'Built entirely in a single HTML file — no server, no dependencies.',
@@ -699,7 +729,7 @@ const LANGS={
     'rm.team.rebel':'Rebel','rm.team.empire':'Empire',
     'rm.role.xwing':'All-rounder, 4 cannons','rm.role.awing':'Interceptor, fast, evasive',
     'rm.role.tie':'Cannon fodder, swarm','rm.role.tiein':'Heavy, double shot',
-    'lv.title':'Load Version','lv.current.tag':'v1.5.3 — current',
+    'lv.title':'Load Version','lv.current.tag':'v1.5.4 — current',
     'lv.current.desc':'Boost System · Particles · Glow',
     'lv.current.btn':'Playing','lv.load':'Load',
     'lv.v12.tag':'v1.2','lv.v12.desc':'Multi-language (EN/DE/PL) · Laser speed config · GitHub changelog',
@@ -717,7 +747,7 @@ const LANGS={
     'menu.newGame':'Neue Simulation','menu.config':'Konfiguration',
     'menu.changelog':'Changelog','menu.about':'Über das Spiel',
     'cl.title':'Changelog',
-    'cl.v14.tag':'v1.5.3','cl.v14.date':'2026-04-28 · aktuell',
+    'cl.v14.tag':'v1.5.4','cl.v14.date':'2026-04-28 · aktuell',
     'cl.v14.e1':'Boost-System — 4 Richtungen (vorwärts · rückwärts · links · rechts), Energie-Tank mit Regeneration, Cooldown verhindert Spam',
     'cl.v14.e2':'Boost-KI — taktisch: weicht einkommenden Lasern aus, zieht sich bei niedrigen TP zurück, schließt Lücke zu weit entfernten Feinden',
     'cl.v14.e3':'Boost-Partikel — 12 Abgas-Partikel + Glow-Ring-Burst; Rebellion blau · Imperium grün; separates Canvas mit shadowBlur',
@@ -741,7 +771,7 @@ const LANGS={
     'cl.v10.e8':'Einzelne HTML-Datei, keine Abhängigkeiten',
     'menu.showCrawl':'Intro anzeigen',
     'menu.playMusic':'Musik abspielen','menu.stopMusic':'Musik stoppen',
-    'menu.loadVersion':'Version laden','menu.madeWith':'v1.5.3 — made with Claude',
+    'menu.loadVersion':'Version laden','menu.madeWith':'v1.5.4 — made with Claude',
     'hud.rebellion':'Rebellion','hud.empire':'Imperium',
     'hud.pause':'|| Pause','hud.mute.on':'♪ An','hud.mute.off':'♪ Aus',
     'hud.music.on':'♫ Musik','hud.music.off':'♫ Aus',
@@ -770,7 +800,7 @@ const LANGS={
     'cfg.dmg':'Schaden','cfg.turnRate':'Wenderate','cfg.count':'Anzahl',
     'cfg.btn.reset':'Zurücksetzen','cfg.btn.resetAll':'Alles zurücksetzen','cfg.btn.save':'Speichern','cfg.btn.back':'Zurück',
     'cfg.saved':'✓ Gespeichert','cfg.on':'An','cfg.off':'Aus',
-    'rm.title':'Krieg der Sterne','rm.sub':'Pixel Kampfsimulator — v1.5.3',
+    'rm.title':'Krieg der Sterne','rm.sub':'Pixel Kampfsimulator — v1.5.4',
     'rm.sec.what':'Was ist das?',
     'rm.what.p1':'Ein autonomer Pixel-Art-Weltraumkampf zwischen der Rebellion und dem Imperium.',
     'rm.what.p2':'Komplett in einer einzigen HTML-Datei.',
@@ -780,7 +810,7 @@ const LANGS={
     'rm.team.rebel':'Rebellen','rm.team.empire':'Imperium',
     'rm.role.xwing':'Allrounder, 4 Kanonen','rm.role.awing':'Abfangjäger, schnell',
     'rm.role.tie':'Kanonenfutter, Schwarm','rm.role.tiein':'Schwer, Doppelschuss',
-    'lv.title':'Version laden','lv.current.tag':'v1.5.3 — aktuell',
+    'lv.title':'Version laden','lv.current.tag':'v1.5.4 — aktuell',
     'lv.current.desc':'Boost-System · Partikel · Glow',
     'lv.current.btn':'Aktiv','lv.load':'Laden',
     'lv.v12.tag':'v1.2','lv.v12.desc':'Mehrsprachigkeit (EN/DE/PL) · Lasergeschwindigkeit · GitHub-Changelog',
@@ -798,7 +828,7 @@ const LANGS={
     'menu.newGame':'Nowa Symulacja','menu.config':'Konfiguracja',
     'menu.changelog':'Historia zmian','menu.about':'O grze',
     'cl.title':'Historia zmian',
-    'cl.v14.tag':'v1.5.3','cl.v14.date':'2026-04-28 · aktualna',
+    'cl.v14.tag':'v1.5.4','cl.v14.date':'2026-04-28 · aktualna',
     'cl.v14.e1':'System dopalacza — 4 kierunki (przód · tył · lewo · prawo), tank energii z regeneracją, cooldown zapobiega spamowi',
     'cl.v14.e2':'AI dopalacza — taktyczne użycie: unikanie laserów, odwrót przy niskim PW, doganianie odległych wrogów',
     'cl.v14.e3':'Cząsteczki dopalacza — 12 cząsteczek spalin + rozbłysk pierścienia; Rebelia niebieska · Imperium zielone',
@@ -822,7 +852,7 @@ const LANGS={
     'cl.v10.e8':'Pojedynczy plik HTML, brak zależności',
     'menu.showCrawl':'Pokaż intro',
     'menu.playMusic':'Odtwórz muzykę','menu.stopMusic':'Zatrzymaj muzykę',
-    'menu.loadVersion':'Wczytaj wersję','menu.madeWith':'v1.5.3 — stworzone z Claude',
+    'menu.loadVersion':'Wczytaj wersję','menu.madeWith':'v1.5.4 — stworzone z Claude',
     'hud.rebellion':'Rebelia','hud.empire':'Imperium',
     'hud.pause':'|| Pauza','hud.mute.on':'♪ Wł','hud.mute.off':'♪ Wył',
     'hud.music.on':'♫ Muzyka','hud.music.off':'♫ Wył',
@@ -851,7 +881,7 @@ const LANGS={
     'cfg.dmg':'Obrażenia','cfg.turnRate':'Zwrotność','cfg.count':'Liczba',
     'cfg.btn.reset':'Resetuj','cfg.btn.resetAll':'Resetuj wszystko','cfg.btn.save':'Zapisz','cfg.btn.back':'Wróć',
     'cfg.saved':'✓ Zapisano','cfg.on':'Wł','cfg.off':'Wył',
-    'rm.title':'Gwiezdne Wojny','rm.sub':'Pikselowy Symulator Bitwy — v1.5.3',
+    'rm.title':'Gwiezdne Wojny','rm.sub':'Pikselowy Symulator Bitwy — v1.5.4',
     'rm.sec.what':'Co to jest?',
     'rm.what.p1':'Autonomiczna pikselowa bitwa kosmiczna między Rebelią a Imperium.',
     'rm.what.p2':'Zbudowane w jednym pliku HTML.',
@@ -861,7 +891,7 @@ const LANGS={
     'rm.team.rebel':'Rebelia','rm.team.empire':'Imperium',
     'rm.role.xwing':'Wszechstronny, 4 działa','rm.role.awing':'Przechwytywacz, szybki',
     'rm.role.tie':'Mięso armatnie, rój','rm.role.tiein':'Ciężki, podwójny strzał',
-    'lv.title':'Wczytaj wersję','lv.current.tag':'v1.5.3 — aktualna',
+    'lv.title':'Wczytaj wersję','lv.current.tag':'v1.5.4 — aktualna',
     'lv.current.desc':'System Dopalacza · Cząsteczki · Poświata',
     'lv.current.btn':'Aktywna','lv.load':'Wczytaj',
     'lv.v12.tag':'v1.2','lv.v12.desc':'Wielojęzyczność (EN/DE/PL) · Prędkość lasera · Link do changelogu GitHub',
@@ -1283,10 +1313,11 @@ function makeShip(type,x,y,angle){
     formationMode:false,formationGroupId:null,formationIndex:0,breakDelay:0,wasHit:false,
     // boost state
     boostEnergy:tp.boostEnergy,
-    boostCooldown:0,  // frames until next boost allowed
-    boostActive:false,boostDir:null,
-    // AI boost state
-    aiBoostCooldown:0, // prevents boost spam in AI
+    boostCooldown:0,boostActive:false,boostDir:null,
+    aiBoostCooldown:0,
+    // stats
+    _spawnTime: performance.now(),
+    _shotFired: false,
   };
 }
 
@@ -1314,6 +1345,7 @@ function spawnGroup(type,count,formationName,side,verticalZone,groupId){
 
 function spawnAll(){
   ships=[];lasers=[];explosions=[];particles=[];roundOver=false;respawnCounter=0;
+  statOnSimStart();
   let gid=0;
   if(CFG.xwing.count>0)ships.push(...spawnGroup('xwing',CFG.xwing.count,CFG.xwing.formation,'left','top',gid++));
   if(CFG.awing.count>0)ships.push(...spawnGroup('awing',CFG.awing.count,CFG.awing.formation,'left','bottom',gid++));
@@ -1331,6 +1363,7 @@ function applyBoost(s,direction){
   s.boostEnergy-=tp.boostCost;
   s.boostCooldown=BOOST_COOLDOWN_FRAMES;
   s.boostActive=true;s.boostDir=direction;
+  statOnBoost(s.type);
   const force=tp.boostForce;
   let bx,by;
   if(direction==='forward'){bx=Math.cos(s.angle)*force;by=Math.sin(s.angle)*force;}
@@ -1437,7 +1470,7 @@ function moveBoid(s){
           const lspd=tp.laserSpd||12, shots=s.type==='tiein'?2:1, ttlF=Math.round((tp.ttl||2)*60);
           s.cd=tp.cd+Math.floor(rand(-8,8));
           playLaser(s.team);
-          for(let i=0;i<shots;i++){const sp=shots>1?(i===0?-0.06:0.06):0,a=aTgt+sp;lasers.push({x:s.x,y:s.y,vx:Math.cos(a)*lspd,vy:Math.sin(a)*lspd,angle:a,team:s.team,color:tp.laser,dmg:tp.dmg,life:ttlF});}
+          for(let i=0;i<shots;i++){const sp=shots>1?(i===0?-0.06:0.06):0,a=aTgt+sp;const _isFirst=i===0&&!s._shotFired;lasers.push({x:s.x,y:s.y,vx:Math.cos(a)*lspd,vy:Math.sin(a)*lspd,angle:a,team:s.team,color:tp.laser,dmg:tp.dmg,life:ttlF,ownerType:s.type,_isFirstShot:_isFirst});statOnShot(s.type, !s._shotFired); if(i===0) s._shotFired=true;}
         }
       } else if(s.cd>0) s.cd--;
       // apply boost
@@ -1513,12 +1546,12 @@ function shoot(s){
     const fm=tp.fireMode||'atwill';if(fm==='hold')return;if(fm==='returnfire'&&!s.wasHit)return;
     if(Math.abs(angleDiff(aTgt,s.angle))>Math.PI*0.6)return;
     s.cd=tp.cd+Math.floor(rand(-8,8));playLaser(s.team);
-    for(let i=0;i<shots;i++){const sp=shots>1?(i===0?-0.06:0.06):0;lasers.push({x:s.x,y:s.y,vx:Math.cos(aTgt+sp)*lspd,vy:Math.sin(aTgt+sp)*lspd,angle:aTgt+sp,team:s.team,color:tp.laser,dmg:tp.dmg,life:ttlF});}
+    for(let i=0;i<shots;i++){const sp=shots>1?(i===0?-0.06:0.06):0;const _isFirst2=i===0&&!s._shotFired;lasers.push({x:s.x,y:s.y,vx:Math.cos(aTgt+sp)*lspd,vy:Math.sin(aTgt+sp)*lspd,angle:aTgt+sp,team:s.team,color:tp.laser,dmg:tp.dmg,life:ttlF,ownerType:s.type,_isFirstShot:_isFirst2});statOnShot(s.type, !s._shotFired); if(i===0) s._shotFired=true;}
     return;
   }
   if(Math.abs(angleDiff(aTgt,s.angle))>0.26)return;
   s.cd=tp.cd+Math.floor(rand(-8,8));playLaser(s.team);
-  for(let i=0;i<shots;i++){const sp=shots>1?(i===0?-0.06:0.06):0,a=s.angle+sp;lasers.push({x:s.x,y:s.y,vx:Math.cos(a)*lspd,vy:Math.sin(a)*lspd,angle:a,team:s.team,color:tp.laser,dmg:tp.dmg,life:ttlF});}
+  for(let i=0;i<shots;i++){const sp=shots>1?(i===0?-0.06:0.06):0,a=s.angle+sp;const _isFirst3=i===0&&!s._shotFired;lasers.push({x:s.x,y:s.y,vx:Math.cos(a)*lspd,vy:Math.sin(a)*lspd,angle:a,team:s.team,color:tp.laser,dmg:tp.dmg,life:ttlF,ownerType:s.type,_isFirstShot:_isFirst3});statOnShot(s.type, !s._shotFired); if(i===0) s._shotFired=true;}
 }
 
 function drawHP(s){
@@ -1611,7 +1644,7 @@ function loop(){
         if(s.team===l.team)continue;
         let dx=Math.abs(s.x-l.x),dy=Math.abs(s.y-l.y);
         if(CFG.wrapWorld){if(dx>W/2)dx=W-dx;if(dy>H/2)dy=H-dy;}
-        if(dx<HIT&&dy<HIT){s.hp-=l.dmg;l.life=0;onShipHit(s);if(s.hp<=0){addExplosion(s.x,s.y);ships=ships.filter(o=>o!==s);}break;}
+        if(dx<HIT&&dy<HIT){s.hp-=l.dmg;if(l.ownerType)statOnHit(l.ownerType,l);l.life=0;onShipHit(s);if(s.hp<=0){addExplosion(s.x,s.y);if(l.ownerType)statOnKill(l.ownerType);statOnDeath(s.type,s._spawnTime);ships=ships.filter(o=>o!==s);}break;}
       }
     }
     lasers=lasers.filter(l=>l.life>0);
@@ -1628,6 +1661,9 @@ function loop(){
     // only capture if at present (not reviewing past)
     if(stepCursor < 0 || stepCursor === stateBuffer.length - 1) captureState();
   }
+  // update stats panel every ~60 frames
+  if(!window._statsFrameCount) window._statsFrameCount=0;
+  if(++window._statsFrameCount % 60 === 0) updateStatsPanel();
   // draw particles on particle canvas
   updateDrawParticles();
   animId=requestAnimationFrame(loop);
@@ -1858,6 +1894,26 @@ return {
   shoot: Math.abs(angleDiff(foe.angleTo, self.angle)) < 0.26,
   boost: b
 };`,
+
+  leadshot: `// Lead Shot — Vorhalten
+// Berechnet wo der Feind sein wird wenn der Laser ankommt
+if (!foe) return { steer: 0, shoot: false, boost: false };
+
+var bulletSpeed = self.laserSpd || 12;
+var leadTime = foe.dist / bulletSpeed;
+
+// Vorhaltepunkt mit Winkelgeschwindigkeit des Feindes
+var leadAngle = foe.angleTo + foe.angularVel * leadTime * 0.8;
+var steer = angleDiff(leadAngle, self.angle);
+var shooting = Math.abs(angleDiff(leadAngle, self.angle)) < 0.2;
+
+var b = false;
+if (self.boostReady) {
+  if (foe.dist > 250) b = 'forward';
+  else if (Math.abs(steer) > 0.8) b = 'forward';
+}
+
+return { steer: steer, shoot: shooting, boost: b };`,
 };
 
 function compileBrain(ship){
@@ -1904,6 +1960,163 @@ function runBrain(ship, context){
   }
 }
 
+// ── STATS SYSTEM ──────────────────────────────────────────────────────────────
+const SHIP_TYPES = ['xwing','awing','tie','tiein'];
+
+function makeStatEntry(){ return {
+  shotsFired:0, shotsHit:0,
+  firstShotPending:false, firstShotHits:0, firstShotAttempts:0,
+  kills:0, deaths:0,
+  killTimes:[],
+  boostCount:0,
+}; }
+
+// Current live stats per ship type
+let STATS = {};
+SHIP_TYPES.forEach(t=>{ STATS[t] = makeStatEntry(); });
+
+// Frozen runs per ship type — array of snapshots
+let STAT_RUNS = {};
+SHIP_TYPES.forEach(t=>{ STAT_RUNS[t] = []; });
+
+// Called on Apply — freeze current stats as a new run
+function freezeStatsRun(){
+  SHIP_TYPES.forEach(t=>{
+    const s = STATS[t];
+    if(s.shotsFired === 0 && s.kills === 0) return; // skip empty
+    STAT_RUNS[t].push({...s, killTimes:[...s.killTimes]});
+    STATS[t] = makeStatEntry(); // reset for next run
+  });
+  updateStatsPanel();
+}
+
+function resetStats(){
+  SHIP_TYPES.forEach(t=>{ STATS[t]=makeStatEntry(); STAT_RUNS[t]=[]; });
+  updateStatsPanel();
+}
+
+function statOnShot(shipType, isFirstShotOfLife){
+  const s=STATS[shipType];
+  s.shotsFired++;
+  if(isFirstShotOfLife && !s.firstShotPending){ s.firstShotPending=true; s.firstShotAttempts++; }
+}
+
+function statOnHit(shooterType, laser){
+  const s=STATS[shooterType];
+  s.shotsHit++;
+  if(laser._isFirstShot){ s.firstShotHits++; laser._isFirstShot=false; }
+}
+
+function statOnKill(shooterType){
+  STATS[shooterType].kills++;
+}
+
+function statOnDeath(shipType, spawnTime){
+  const s=STATS[shipType];
+  s.deaths++;
+  s.firstShotPending=false; // reset for next life
+  if(spawnTime) s.killTimes.push(performance.now()-spawnTime);
+}
+
+function statOnBoost(shipType){
+  STATS[shipType].boostCount++;
+}
+
+function statOnSimStart(){
+  // no-op now — runs are frozen on Apply
+}
+
+function calcStatRow(s){
+  const hr = s.shotsFired>0 ? s.shotsHit/s.shotsFired : null;
+  const fsr = s.firstShotAttempts>0 ? s.firstShotHits/s.firstShotAttempts : null;
+  const avgKT = s.killTimes.length>0 ? s.killTimes.reduce((a,b)=>a+b,0)/s.killTimes.length/1000 : null;
+  return {
+    shotsFired: s.shotsFired,
+    hitRate:    hr !== null ? (hr*100).toFixed(1)+'%' : '—',
+    hitRateNum: hr,
+    fsRate:     fsr !== null ? (fsr*100).toFixed(1)+'%' : '—',
+    fsRateNum:  fsr,
+    kills:      s.kills,
+    deaths:     s.deaths,
+    avgKillTime: avgKT !== null ? avgKT.toFixed(2)+'s' : '—',
+    avgKillTimeNum: avgKT,
+    boosts:     s.boostCount,
+  };
+}
+
+function trendArrow(curr, prev, higherIsBetter){
+  if(prev===null||curr===null) return '';
+  if(curr===prev) return '';
+  const up = curr>prev;
+  const good = higherIsBetter ? up : !up;
+  return `<span class="trend ${good?'val-up':'val-down'}">${up?'▲':'▼'}</span>`;
+}
+
+function updateStatsPanel(){
+  const scroll = document.getElementById('bp-stats-scroll');
+  if(!scroll) return;
+  const ship = bpCurrentShip;
+
+  const frozen = STAT_RUNS[ship]||[];
+  const live = STATS[ship];
+  const hasLive = live.shotsFired>0||live.kills>0;
+  const allRuns = [...frozen, ...(hasLive?[live]:[])];
+
+  if(allRuns.length===0){
+    scroll.innerHTML='<span style="color:#334455;font-size:9px;">No data yet — run a simulation.</span>';
+    return;
+  }
+
+  const rows = allRuns.map(calcStatRow);
+  const isCurrent = rows.map((_,i)=>i===allRuns.length-1&&hasLive);
+
+  const LABELS = [
+    ['Shots fired',    'shotsFired',      false, false],
+    ['Hit rate',       'hitRateNum',      true,  true ],
+    ['1st-shot rate',  'fsRateNum',       true,  true ],
+    ['Kills',          'kills',           true,  false],
+    ['Deaths',         'deaths',          false, true ],
+    ['Ø Kill time',    'avgKillTimeNum',  false, true ],
+    ['Boosts',         'boosts',          false, false],
+  ];
+  const DISPLAY = ['shotsFired','hitRate','fsRate','kills','deaths','avgKillTime','boosts'];
+  const DIVIDER_BEFORE = new Set([3,5,6]); // before kills, avgKillTime, boosts
+
+  // build table
+  let html = '<table class="bp-stats-table"><thead><tr>';
+  html += '<th class="col-label row-header">—</th>';
+  rows.forEach((_,i)=>{
+    const cur = isCurrent[i];
+    const label = frozen.length>0 ? (cur?'Live':`R${i+1}`) : 'Live';
+    html += `<th class="col-run${cur?' current':''}">${label}</th>`;
+  });
+  html += '</tr></thead><tbody>';
+
+  LABELS.forEach(([label, numKey, higherBetter, lowerBetter], li)=>{
+    const divClass = DIVIDER_BEFORE.has(li) ? ' divider' : '';
+    html += `<tr class="${divClass}">`;
+    html += `<td class="col-label">${label}</td>`;
+    rows.forEach((r,i)=>{
+      const cur = isCurrent[i];
+      const dispKey = DISPLAY[li];
+      const val = r[dispKey];
+      const numVal = r[numKey];
+      const prevNum = i>0 ? rows[i-1][numKey] : null;
+      const arrow = trendArrow(numVal, prevNum, higherBetter||!lowerBetter);
+      // color good/warn for hit rate
+      let cls='';
+      if(numKey==='hitRateNum' && numVal!==null) cls=numVal>0.3?'val-good':numVal>0.15?'val-warn':'';
+      html += `<td class="col-run${cur?' current':''} ${cls}">${val}${arrow}</td>`;
+    });
+    html += '</tr>';
+  });
+
+  html += '</tbody></table>';
+  scroll.innerHTML = html;
+  // auto-scroll to rightmost (latest run)
+  setTimeout(()=>{ scroll.scrollLeft = scroll.scrollWidth; }, 10);
+}
+
 function buildBrainContext(ship){
   const foes  = ships.filter(o=>o.team!==ship.team);
   const friends = ships.filter(o=>o.team===ship.team&&o!==ship);
@@ -1914,29 +2127,36 @@ function buildBrainContext(ship){
     x:l.x, y:l.y, vx:l.vx, vy:l.vy, angle:l.angle,
     dist: Math.sqrt((l.x-ship.x)**2+(l.y-ship.y)**2)
   }));
-  return {
+  const brainCtx = {
     self: {
       x:ship.x, y:ship.y, angle:ship.angle, vx:ship.vx, vy:ship.vy,
       hp:ship.hp, maxHp:ship.maxHp, cd:ship.cd,
       boostEnergy:ship.boostEnergy,
       boostReady: CFG.boostEnabled && ship.boostEnergy>=(tp.boostCost||25) && ship.boostCooldown<=0,
       team:ship.team, type:ship.type,
+      laserSpd: tp.laserSpd || 12,
     },
     foe: nearFoe ? {
       x:nearFoe.x, y:nearFoe.y, angle:nearFoe.angle,
       hp:nearFoe.hp, maxHp:nearFoe.maxHp,
       dist: Math.sqrt(getDist2(nearFoe,ship)),
       angleTo: getAngleTo(ship, nearFoe),
+      vx: nearFoe.vx, vy: nearFoe.vy,
+      angularVel: nearFoe.angle - (nearFoe._lastAngle !== undefined ? nearFoe._lastAngle : nearFoe.angle),
     } : null,
     friend: nearFriend ? {
       x:nearFriend.x, y:nearFriend.y,
       dist: Math.sqrt(getDist2(nearFriend,ship)),
     } : null,
-    foes:  foes.map(o=>({x:o.x,y:o.y,angle:o.angle,hp:o.hp,maxHp:o.maxHp,dist:Math.sqrt(getDist2(o,ship)),angleTo:getAngleTo(ship,o)})),
+    foes:  foes.map(o=>({x:o.x,y:o.y,angle:o.angle,hp:o.hp,maxHp:o.maxHp,dist:Math.sqrt(getDist2(o,ship)),angleTo:getAngleTo(ship,o),vx:o.vx,vy:o.vy,angularVel:o.angle-(o._lastAngle!==undefined?o._lastAngle:o.angle)})),
     friends: friends.map(o=>({x:o.x,y:o.y,dist:Math.sqrt(getDist2(o,ship))})),
     lasers: enemyLasers,
     W, H, angleDiff, rand,
   };
+  // store last angle for angular velocity next frame
+  if(nearFoe) nearFoe._lastAngle = nearFoe.angle;
+  foes.forEach(o=>{ o._lastAngle = o.angle; });
+  return brainCtx;
 }
 
 function toggleBrain(ship){
@@ -2004,7 +2224,7 @@ let debugMode = false;
 let gameSpeed = 1.0;
 let _speedAccum = 0; // sub-frame accumulator for speeds < 1
 
-const SPEED_STEPS = [0, 0.1, 0.25, 0.5, 0.75, 1.0];
+const SPEED_STEPS = [0, 0.1, 0.25, 0.5, 0.75, 1.0, 2.0, 5.0, 10.0];
 const GLOBAL_SPEED_STEPS = [0.1, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 2, 5, 10];
 let globalGameSpeed = 1.0;
 let _globalSpeedAccum = 0;
@@ -2117,7 +2337,7 @@ function tickOnce(){
         if(s.team===l.team)continue;
         let dx=Math.abs(s.x-l.x),dy=Math.abs(s.y-l.y);
         if(CFG.wrapWorld){if(dx>W/2)dx=W-dx;if(dy>H/2)dy=H-dy;}
-        if(dx<HIT&&dy<HIT){s.hp-=l.dmg;l.life=0;onShipHit(s);if(s.hp<=0){addExplosion(s.x,s.y);ships=ships.filter(o=>o!==s);}break;}
+        if(dx<HIT&&dy<HIT){s.hp-=l.dmg;if(l.ownerType)statOnHit(l.ownerType,l);l.life=0;onShipHit(s);if(s.hp<=0){addExplosion(s.x,s.y);if(l.ownerType)statOnKill(l.ownerType);statOnDeath(s.type,s._spawnTime);ships=ships.filter(o=>o!==s);}break;}
       }
     }
     lasers=lasers.filter(l=>l.life>0);
@@ -2340,6 +2560,7 @@ function bpUpdateGameWidth(){
 function bpSelectShip(ship){
   bpCurrentShip = ship;
   bpSyncToShip(ship);
+  updateStatsPanel();
 }
 
 function bpSyncToShip(ship){
@@ -2398,6 +2619,8 @@ function bpApply(){
   compileBrain(ship);
   try{ localStorage.setItem(BRAIN_KEY, JSON.stringify(BRAINS)); }catch(e){}
   updateDebugBtn();
+  // freeze current stats as completed run before new game
+  freezeStatsRun();
   // start new game immediately
   startGame();
   // re-show panel — bpSyncToShip will read BRAINS[ship].script which is already set correctly
@@ -2491,11 +2714,20 @@ loadSprites(()=>{
         <option value="flanker">Flanker</option>
         <option value="coward">Coward</option>
         <option value="default">Default AI</option>
+        <option value="leadshot">Lead Shot</option>
       </select>
     </div>
     <!-- editor -->
     <textarea id="bp-textarea" spellcheck="false" placeholder="// return { steer, shoot, boost }"></textarea>
     <div id="bp-error"></div>
+    <!-- stats panel -->
+    <div id="bp-stats">
+      <div class="bp-stats-header">
+        <span class="bp-stats-title">⚡ Stats</span>
+        <button class="bp-stats-reset" onclick="resetStats()">Reset</button>
+      </div>
+      <div id="bp-stats-scroll"><span style="color:#334455;font-size:9px;">No data yet — run a simulation.</span></div>
+    </div>
     <!-- footer buttons -->
     <div class="bp-footer">
       <button class="bp-btn apply" onclick="bpApply()">▶ Apply + New Game</button>
