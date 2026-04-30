@@ -16,7 +16,7 @@ canvas{display:block;image-rendering:pixelated;position:absolute;top:32px;left:0
 .screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
 .screen.hidden{display:none;}
 .title{font-size:26px;font-weight:bold;letter-spacing:6px;color:#fff;margin-bottom:4px;text-transform:uppercase;}
-.subtitle{font-size:10px;letter-spacing:3px;color:#556677;margin-bottom:24px;text-transform:uppercase;}
+.subtitle{font-size:12px;letter-spacing:3px;color:#8899aa;margin-bottom:24px;text-transform:uppercase;}
 .btn{display:block;width:220px;padding:11px 0;margin-bottom:10px;background:#0a0a1a;border:1px solid #556677;color:#dddddd;font-family:monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;text-align:center;cursor:pointer;}
 .btn:hover{background:#0f0f2a;border-color:#4fa3e0;color:#fff;}
 .btn.danger:hover{border-color:#e04f4f;color:#e04f4f;}
@@ -150,7 +150,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 
 @media (max-width: 500px), (max-height: 500px) {
   .title{font-size:16px;letter-spacing:3px;margin-bottom:2px;}
-  .subtitle{font-size:8px;margin-bottom:12px;}
+  .subtitle{font-size:9px;margin-bottom:12px;}
   .btn{width:160px;padding:7px 0;font-size:9px;letter-spacing:1px;margin-bottom:6px;}
   .lang-row{margin-bottom:12px;gap:4px;}
   .lang-pill{padding:3px 8px;font-size:8px;}
@@ -200,11 +200,11 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
   #menuScreen .lang-row{margin-bottom:3vw;}
   #menuScreen .lang-pill{padding:1vw 2.5vw;font-size:2.8vw;}
   #menuScreen .title{font-size:7vw;}
-  #menuScreen .subtitle{font-size:2.5vw;margin-bottom:3vw;}
+  #menuScreen .subtitle{font-size:3vw;margin-bottom:3vw;}
 }
 @media (orientation:landscape) and (max-width:1024px){
   #menuScreen .title{font-size:4.5vw;margin-bottom:0.8vh;}
-  #menuScreen .subtitle{font-size:1.8vw;margin-bottom:1.5vh;}
+  #menuScreen .subtitle{font-size:2.2vw;margin-bottom:1.5vh;}
   #menuScreen .lang-row{margin-bottom:1.5vh;gap:1vw;}
   #menuScreen .lang-pill{padding:0.8vh 1.5vw;font-size:1.6vw;}
   #menuBtnGrid{display:grid;grid-template-columns:1fr 1fr;gap:1.2vh 2vw;width:70vw;}
@@ -218,7 +218,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 <canvas id="crawl-starfield"></canvas>
 <canvas id="crawl-canvas-el"></canvas>
 <div class="crawl-fade-top"></div>
-<div class="crawl-intro" id="crawl-intro-text">A long time ago, in a galaxy far, far away&hellip;</div>
+<div class="crawl-intro" id="crawl-intro-text">Somewhere in the Outer Rim, in a hidden Rebel research bay&hellip;</div>
 <div id="crawl-logo-el">
   <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 693.615 419.375" xml:space="preserve">
     <g><path fill="#FFE81F" d="M148.718,221.207l8.67,25.461c4.691,13.768,8.879,24.779,9.425,24.779c0.009,0,0.017-0.004,0.024-0.01c0.6-0.53,17.57-49.811,17.57-49.811h32.89l-39.68,115.619h-22.86c0,0-24.4-70.471-24.3-70.739l-25.47,69.851h-22.63l-39.18-115.15l32.73,0.021c0,0,17.929,50.821,18.168,50.821c0.001,0,0.001-0.001,0.002-0.002l17.89-50.841H148.718 M32.003,213.2l3.601,10.584l39.18,115.149l1.845,5.424h5.729h22.63h5.598l1.918-5.26l17.685-48.5c1.524,4.434,3.171,9.213,4.818,13.988c6.089,17.655,12.191,35.277,12.191,35.277l1.864,5.383h5.696h22.86h5.712l1.854-5.403l39.68-115.618l3.637-10.598h-11.204h-32.89h-5.706l-1.858,5.396c-2.974,8.635-6.921,20.031-10.296,29.676c-0.509-1.463-1.039-3.001-1.587-4.611l-8.669-25.46l-1.846-5.421h-5.727h-36.75h-5.666l-1.881,5.345l-10.453,29.706c-3.453-9.706-7.456-21.017-10.516-29.691l-1.882-5.334l-5.657-0.004l-32.73-0.021L32.003,213.2L32.003,213.2z"/></g>
@@ -243,20 +243,21 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
   <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;">
     <div class="title" data-i18n="menu.title">Star Wars</div>
     <div class="subtitle" data-i18n="menu.subtitle">Pixel Battle Simulator</div>
+    <div class="subtitle" style="margin-top:-18px;" data-i18n="menu.subtitle2">Operation: Iron Wing</div>
     <div class="lang-row">
       <button class="lang-pill active" data-lang="en" onclick="setLang('en')">EN</button>
       <button class="lang-pill" data-lang="de" onclick="setLang('de')">DE</button>
       <button class="lang-pill" data-lang="pl" onclick="setLang('pl')">PL</button>
     </div>
     <div id="menuBtnGrid">
-    <button class="btn" onclick="startGame()" data-i18n="menu.newGame">New Game</button>
+    <button class="btn" onclick="startGame()" data-i18n="menu.newGame">New Simulation</button>
     <button class="btn" onclick="showConfig()" data-i18n="menu.config">Configuration</button>
     <button class="btn" onclick="window.open('https://github.com/OberstRolex123/Star-Wars-Battle-Simulator/blob/main/CHANGELOG.md','_blank')" data-i18n="menu.changelog">Changelog</button>
     <button class="btn" onclick="showReadme()" data-i18n="menu.about">About</button>
     <button class="btn" onclick="showCrawl()" data-i18n="menu.showCrawl">Show Intro</button>
     <button class="btn" style="border-color:#334455;color:#aaaaaa;" onclick="loadVersion()" data-i18n="menu.loadVersion">Load Version</button>
     </div>
-    <div style="font-size:9px;letter-spacing:2px;color:#ffffff;text-transform:uppercase;margin-top:4px;opacity:0.4;" data-i18n="menu.madeWith">v1.5.2 — made with Claude</div>
+    <div style="font-size:9px;letter-spacing:2px;color:#ffffff;text-transform:uppercase;margin-top:4px;opacity:0.4;" data-i18n="menu.madeWith">v1.5.3 — made with Claude</div>
   </div>
 </div>
 
@@ -497,7 +498,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 
 <div id="readmeScreen" class="screen hidden">
   <div class="rm-header" data-i18n="rm.title">Star Wars</div>
-  <div class="rm-sub" data-i18n="rm.sub">Pixel Battle Simulator — v1.5.2</div>
+  <div class="rm-sub" data-i18n="rm.sub">Pixel Battle Simulator — v1.5.3</div>
   <div class="rm-sec">
     <div class="rm-sec-title" data-i18n="rm.sec.what">What is this</div>
     <div class="rm-p" data-i18n="rm.what.p1">An autonomous pixel-art space battle...</div>
@@ -526,7 +527,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
   <div class="lv-header" data-i18n="lv.title">Load Version</div>
   <div class="lv-entry lv-current">
     <div class="lv-info">
-      <div class="lv-tag" data-i18n="lv.current.tag">v1.5.2 — current</div>
+      <div class="lv-tag" data-i18n="lv.current.tag">v1.5.3 — current</div>
       <div class="lv-desc" data-i18n="lv.current.desc">Boost System · Particles · Glow</div>
     </div>
     <button class="lv-btn" data-i18n="lv.current.btn">Playing</button>
@@ -621,11 +622,12 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 const LANGS={
   en:{
     'lang.code':'en','lang.label':'English',
-    'menu.title':'Star Wars','menu.subtitle':'Pixel Battle Simulator',
-    'menu.newGame':'New Game','menu.config':'Configuration',
+    'menu.title':'Star Wars','menu.subtitle':'Combat Simulation Division',
+    'menu.subtitle2':'Operation: Iron Wing',
+    'menu.newGame':'New Simulation','menu.config':'Configuration',
     'menu.changelog':'Changelog','menu.about':'About',
     'cl.title':'Changelog',
-    'cl.v14.tag':'v1.5.2','cl.v14.date':'2026-04-28 · current',
+    'cl.v14.tag':'v1.5.3','cl.v14.date':'2026-04-28 · current',
     'cl.v14.e1':'Boost system — 4 directions (forward · back · left · right), energy tank per ship with regeneration, cooldown prevents spam',
     'cl.v14.e2':'Boost AI — tactical: dodge incoming lasers sideways, retreat when low HP, close gap on distant enemies, evade when targeted',
     'cl.v14.e3':'Boost particles — 12 exhaust particles + glow ring burst; Rebel blue · Empire green; separate canvas with shadowBlur',
@@ -649,7 +651,7 @@ const LANGS={
     'cl.v10.e8':'Single HTML file, zero dependencies',
     'menu.showCrawl':'Show Intro',
     'menu.playMusic':'Play Music','menu.stopMusic':'Stop Music',
-    'menu.loadVersion':'Load Version','menu.madeWith':'v1.5.2 — made with Claude',
+    'menu.loadVersion':'Load Version','menu.madeWith':'v1.5.3 — made with Claude',
     'hud.rebellion':'Rebellion','hud.empire':'Empire',
     'hud.pause':'|| Pause','hud.mute.on':'♪ On','hud.mute.off':'♪ Off',
     'hud.music.on':'♫ Music','hud.music.off':'♫ Off',
@@ -678,7 +680,7 @@ const LANGS={
     'cfg.dmg':'Damage','cfg.turnRate':'Turn Rate','cfg.count':'Count',
     'cfg.btn.reset':'Reset','cfg.btn.resetAll':'Reset All','cfg.btn.save':'Save','cfg.btn.back':'Back',
     'cfg.saved':'✓ Saved','cfg.on':'On','cfg.off':'Off',
-    'rm.title':'Star Wars','rm.sub':'Pixel Battle Simulator — v1.5.2',
+    'rm.title':'Star Wars','rm.sub':'Pixel Battle Simulator — v1.5.3',
     'rm.sec.what':'What is this',
     'rm.what.p1':'An autonomous pixel-art space battle between the Rebellion and the Empire.',
     'rm.what.p2':'Built entirely in a single HTML file — no server, no dependencies.',
@@ -688,7 +690,7 @@ const LANGS={
     'rm.team.rebel':'Rebel','rm.team.empire':'Empire',
     'rm.role.xwing':'All-rounder, 4 cannons','rm.role.awing':'Interceptor, fast, evasive',
     'rm.role.tie':'Cannon fodder, swarm','rm.role.tiein':'Heavy, double shot',
-    'lv.title':'Load Version','lv.current.tag':'v1.5.2 — current',
+    'lv.title':'Load Version','lv.current.tag':'v1.5.3 — current',
     'lv.current.desc':'Boost System · Particles · Glow',
     'lv.current.btn':'Playing','lv.load':'Load',
     'lv.v12.tag':'v1.2','lv.v12.desc':'Multi-language (EN/DE/PL) · Laser speed config · GitHub changelog',
@@ -701,11 +703,12 @@ const LANGS={
   },
   de:{
     'lang.code':'de','lang.label':'Deutsch',
-    'menu.title':'Krieg der Sterne','menu.subtitle':'Pixel Kampfsimulator',
-    'menu.newGame':'Neues Spiel','menu.config':'Konfiguration',
+    'menu.title':'Krieg der Sterne','menu.subtitle':'Kampfsimulationsabteilung',
+    'menu.subtitle2':'Operation: Eiserner Flügel',
+    'menu.newGame':'Neue Simulation','menu.config':'Konfiguration',
     'menu.changelog':'Changelog','menu.about':'Über das Spiel',
     'cl.title':'Changelog',
-    'cl.v14.tag':'v1.5.2','cl.v14.date':'2026-04-28 · aktuell',
+    'cl.v14.tag':'v1.5.3','cl.v14.date':'2026-04-28 · aktuell',
     'cl.v14.e1':'Boost-System — 4 Richtungen (vorwärts · rückwärts · links · rechts), Energie-Tank mit Regeneration, Cooldown verhindert Spam',
     'cl.v14.e2':'Boost-KI — taktisch: weicht einkommenden Lasern aus, zieht sich bei niedrigen TP zurück, schließt Lücke zu weit entfernten Feinden',
     'cl.v14.e3':'Boost-Partikel — 12 Abgas-Partikel + Glow-Ring-Burst; Rebellion blau · Imperium grün; separates Canvas mit shadowBlur',
@@ -729,7 +732,7 @@ const LANGS={
     'cl.v10.e8':'Einzelne HTML-Datei, keine Abhängigkeiten',
     'menu.showCrawl':'Intro anzeigen',
     'menu.playMusic':'Musik abspielen','menu.stopMusic':'Musik stoppen',
-    'menu.loadVersion':'Version laden','menu.madeWith':'v1.5.2 — made with Claude',
+    'menu.loadVersion':'Version laden','menu.madeWith':'v1.5.3 — made with Claude',
     'hud.rebellion':'Rebellion','hud.empire':'Imperium',
     'hud.pause':'|| Pause','hud.mute.on':'♪ An','hud.mute.off':'♪ Aus',
     'hud.music.on':'♫ Musik','hud.music.off':'♫ Aus',
@@ -758,7 +761,7 @@ const LANGS={
     'cfg.dmg':'Schaden','cfg.turnRate':'Wenderate','cfg.count':'Anzahl',
     'cfg.btn.reset':'Zurücksetzen','cfg.btn.resetAll':'Alles zurücksetzen','cfg.btn.save':'Speichern','cfg.btn.back':'Zurück',
     'cfg.saved':'✓ Gespeichert','cfg.on':'An','cfg.off':'Aus',
-    'rm.title':'Krieg der Sterne','rm.sub':'Pixel Kampfsimulator — v1.5.2',
+    'rm.title':'Krieg der Sterne','rm.sub':'Pixel Kampfsimulator — v1.5.3',
     'rm.sec.what':'Was ist das?',
     'rm.what.p1':'Ein autonomer Pixel-Art-Weltraumkampf zwischen der Rebellion und dem Imperium.',
     'rm.what.p2':'Komplett in einer einzigen HTML-Datei.',
@@ -768,7 +771,7 @@ const LANGS={
     'rm.team.rebel':'Rebellen','rm.team.empire':'Imperium',
     'rm.role.xwing':'Allrounder, 4 Kanonen','rm.role.awing':'Abfangjäger, schnell',
     'rm.role.tie':'Kanonenfutter, Schwarm','rm.role.tiein':'Schwer, Doppelschuss',
-    'lv.title':'Version laden','lv.current.tag':'v1.5.2 — aktuell',
+    'lv.title':'Version laden','lv.current.tag':'v1.5.3 — aktuell',
     'lv.current.desc':'Boost-System · Partikel · Glow',
     'lv.current.btn':'Aktiv','lv.load':'Laden',
     'lv.v12.tag':'v1.2','lv.v12.desc':'Mehrsprachigkeit (EN/DE/PL) · Lasergeschwindigkeit · GitHub-Changelog',
@@ -781,11 +784,12 @@ const LANGS={
   },
   pl:{
     'lang.code':'pl','lang.label':'Polski',
-    'menu.title':'Gwiezdne Wojny','menu.subtitle':'Pikselowy Symulator Bitwy',
-    'menu.newGame':'Nowa Gra','menu.config':'Konfiguracja',
+    'menu.title':'Gwiezdne Wojny','menu.subtitle':'Wydział Symulacji Bojowej',
+    'menu.subtitle2':'Operacja: Żelazne Skrzydło',
+    'menu.newGame':'Nowa Symulacja','menu.config':'Konfiguracja',
     'menu.changelog':'Historia zmian','menu.about':'O grze',
     'cl.title':'Historia zmian',
-    'cl.v14.tag':'v1.5.2','cl.v14.date':'2026-04-28 · aktualna',
+    'cl.v14.tag':'v1.5.3','cl.v14.date':'2026-04-28 · aktualna',
     'cl.v14.e1':'System dopalacza — 4 kierunki (przód · tył · lewo · prawo), tank energii z regeneracją, cooldown zapobiega spamowi',
     'cl.v14.e2':'AI dopalacza — taktyczne użycie: unikanie laserów, odwrót przy niskim PW, doganianie odległych wrogów',
     'cl.v14.e3':'Cząsteczki dopalacza — 12 cząsteczek spalin + rozbłysk pierścienia; Rebelia niebieska · Imperium zielone',
@@ -809,7 +813,7 @@ const LANGS={
     'cl.v10.e8':'Pojedynczy plik HTML, brak zależności',
     'menu.showCrawl':'Pokaż intro',
     'menu.playMusic':'Odtwórz muzykę','menu.stopMusic':'Zatrzymaj muzykę',
-    'menu.loadVersion':'Wczytaj wersję','menu.madeWith':'v1.5.2 — stworzone z Claude',
+    'menu.loadVersion':'Wczytaj wersję','menu.madeWith':'v1.5.3 — stworzone z Claude',
     'hud.rebellion':'Rebelia','hud.empire':'Imperium',
     'hud.pause':'|| Pauza','hud.mute.on':'♪ Wł','hud.mute.off':'♪ Wył',
     'hud.music.on':'♫ Muzyka','hud.music.off':'♫ Wył',
@@ -838,7 +842,7 @@ const LANGS={
     'cfg.dmg':'Obrażenia','cfg.turnRate':'Zwrotność','cfg.count':'Liczba',
     'cfg.btn.reset':'Resetuj','cfg.btn.resetAll':'Resetuj wszystko','cfg.btn.save':'Zapisz','cfg.btn.back':'Wróć',
     'cfg.saved':'✓ Zapisano','cfg.on':'Wł','cfg.off':'Wył',
-    'rm.title':'Gwiezdne Wojny','rm.sub':'Pikselowy Symulator Bitwy — v1.5.2',
+    'rm.title':'Gwiezdne Wojny','rm.sub':'Pikselowy Symulator Bitwy — v1.5.3',
     'rm.sec.what':'Co to jest?',
     'rm.what.p1':'Autonomiczna pikselowa bitwa kosmiczna między Rebelią a Imperium.',
     'rm.what.p2':'Zbudowane w jednym pliku HTML.',
@@ -848,7 +852,7 @@ const LANGS={
     'rm.team.rebel':'Rebelia','rm.team.empire':'Imperium',
     'rm.role.xwing':'Wszechstronny, 4 działa','rm.role.awing':'Przechwytywacz, szybki',
     'rm.role.tie':'Mięso armatnie, rój','rm.role.tiein':'Ciężki, podwójny strzał',
-    'lv.title':'Wczytaj wersję','lv.current.tag':'v1.5.2 — aktualna',
+    'lv.title':'Wczytaj wersję','lv.current.tag':'v1.5.3 — aktualna',
     'lv.current.desc':'System Dopalacza · Cząsteczki · Poświata',
     'lv.current.btn':'Aktywna','lv.load':'Wczytaj',
     'lv.v12.tag':'v1.2','lv.v12.desc':'Wielojęzyczność (EN/DE/PL) · Prędkość lasera · Link do changelogu GitHub',
@@ -1732,11 +1736,32 @@ function skipCrawl(){const el=document.getElementById('crawl-screen');el.classLi
   let starRaf;
   function drawCrawlStars(){sCtx.clearRect(0,0,sCv.width,sCv.height);for(const s of stars){s.a+=s.spd*s.dir;if(s.a>0.95){s.a=0.95;s.dir=-1;}if(s.a<0.18){s.a=0.18;s.dir=1;}sCtx.beginPath();sCtx.arc(s.x*sCv.width,s.y*sCv.height,s.r,0,Math.PI*2);sCtx.fillStyle=`rgba(255,255,255,${s.a.toFixed(2)})`;sCtx.fill();}starRaf=requestAnimationFrame(drawCrawlStars);}
   drawCrawlStars();
-  const START_DELAY=9.5,SCROLL_SPEED=45,VANISHING_Y=0.28,TEXT_COLOR='#FFE81F',FONT_NORMAL="'News Cycle','Arial Narrow',Arial,sans-serif";
+  const START_DELAY=9.5,SCROLL_SPEED=50,VANISHING_Y=0.28,TEXT_COLOR='#FFE81F',FONT_NORMAL="'News Cycle','Arial Narrow',Arial,sans-serif";
   const TEXTS={
-    en:{intro:'A long time ago, in a galaxy far, far away…',episode:'Episode IV',title:'A NEW HOPE',p1:'It is a period of civil war. Rebel spaceships, striking from a hidden base, have won their first victory against the evil Galactic Empire.',p2:"During the battle, Rebel spies managed to steal secret plans to the Empire's ultimate weapon, the DEATH STAR, an armored space station with enough power to destroy an entire planet.",p3:"Pursued by the Empire's sinister agents, Princess Leia races home aboard her starship, custodian of the stolen plans that can save her people and restore freedom to the galaxy…"},
-    de:{intro:'Es war einmal vor langer Zeit, in einer weit, weit entfernten Galaxis…',episode:'Episode IV',title:'EINE NEUE HOFFNUNG',p1:'Es ist eine Zeit des Bürgerkriegs. Rebellenschiffe haben ihren ersten Sieg gegen das böse Galaktische Imperium errungen.',p2:'Während des Kampfes gelang es Rebellenspionen, die geheimen Pläne der ultimativen Waffe des Imperiums zu stehlen – dem TODESSTERN.',p3:'Verfolgt von den finsteren Agenten des Imperiums, flieht Prinzessin Leia an Bord ihres Raumschiffes mit den gestohlenen Plänen…'},
-    pl:{intro:'Dawno, dawno temu, w odległej galaktyce…',episode:'Epizod IV',title:'NOWA NADZIEJA',p1:'Trwa okres wojny domowej. Statki rebeliantów odniosły pierwsze zwycięstwo nad złym Galaktycznym Imperium.',p2:'Szpiegom Rebelii udało się wykraść tajne plany GWIAZDY ŚMIERCI, stacji zdolnej zniszczyć całą planetę.',p3:'Ścigana przez agentów Imperium, Księżniczka Leia pędzi do domu ze skradzionymi planami…'},
+    en:{
+      intro:'Somewhere in the Outer Rim, in a hidden Rebel research bay…',
+      episode:'COMBAT SIMULATION DIVISION',
+      title:'OPERATION: IRON WING',
+      p1:'The Galactic Empire tightens its grip. Across the Outer Rim, Imperial fleets crush Rebel cells one by one. Outgunned and outnumbered, the Alliance desperately seeks any advantage it can find.',
+      p2:'Deep within a hidden asteroid base, a small team of Rebel engineers has been tasked with a critical mission: study Imperial combat tactics, push the limits of Rebel starfighter technology, and develop the flight algorithms that could turn the tide of war.',
+      p3:'You are one of them. Armed with data cores, a battle simulator, and the freedom to reprogram every system aboard an X-Wing or A-Wing — you run scenario after scenario, refining AI behaviour, optimising boost sequences, and testing formation tactics against endless waves of simulated TIE Fighters. The Empire does not rest. Neither do you.',
+    },
+    de:{
+      intro:'Irgendwo am Rand der Galaxis, in einem geheimen Forschungsdock der Rebellen…',
+      episode:'KAMPFSIMULATIONSABTEILUNG',
+      title:'OPERATION: EISERNER FLÜGEL',
+      p1:'Das Galaktische Imperium dehnt seine Macht unaufhaltsam aus. Am Rand der Galaxis werden Rebellenzellen eine nach der anderen zerschlagen. Unterlegen an Zahl und Feuerkraft, sucht die Allianz fieberhaft nach jedem Vorteil, den sie bekommen kann.',
+      p2:'Tief in einem verborgenen Asteroiden-Stützpunkt arbeitet ein kleines Team rebellischer Ingenieure an einer entscheidenden Aufgabe: imperiale Kampftaktiken analysieren, die Grenzen der Jägertechnik verschieben und Flugalgorithmen entwickeln, die den Krieg noch wenden könnten.',
+      p3:'Du bist einer von ihnen. Ausgestattet mit Datenspeichern, einem Kampfsimulator und der Freiheit, jeden Systemparameter eines X-Wings oder A-Wings neu zu programmieren — läufst du Szenario für Szenario, verfeinerst das Verhalten deiner KI, optimierst Schubsequenzen und testest Formationstaktiken gegen endlose Wellen simulierter TIE-Jäger. Das Imperium schläft nicht. Du auch nicht.',
+    },
+    pl:{
+      intro:'Gdzieś na rubieżach galaktyki, w ukrytej bazie badawczej Rebelii…',
+      episode:'WYDZIAŁ SYMULACJI BOJOWEJ',
+      title:'OPERACJA: ŻELAZNE SKRZYDŁO',
+      p1:'Galaktyczne Imperium rozszerza swoje panowanie bez opamiętania. Na rubieżach galaktyki imperialne floty rozbijają komórki Rebelii jedną po drugiej. Ustępując siłą i liczebnością, Sojusz gorączkowo szuka każdej możliwej przewagi.',
+      p2:'Głęboko w ukrytej bazie na asteroidzie mały zespół inżynierów Rebelii otrzymał kluczową misję: analizować taktykę bojową Imperium, przesuwać granice technologii myśliwców i opracowywać algorytmy lotu, które mogą odmienić losy wojny.',
+      p3:'Jesteś jednym z nich. Wyposażony w rdzenie danych, symulator bitew i swobodę przeprogramowania każdego parametru X-Winga lub A-Winga — przeprowadzasz scenariusz za scenariuszem, doskonaląc zachowanie AI, optymalizując sekwencje dopalacza i testując taktyki formacji przeciwko niekończącym się falom symulowanych myśliwców TIE. Imperium nie śpi. Ty też nie.',
+    },
   };
   try{const _sl=localStorage.getItem('swLang');if(_sl&&TEXTS[_sl])currentLang=_sl;}catch(e){}
   function getCrawlLang(){return(typeof currentLang!=='undefined'&&TEXTS[currentLang])?currentLang:'en';}
