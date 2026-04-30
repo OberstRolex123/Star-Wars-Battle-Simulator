@@ -8,7 +8,7 @@
 <title>Star Wars — Pixel Battle Simulator</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;height:100dvh;width:100vw;font-family:monospace;overflow:hidden;margin:0;}
+body{background:#000;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;height:100vh;height:100dvh;width:100vw;font-family:monospace;overflow:hidden;margin:0;}
 #app{position:relative;overflow:hidden;background:#03030d;border-radius:0;}
 canvas{display:block;image-rendering:pixelated;position:absolute;top:32px;left:0;}
 #starCanvas{position:absolute;top:0;left:0;width:100%!important;height:100%!important;}
@@ -16,15 +16,15 @@ canvas{display:block;image-rendering:pixelated;position:absolute;top:32px;left:0
 .screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
 .screen.hidden{display:none;}
 .title{font-size:26px;font-weight:bold;letter-spacing:6px;color:#fff;margin-bottom:4px;text-transform:uppercase;}
-.subtitle{font-size:10px;letter-spacing:3px;color:#556677;margin-bottom:24px;text-transform:uppercase;}
+.subtitle{font-size:12px;letter-spacing:3px;color:#ffffff;margin-bottom:24px;text-transform:uppercase;}
 .btn{display:block;width:220px;padding:11px 0;margin-bottom:10px;background:#0a0a1a;border:1px solid #556677;color:#dddddd;font-family:monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;text-align:center;cursor:pointer;}
 .btn:hover{background:#0f0f2a;border-color:#4fa3e0;color:#fff;}
 .btn.danger:hover{border-color:#e04f4f;color:#e04f4f;}
-#hud{position:absolute;top:0;left:0;right:0;height:32px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:#06060f;border-bottom:1px solid #1a1a2a;z-index:10;}
+#hud{position:absolute;top:0;left:0;right:0;min-height:32px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:#06060f;border-bottom:1px solid #1a1a2a;z-index:10;}
 #hud.hidden{display:none;}
-.hud-lbl{font-size:9px;letter-spacing:1px;text-transform:uppercase;}
-.hud-sc{font-size:14px;font-weight:bold;letter-spacing:3px;}
-.hud-btn{background:#06060f;border:1px solid #2a2a3a;color:#556677;font-family:monospace;font-size:9px;letter-spacing:1px;padding:3px 8px;cursor:pointer;text-transform:uppercase;}
+.hud-lbl{font-size:clamp(10px,1.2vw,13px);letter-spacing:1px;text-transform:uppercase;}
+.hud-sc{font-size:clamp(16px,2.2vw,26px);font-weight:bold;letter-spacing:3px;}
+.hud-btn{background:#06060f;border:1px solid #2a2a3a;color:#556677;font-family:monospace;font-size:clamp(10px,1.1vw,13px);letter-spacing:1px;padding:4px 10px;cursor:pointer;text-transform:uppercase;}
 .hud-btn:hover{border-color:#4fa3e0;color:#fff;}
 #legend{position:absolute;bottom:0;left:0;right:0;height:22px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:#06060f;border-top:1px solid #1a1a2a;font-size:9px;letter-spacing:1px;font-family:monospace;z-index:10;}
 #legend.hidden{display:none;}
@@ -104,10 +104,79 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 /* boost section hidden when disabled */
 .boost-cfg-block{transition:opacity .2s;}
 .boost-cfg-block.disabled{opacity:0.3;pointer-events:none;}
+/* brain editor */
+.brain-block{margin-top:6px;border-left:2px solid #224466;padding-left:8px;}
+.brain-block.disabled{opacity:0.3;pointer-events:none;}
+.brain-header{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;}
+.brain-textarea{width:100%;background:#06060f;border:1px solid #1a3a5a;color:#88ccff;font-family:monospace;font-size:11px;line-height:1.5;padding:8px;resize:vertical;min-height:120px;outline:none;letter-spacing:0.3px;}
+.brain-textarea:focus{border-color:#4fa3e0;}
+.brain-error{font-size:9px;color:#ff4444;letter-spacing:1px;margin-top:3px;min-height:12px;font-family:monospace;}
+.brain-preset-select{background:#0a0a1a;border:1px solid #334455;color:#aabbcc;font-family:monospace;font-size:9px;padding:3px 6px;cursor:pointer;letter-spacing:1px;}
+.brain-preset-select:focus{outline:none;border-color:#4fa3e0;}
+.brain-btn{background:#0a0a1a;border:1px solid #334455;color:#778899;font-family:monospace;font-size:9px;letter-spacing:1px;padding:3px 8px;cursor:pointer;text-transform:uppercase;}
+.brain-btn:hover{border-color:#4fa3e0;color:#fff;}
+.brain-label{font-size:10px;color:#4fa3e0;letter-spacing:2px;text-transform:uppercase;}
+/* ── LIVE BRAIN EDITOR PANEL ─────────────────────────────────────────────── */
+#brainPanel{position:fixed;top:0;right:0;bottom:0;width:300px;background:#06060f;border-left:1px solid #1a2a3a;z-index:200;display:none;flex-direction:column;font-family:monospace;box-sizing:border-box;}
+#brainPanel::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#1a2a3a 0%,#4fa3e0 50%,#1a2a3a 100%);opacity:0.4;pointer-events:none;}
+#brainPanel.visible{display:flex;}
+#brainPanel.collapsed{width:28px!important;}
+#brainDragHandle{position:absolute;left:0;top:0;bottom:0;width:8px;cursor:col-resize;background:transparent;z-index:20;}
+#brainDragHandle:hover{background:rgba(79,163,224,0.3);}
+#brainDragHandle:active{background:rgba(79,163,224,0.5);}
+#brainCollapseTab{position:absolute;left:-22px;top:50%;transform:translateY(-50%);width:22px;height:60px;background:#06060f;border:1px solid #1a2a3a;border-right:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#4fa3e0;font-size:10px;writing-mode:vertical-rl;border-radius:4px 0 0 4px;user-select:none;letter-spacing:2px;}
+#brainCollapseTab:hover{background:#0a0a1a;color:#fff;}
+#brainPanelInner{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:8px 10px 8px 16px;min-width:0;}
+#brainPanel.collapsed #brainPanelInner{display:none;}
+.bp-header{font-size:9px;letter-spacing:2px;color:#4fa3e0;text-transform:uppercase;margin-bottom:8px;border-bottom:1px solid #1a2a3a;padding-bottom:6px;}
+.bp-row{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
+.bp-select{background:#0a0a1a;border:1px solid #334455;color:#aabbcc;font-family:monospace;font-size:10px;padding:3px 6px;cursor:pointer;flex:1;}
+.bp-select:focus{outline:none;border-color:#4fa3e0;}
+.bp-toggle-row{display:flex;align-items:center;gap:6px;margin-bottom:8px;font-size:9px;color:#889aaa;letter-spacing:1px;}
+#bp-textarea{flex:1;background:#03030d;border:1px solid #1a3a5a;color:#88ccff;font-family:monospace;font-size:11px;line-height:1.55;padding:8px;resize:none;outline:none;letter-spacing:0.3px;min-height:0;}
+#bp-textarea:focus{border-color:#4fa3e0;}
+#bp-error{font-size:9px;color:#ff4444;letter-spacing:1px;margin-top:4px;min-height:14px;font-family:monospace;word-break:break-all;}
+/* stats panel */
+#bp-stats{margin-top:6px;border:1px solid #1a2a3a;border-radius:2px;background:#03030d;padding:6px 8px;font-family:monospace;font-size:9px;color:#445566;letter-spacing:1px;flex-shrink:0;}
+.bp-stats-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.bp-stats-title{font-size:9px;color:#4fa3e0;letter-spacing:2px;text-transform:uppercase;}
+.bp-stats-reset{font-size:8px;color:#334455;border:1px solid #1a2a3a;background:transparent;font-family:monospace;padding:1px 6px;cursor:pointer;letter-spacing:1px;text-transform:uppercase;}
+.bp-stats-reset:hover{color:#ff4444;border-color:#ff4444;}
+.bp-stats-divider{border:none;border-top:1px solid #1a2a3a;margin:4px 0;}
+/* comparison table */
+#bp-stats-scroll{overflow-x:auto;overflow-y:hidden;margin-top:4px;}
+#bp-stats-scroll::-webkit-scrollbar{height:4px;}
+#bp-stats-scroll::-webkit-scrollbar-track{background:#06060f;}
+#bp-stats-scroll::-webkit-scrollbar-thumb{background:#1a2a3a;border-radius:2px;}
+.bp-stats-table{border-collapse:collapse;width:max-content;min-width:100%;}
+.bp-stats-table td,.bp-stats-table th{padding:2px 8px;white-space:nowrap;font-size:9px;font-family:monospace;}
+.bp-stats-table .col-label{color:#445566;padding-right:10px;text-align:left;position:sticky;left:0;background:#03030d;z-index:1;min-width:90px;}
+.bp-stats-table .col-run{text-align:right;color:#556677;min-width:52px;}
+.bp-stats-table .col-run.current{color:#aabbcc;border-left:1px solid #1a3a5a;}
+.bp-stats-table .col-run.current td{background:#06060f;}
+.bp-stats-table tr.divider td{border-top:1px solid #1a2a3a;padding-top:4px;}
+.bp-stats-table .row-header th{color:#334455;font-size:8px;letter-spacing:1px;padding-bottom:3px;border-bottom:1px solid #1a2a3a;}
+.bp-stats-table .row-header .col-run.current{color:#4fa3e0;}
+.val-good{color:#00cc44 !important;}
+.val-warn{color:#ffaa00 !important;}
+.val-up{color:#00cc44 !important;}
+.val-down{color:#ff4444 !important;}
+.trend{font-size:8px;opacity:0.7;}
+.bp-footer{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;}
+.bp-btn{background:#0a0a1a;border:1px solid #334455;color:#aabbcc;font-family:monospace;font-size:9px;letter-spacing:1px;padding:4px 10px;cursor:pointer;text-transform:uppercase;flex:1;}
+.bp-btn:hover{border-color:#4fa3e0;color:#fff;}
+.bp-btn.apply{border-color:#00aa44;color:#00cc44;}
+.bp-btn.apply:hover{background:#0a2a14;border-color:#00cc44;}
+.bp-btn.danger:hover{border-color:#e04f4f;color:#e04f4f;}
+@media(max-width:900px){#brainPanel{display:none!important;}}
+/* countdown */
+#countdown{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:50;pointer-events:none;}
+#countdown.hidden{display:none;}
+#countdownText{font-size:clamp(60px,12vw,120px);font-weight:bold;letter-spacing:8px;color:#fff;text-transform:uppercase;font-family:monospace;text-shadow:0 0 40px rgba(79,163,224,0.8),0 0 80px rgba(79,163,224,0.4);}
 
 @media (max-width: 500px), (max-height: 500px) {
   .title{font-size:16px;letter-spacing:3px;margin-bottom:2px;}
-  .subtitle{font-size:8px;margin-bottom:12px;}
+  .subtitle{font-size:9px;margin-bottom:12px;}
   .btn{width:160px;padding:7px 0;font-size:9px;letter-spacing:1px;margin-bottom:6px;}
   .lang-row{margin-bottom:12px;gap:4px;}
   .lang-pill{padding:3px 8px;font-size:8px;}
@@ -141,7 +210,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 #crawl-screen.hidden{display:none;}
 #crawl-starfield{position:fixed;inset:0;z-index:0;}
 #crawl-canvas-el{position:fixed;inset:0;z-index:2;}
-.crawl-fade-top{position:fixed;top:0;left:0;right:0;height:30%;background:linear-gradient(to bottom,#000 35%,transparent);z-index:3;pointer-events:none;}
+
 .crawl-intro{position:fixed;top:50%;left:10%;right:10%;transform:translateY(-50%);color:#4a9eff;font-family:'News Cycle','Arial Narrow',Arial,sans-serif;font-size:clamp(1.6rem,4.5vw,4rem);font-weight:900;-webkit-text-stroke:2px #4a9eff;letter-spacing:0.06em;text-align:center;z-index:20;animation:crawlIntroFade 5.5s ease forwards;}
 @keyframes crawlIntroFade{0%{opacity:0;}12%{opacity:1;}72%{opacity:1;}100%{opacity:0;}}
 #crawl-logo-el{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:clamp(220px,46vw,560px);will-change:transform,opacity;z-index:20;opacity:0;animation:crawlLogoAnim 8.5s cubic-bezier(.16,.84,.44,1) forwards;animation-delay:5.2s;}
@@ -157,11 +226,11 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
   #menuScreen .lang-row{margin-bottom:3vw;}
   #menuScreen .lang-pill{padding:1vw 2.5vw;font-size:2.8vw;}
   #menuScreen .title{font-size:7vw;}
-  #menuScreen .subtitle{font-size:2.5vw;margin-bottom:3vw;}
+  #menuScreen .subtitle{font-size:3vw;margin-bottom:3vw;}
 }
 @media (orientation:landscape) and (max-width:1024px){
   #menuScreen .title{font-size:4.5vw;margin-bottom:0.8vh;}
-  #menuScreen .subtitle{font-size:1.8vw;margin-bottom:1.5vh;}
+  #menuScreen .subtitle{font-size:2.2vw;margin-bottom:1.5vh;}
   #menuScreen .lang-row{margin-bottom:1.5vh;gap:1vw;}
   #menuScreen .lang-pill{padding:0.8vh 1.5vw;font-size:1.6vw;}
   #menuBtnGrid{display:grid;grid-template-columns:1fr 1fr;gap:1.2vh 2vw;width:70vw;}
@@ -174,8 +243,8 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 <div id="crawl-screen">
 <canvas id="crawl-starfield"></canvas>
 <canvas id="crawl-canvas-el"></canvas>
-<div class="crawl-fade-top"></div>
-<div class="crawl-intro" id="crawl-intro-text">A long time ago, in a galaxy far, far away&hellip;</div>
+
+<div class="crawl-intro" id="crawl-intro-text">Somewhere in the Outer Rim, in a hidden Rebel research bay&hellip;</div>
 <div id="crawl-logo-el">
   <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 693.615 419.375" xml:space="preserve">
     <g><path fill="#FFE81F" d="M148.718,221.207l8.67,25.461c4.691,13.768,8.879,24.779,9.425,24.779c0.009,0,0.017-0.004,0.024-0.01c0.6-0.53,17.57-49.811,17.57-49.811h32.89l-39.68,115.619h-22.86c0,0-24.4-70.471-24.3-70.739l-25.47,69.851h-22.63l-39.18-115.15l32.73,0.021c0,0,17.929,50.821,18.168,50.821c0.001,0,0.001-0.001,0.002-0.002l17.89-50.841H148.718 M32.003,213.2l3.601,10.584l39.18,115.149l1.845,5.424h5.729h22.63h5.598l1.918-5.26l17.685-48.5c1.524,4.434,3.171,9.213,4.818,13.988c6.089,17.655,12.191,35.277,12.191,35.277l1.864,5.383h5.696h22.86h5.712l1.854-5.403l39.68-115.618l3.637-10.598h-11.204h-32.89h-5.706l-1.858,5.396c-2.974,8.635-6.921,20.031-10.296,29.676c-0.509-1.463-1.039-3.001-1.587-4.611l-8.669-25.46l-1.846-5.421h-5.727h-36.75h-5.666l-1.881,5.345l-10.453,29.706c-3.453-9.706-7.456-21.017-10.516-29.691l-1.882-5.334l-5.657-0.004l-32.73-0.021L32.003,213.2L32.003,213.2z"/></g>
@@ -194,25 +263,36 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 <canvas id="starCanvas"></canvas>
 <canvas id="c"></canvas>
 <canvas id="particleCanvas"></canvas>
+<div id="countdown" class="hidden"><span id="countdownText"></span></div>
 
 <div id="menuScreen" class="screen" style="background:transparent;">
   <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;">
-    <div class="title" data-i18n="menu.title">Star Wars</div>
-    <div class="subtitle" data-i18n="menu.subtitle">Pixel Battle Simulator</div>
+    <div style="width:clamp(144px,25.6vw,272px);margin-bottom:6px;">
+      <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 693.615 419.375" xml:space="preserve" style="width:100%;height:auto;display:block;filter:drop-shadow(0 0 12px rgba(255,232,31,0.5));">
+        <g><path fill="#FFE81F" d="M148.718,221.207l8.67,25.461c4.691,13.768,8.879,24.779,9.425,24.779c0.009,0,0.017-0.004,0.024-0.01c0.6-0.53,17.57-49.811,17.57-49.811h32.89l-39.68,115.619h-22.86c0,0-24.4-70.471-24.3-70.739l-25.47,69.851h-22.63l-39.18-115.15l32.73,0.021c0,0,17.929,50.821,18.168,50.821c0.001,0,0.001-0.001,0.002-0.002l17.89-50.841H148.718 M32.003,213.2l3.601,10.584l39.18,115.149l1.845,5.424h5.729h22.63h5.598l1.918-5.26l17.685-48.5c1.524,4.434,3.171,9.213,4.818,13.988c6.089,17.655,12.191,35.277,12.191,35.277l1.864,5.383h5.696h22.86h5.712l1.854-5.403l39.68-115.618l3.637-10.598h-11.204h-32.89h-5.706l-1.858,5.396c-2.974,8.635-6.921,20.031-10.296,29.676c-0.509-1.463-1.039-3.001-1.587-4.611l-8.669-25.46l-1.846-5.421h-5.727h-36.75h-5.666l-1.881,5.345l-10.453,29.706c-3.453-9.706-7.456-21.017-10.516-29.691l-1.882-5.334l-5.657-0.004l-32.73-0.021L32.003,213.2L32.003,213.2z"/></g>
+        <g><path fill="#FFE81F" d="M655.258,220.758l-0.075,30.305c0,0-32.643-0.109-49.239-0.109c-5.521,0-9.266,0.013-9.444,0.045c-2.86,0.521-4.681,6.602-3.87,9.271c0.399,1.35,3.391,5.76,6.63,9.81c3.229,4.051,8.54,10.681,11.78,14.729c8.319,10.381,9.46,12.43,10.229,18.391c1.25,9.681-3.329,20.16-11.829,27.07c-8.518,6.93-8.145,6.979-71.383,6.979c-0.916,0-1.835,0-2.777,0c-38.46-0.01-58.8-0.329-61.761-0.989c-5.26-1.19-13.64-8.03-35.79-29.28c-7.967-7.636-15.309-14.322-15.686-14.324c-0.01,0-0.015,0.006-0.015,0.016l-0.261,44.579l-35.899-0.159l-0.221-114.98h45.271h34.79c24.13,0.871,40.46,24.91,37.21,40.24c-0.74,3.479-2.62,8.521-4.181,11.2c-3.21,5.5-11.38,12.56-18.011,15.591c-2.449,1.108-4.449,2.398-4.449,2.858c0,1.71,8.061,9.649,11.08,10.91c2.579,1.079,10.09,1.319,43.21,1.319c3.882,0,7.408,0.002,10.608,0.002c33.293,0,31.618-0.24,34.19-5.741c1.801-3.83,0.431-6.12-12.239-20.39c-16.051-15.971-14.37-23.621-14.48-29.271c-0.229-6.77,5.102-28.069,32.812-28.069L655.258,220.758 M440.188,273.878c15.37,0,18.49-0.239,21.761-1.66c11.04-4.8,11.63-18.979,1.04-25.271c-2.319-1.381-5.3-1.609-21.96-1.7l-19.279-0.101c0.159,0.15-0.061,27.57-0.061,27.57S426.518,273.878,440.188,273.878 M663.277,212.758h-8.021h-73.8c-16.032,0-25.515,6.328-30.646,11.637c-8.347,8.633-10.313,19.504-10.162,24.629c0.008,0.427,0.003,0.865-0.002,1.322c-0.073,8.329,1.154,17.758,16.659,33.246c3.065,3.452,8.193,9.239,10.131,12.115c-4.238,0.521-14.98,0.521-26.262,0.521h-4.792l-5.816-0.002c-19.904,0-36.688-0.057-40.128-0.736c-0.481-0.314-1.156-0.854-1.898-1.498c6.877-4.235,13.83-10.799,17.104-16.412c1.987-3.413,4.178-9.243,5.098-13.568c2.04-9.625-1.325-21.236-9.001-31.068c-8.956-11.471-21.985-18.334-35.746-18.83l-0.145-0.006h-0.145h-34.79h-45.271h-8.016l0.016,8.017l0.221,114.979l0.016,7.949l7.949,0.035l35.899,0.159l7.988,0.035l0.047-7.988l0.155-26.706c0.733,0.696,1.491,1.419,2.269,2.165c24.227,23.24,32.359,29.679,39.562,31.308c1.979,0.441,5.253,1.172,63.523,1.188h2.779c31.546,0,47.38,0,56.799-0.91c10.789-1.043,14.259-3.49,19.461-7.725l0.173-0.141c10.685-8.687,16.323-21.83,14.715-34.3c-1.048-8.11-3.194-11.479-11.922-22.368l-2.594-3.24c-3.04-3.799-6.713-8.387-9.175-11.475c-1.986-2.484-3.546-4.689-4.487-6.133c1.236-0.003,2.841-0.005,4.918-0.005c16.395,0,48.887,0.108,49.213,0.11l8.008,0.026l0.02-8.008l0.075-30.306L663.277,212.758L663.277,212.758z M429.739,265.586c0.013-2.021,0.025-4.287,0.038-6.557c0.01-2,0.019-4.004,0.022-5.84l11.187,0.058c6.429,0.035,16.103,0.088,17.989,0.623c2.407,1.461,3.75,3.72,3.604,6.06c-0.08,1.264-0.682,3.588-3.821,4.951c-1.75,0.76-4.54,0.997-18.57,0.997C435.738,265.878,432.305,265.749,429.739,265.586L429.739,265.586z"/></g>
+        <g><path fill="#FFE81F" d="M312.908,220.287l40.29,115.92l-32.83,0.15l-5.45-17.41l-58.7-0.471l-5.18,17.431l-32.5-0.341l39.78-115.229L312.908,220.287 M286.507,237.283c-0.083,0.333-5.144,14.219-10.222,28.104c-5.12,14-10.257,28-10.328,28.109c0,0.001-0.001,0.001,0,0.001l0,0c0,0,0,0,0-0.001c0.136-0.04,18.316-0.08,29.968-0.08c5.453,0,9.475,0.009,9.55,0.029c0.001,0.004,0.001,0.005,0.001,0.005s0-0.001,0-0.003c0,0,0,0-0.001-0.002C305.271,292.916,286.566,237.959,286.507,237.283c0.001-0.004,0.001-0.006,0.001-0.006l0,0C286.507,237.277,286.507,237.279,286.507,237.283 M318.595,212.282l-5.693,0.005l-54.59,0.051l-5.696,0.005l-1.859,5.386l-39.78,115.229l-3.623,10.494l11.102,0.115l32.5,0.341l6.033,0.063l1.719-5.782l3.466-11.662l46.854,0.375l3.708,11.848l1.765,5.638l5.907-0.026l32.829-0.15l11.195-0.052l-3.676-10.574l-40.29-115.92L318.595,212.282L318.595,212.282z M277.472,285.424c1.515-4.129,3.556-9.71,6.327-17.289c0.869-2.376,1.664-4.551,2.393-6.545c0.663,1.956,1.385,4.084,2.169,6.398c0.646,1.906,3.485,10.27,5.92,17.428C287.041,285.416,281.591,285.417,277.472,285.424L277.472,285.424z"/></g>
+        <g><path fill="#FFE81F" d="M326.488,81.928v28.6h-57.28v87.47h-34.15v-87.54l-66.86,0.19c-8.06,0-9.14,6.42-9.14,8.88c0,3.02,1.97,6.04,12.79,19.74c7.02,8.9,13.47,17.78,14.32,19.72c4.64,10.68-1.36,27.32-12.29,34.08c-7.79,4.813-6.459,4.931-64.308,4.931c-2.974,0-6.096,0-9.392,0h-62.27v-32.13h97.9l2.89-2.01c1.95-1.36,3.08-3.23,3.51-5.79c0.6-3.68,0.29-4.16-11.8-17.78c-14.29-16.1-15.8-19.04-15.06-29.32c0.84-11.73,11.3-28.77,29.58-28.77L326.488,81.928 M334.488,73.916l-8.013,0.012l-181.56,0.27c-10.458,0-20.171,4.518-27.342,12.722c-5.814,6.652-9.63,15.429-10.206,23.477c-0.973,13.511,2.137,18.393,17.056,35.202c4.33,4.877,8.447,9.516,9.821,11.486c-0.022,0.079-0.042,0.13-0.054,0.159c-0.015,0.012-0.038,0.03-0.07,0.052l-0.822,0.572H37.908h-8v8v32.13v8h8h62.27h4.937h4.455c28.522,0,42.6-0.027,50.894-0.635c9.49-0.695,12.518-2.323,17.054-5.14l0.566-0.351c14.262-8.821,21.612-29.827,15.422-44.074c-1.91-4.358-14.003-19.746-15.376-21.486c-3.796-4.807-10.062-12.74-11.054-15.036c0.024-0.193,0.071-0.393,0.121-0.532c0.165-0.042,0.481-0.098,1.001-0.098l58.86-0.167v79.517v8h8h34.15h8v-8v-79.47h49.28h8v-8v-28.6V73.916L334.488,73.916z"/></g>
+        <g><path fill="#FFE81F" d="M419.548,82.857l40.18,116.22l-32.77-0.18l-5.32-17.41l-58.439-0.26l-5.221,16.77h-33.369l39.739-115.14H419.548 M372.737,156.478l39.801-0.05c0.001,0,0.001,0.001,0.001,0.001c0.136,0-19.342-57.201-19.472-57.241l0,0C392.925,99.183,372.288,156.478,372.737,156.478 M425.247,74.857h-5.699h-55.2h-5.701l-1.86,5.39l-39.74,115.141l-3.662,10.61h11.225h33.37h5.889l1.75-5.623l3.461-11.121l46.632,0.207l3.599,11.774l1.721,5.629l5.887,0.033l32.77,0.18l11.297,0.062l-3.691-10.676l-40.18-116.22L425.247,74.857L425.247,74.857z M383.851,148.464c2.468-7.027,5.904-16.657,9.014-25.312c2.948,8.644,6.209,18.245,8.588,25.29L383.851,148.464L383.851,148.464z"/></g>
+        <g><path fill="#FFE81F" d="M532.396,82.857c25.921,0,43.91,0.37,47.37,0.97c8,1.39,15.23,5.66,20.65,12.22c5.67,6.86,6.97,10.14,7.71,19.54c1.061,13.27-5.25,24.72-17.7,32.15c-3.63,2.17-7.359,4.28-8.29,4.7c-1.43,0.65-1.239,1.27,1.32,4.27c1.649,1.93,4.51,4.68,6.35,6.11l3.36,2.61l62.08,0.89l0.609,31.68h-38.061c-29.439,0-38.86-0.27-41.62-1.2c-4.13-1.4-14.069-9.82-34.271-29.04l-14.42-13.72l0.152,43.96h-37.043V82.857H532.396 M526.938,134.627h19.671c19.141,0,19.739-0.06,22.47-2.11c4.881-3.66,6.609-7.43,6.091-13.22c-0.53-5.97-2.83-9.08-8.601-11.58c-3.25-1.42-6.381-1.65-21.721-1.65h-17.91V134.627 M532.396,74.857h-41.8h-8v8v115.14v8h8h37.043h8.028l-0.028-8.028l-0.088-25.216l0.84,0.799c24.986,23.773,32.356,29.173,37.218,30.821c3.733,1.259,9.982,1.624,44.188,1.624h38.061h8.154l-0.156-8.154l-0.609-31.68l-0.148-7.734l-7.734-0.111l-59.402-0.851l-1.245-0.967c-0.396-0.309-0.876-0.717-1.389-1.179c0.446-0.264,0.854-0.507,1.207-0.717c15.003-8.953,22.866-23.407,21.569-39.653c-0.863-10.959-2.82-15.896-9.52-24c-6.584-7.969-15.621-13.298-25.447-15.005C575.678,74.999,548.257,74.857,532.396,74.857L532.396,74.857z M534.938,114.067h9.91c14.027,0,16.806,0.233,18.518,0.981c3.25,1.408,3.58,2.091,3.835,4.957c0.256,2.848-0.097,3.994-2.922,6.112c-0.093,0.069-0.164,0.123-0.223,0.166c-1.865,0.345-8.786,0.345-17.447,0.345h-11.67L534.938,114.067L534.938,114.067z"/></g>
+      </svg>
+    </div>
+    <div class="subtitle" data-i18n="menu.subtitle">Combat Simulation Division</div>
+    <div class="subtitle" style="margin-top:-18px;" data-i18n="menu.subtitle2">Operation: Iron Wing</div>
     <div class="lang-row">
       <button class="lang-pill active" data-lang="en" onclick="setLang('en')">EN</button>
       <button class="lang-pill" data-lang="de" onclick="setLang('de')">DE</button>
       <button class="lang-pill" data-lang="pl" onclick="setLang('pl')">PL</button>
     </div>
     <div id="menuBtnGrid">
-    <button class="btn" onclick="startGame()" data-i18n="menu.newGame">New Game</button>
+    <button class="btn" onclick="startGame()" data-i18n="menu.newGame">New Simulation</button>
     <button class="btn" onclick="showConfig()" data-i18n="menu.config">Configuration</button>
     <button class="btn" onclick="window.open('https://github.com/OberstRolex123/Star-Wars-Battle-Simulator/blob/main/CHANGELOG.md','_blank')" data-i18n="menu.changelog">Changelog</button>
     <button class="btn" onclick="showReadme()" data-i18n="menu.about">About</button>
     <button class="btn" onclick="showCrawl()" data-i18n="menu.showCrawl">Show Intro</button>
     <button class="btn" style="border-color:#334455;color:#aaaaaa;" onclick="loadVersion()" data-i18n="menu.loadVersion">Load Version</button>
     </div>
-    <div style="font-size:9px;letter-spacing:2px;color:#ffffff;text-transform:uppercase;margin-top:4px;opacity:0.4;" data-i18n="menu.madeWith">v1.4.0 — made with Claude</div>
+    <div style="font-size:9px;letter-spacing:2px;color:#ffffff;text-transform:uppercase;margin-top:4px;opacity:0.4;" data-i18n="menu.madeWith">v1.5.5 — made with Claude</div>
   </div>
 </div>
 
@@ -286,13 +366,36 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.laserSpd">Laser Speed</span><input type="range" min="4" max="30" step="1" data-ship="xwing" data-key="laserSpd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-laserSpd">12</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.ttl">Laser TTL (s)</span><input type="range" min="0.5" max="5" step="0.5" data-ship="xwing" data-key="ttl" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-ttl">2.0</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.dmg">Damage</span><input type="range" min="1" max="10" step="1" data-ship="xwing" data-key="dmg" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-dmg">1</span></div>
-    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.turnRate">Turn Rate</span><input type="range" min="0.01" max="0.15" step="0.005" data-ship="xwing" data-key="turnRate" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-turnRate">0.040</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.turnRate">Turn Rate</span><input type="range" min="0.01" max="0.3" step="0.005" data-ship="xwing" data-key="turnRate" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-turnRate">0.040</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.count">Count</span><input type="range" min="1" max="20" step="1" data-ship="xwing" data-key="count" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-count">3</span></div>
     <div class="boost-cfg-block" id="boost-block-xwing">
       <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.boost.energy">Boost Energy</span><input type="range" min="40" max="200" step="10" data-ship="xwing" data-key="boostEnergy" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-boostEnergy">100</span></div>
       <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.boost.cost">Boost Cost</span><input type="range" min="10" max="60" step="5" data-ship="xwing" data-key="boostCost" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-boostCost">25</span></div>
       <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.boost.regen">Regen/s</span><input type="range" min="2" max="30" step="1" data-ship="xwing" data-key="boostRegen" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-boostRegen">8</span></div>
       <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.boost.force">Boost Force</span><input type="range" min="1" max="8" step="0.5" data-ship="xwing" data-key="boostForce" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-xwing-boostForce">3.5</span></div>
+    </div>
+    <!-- Brain: X-Wing -->
+    <div class="brain-block" id="brain-block-xwing">
+      <div class="brain-header">
+        <div class="toggle" id="tog-brain-xwing" onclick="toggleBrain('xwing')"></div>
+        <span class="brain-label" data-i18n="cfg.brain.label">Brain</span>
+        <select class="brain-preset-select" id="preset-xwing" onchange="loadPreset('xwing',this.value)">
+          <option value="">— Preset —</option>
+          <option value="aggressive">Aggressive</option>
+          <option value="kiter">Kiter</option>
+          <option value="flanker">Flanker</option>
+          <option value="coward">Coward</option>
+          <option value="default">Default AI</option>
+          <option value="leadshot">Lead Shot</option>
+        </select>
+        <button class="brain-btn" onclick="resetBrain('xwing')" data-i18n="cfg.brain.reset">Reset</button>
+        <a href="https://github.com/OberstRolex123/Star-Wars-Battle-Simulator/blob/main/BRAIN_DOCUMENTATION.md"
+           target="_blank"
+           style="font-size:9px;color:#4fa3e0;border:1px solid #1a3a5a;padding:2px 7px;letter-spacing:1px;text-decoration:none;font-family:monospace;text-transform:uppercase;"
+           data-i18n="brain.docs" title="Brain Documentation">? Docs</a>
+      </div>
+      <textarea class="brain-textarea" id="brain-xwing" spellcheck="false" placeholder="// return { steer, shoot, boost }"></textarea>
+      <div class="brain-error" id="brain-error-xwing"></div>
     </div>
   </div>
   <!-- A-Wing -->
@@ -307,13 +410,32 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.laserSpd">Laser Speed</span><input type="range" min="4" max="30" step="1" data-ship="awing" data-key="laserSpd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-laserSpd">14</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.ttl">Laser TTL (s)</span><input type="range" min="0.5" max="5" step="0.5" data-ship="awing" data-key="ttl" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-ttl">2.0</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.dmg">Damage</span><input type="range" min="1" max="10" step="1" data-ship="awing" data-key="dmg" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-dmg">1</span></div>
-    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.turnRate">Turn Rate</span><input type="range" min="0.01" max="0.15" step="0.005" data-ship="awing" data-key="turnRate" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-turnRate">0.070</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.turnRate">Turn Rate</span><input type="range" min="0.01" max="0.3" step="0.005" data-ship="awing" data-key="turnRate" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-turnRate">0.070</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.count">Count</span><input type="range" min="1" max="20" step="1" data-ship="awing" data-key="count" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-count">2</span></div>
     <div class="boost-cfg-block" id="boost-block-awing">
       <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.boost.energy">Boost Energy</span><input type="range" min="40" max="200" step="10" data-ship="awing" data-key="boostEnergy" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-boostEnergy">80</span></div>
       <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.boost.cost">Boost Cost</span><input type="range" min="10" max="60" step="5" data-ship="awing" data-key="boostCost" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-boostCost">20</span></div>
       <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.boost.regen">Regen/s</span><input type="range" min="2" max="30" step="1" data-ship="awing" data-key="boostRegen" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-boostRegen">12</span></div>
       <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.boost.force">Boost Force</span><input type="range" min="1" max="8" step="0.5" data-ship="awing" data-key="boostForce" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-awing-boostForce">4.5</span></div>
+    </div>
+    <!-- Brain: A-Wing -->
+    <div class="brain-block" id="brain-block-awing">
+      <div class="brain-header">
+        <div class="toggle" id="tog-brain-awing" onclick="toggleBrain('awing')"></div>
+        <span class="brain-label" data-i18n="cfg.brain.label">Brain</span>
+        <select class="brain-preset-select" id="preset-awing" onchange="loadPreset('awing',this.value)">
+          <option value="">— Preset —</option>
+          <option value="aggressive">Aggressive</option>
+          <option value="kiter">Kiter</option>
+          <option value="flanker">Flanker</option>
+          <option value="coward">Coward</option>
+          <option value="default">Default AI</option>
+          <option value="leadshot">Lead Shot</option>
+        </select>
+        <button class="brain-btn" onclick="resetBrain('awing')" data-i18n="cfg.brain.reset">Reset</button>
+      </div>
+      <textarea class="brain-textarea" id="brain-awing" spellcheck="false" placeholder="// return { steer, shoot, boost }"></textarea>
+      <div class="brain-error" id="brain-error-awing"></div>
     </div>
   </div>
   <!-- TIE Fighter -->
@@ -328,13 +450,32 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.laserSpd">Laser Speed</span><input type="range" min="4" max="30" step="1" data-ship="tie" data-key="laserSpd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-laserSpd">12</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.ttl">Laser TTL (s)</span><input type="range" min="0.5" max="5" step="0.5" data-ship="tie" data-key="ttl" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-ttl">2.0</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.dmg">Damage</span><input type="range" min="1" max="10" step="1" data-ship="tie" data-key="dmg" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-dmg">1</span></div>
-    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.turnRate">Turn Rate</span><input type="range" min="0.01" max="0.15" step="0.005" data-ship="tie" data-key="turnRate" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-turnRate">0.030</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.turnRate">Turn Rate</span><input type="range" min="0.01" max="0.3" step="0.005" data-ship="tie" data-key="turnRate" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-turnRate">0.030</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.count">Count</span><input type="range" min="1" max="20" step="1" data-ship="tie" data-key="count" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-count">6</span></div>
     <div class="boost-cfg-block" id="boost-block-tie">
       <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.boost.energy">Boost Energy</span><input type="range" min="40" max="200" step="10" data-ship="tie" data-key="boostEnergy" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-boostEnergy">60</span></div>
       <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.boost.cost">Boost Cost</span><input type="range" min="10" max="60" step="5" data-ship="tie" data-key="boostCost" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-boostCost">20</span></div>
       <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.boost.regen">Regen/s</span><input type="range" min="2" max="30" step="1" data-ship="tie" data-key="boostRegen" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-boostRegen">10</span></div>
       <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.boost.force">Boost Force</span><input type="range" min="1" max="8" step="0.5" data-ship="tie" data-key="boostForce" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tie-boostForce">3.0</span></div>
+    </div>
+    <!-- Brain: TIE Fighter -->
+    <div class="brain-block" id="brain-block-tie">
+      <div class="brain-header">
+        <div class="toggle" id="tog-brain-tie" onclick="toggleBrain('tie')"></div>
+        <span class="brain-label" data-i18n="cfg.brain.label">Brain</span>
+        <select class="brain-preset-select" id="preset-tie" onchange="loadPreset('tie',this.value)">
+          <option value="">— Preset —</option>
+          <option value="aggressive">Aggressive</option>
+          <option value="kiter">Kiter</option>
+          <option value="flanker">Flanker</option>
+          <option value="coward">Coward</option>
+          <option value="default">Default AI</option>
+          <option value="leadshot">Lead Shot</option>
+        </select>
+        <button class="brain-btn" onclick="resetBrain('tie')" data-i18n="cfg.brain.reset">Reset</button>
+      </div>
+      <textarea class="brain-textarea" id="brain-tie" spellcheck="false" placeholder="// return { steer, shoot, boost }"></textarea>
+      <div class="brain-error" id="brain-error-tie"></div>
     </div>
   </div>
   <!-- TIE Bomber -->
@@ -349,13 +490,32 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.laserSpd">Laser Speed</span><input type="range" min="4" max="30" step="1" data-ship="tiein" data-key="laserSpd" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-laserSpd">10</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.ttl">Laser TTL (s)</span><input type="range" min="0.5" max="5" step="0.5" data-ship="tiein" data-key="ttl" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-ttl">2.0</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.dmg">Damage</span><input type="range" min="1" max="10" step="1" data-ship="tiein" data-key="dmg" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-dmg">2</span></div>
-    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.turnRate">Turn Rate</span><input type="range" min="0.01" max="0.15" step="0.005" data-ship="tiein" data-key="turnRate" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-turnRate">0.065</span></div>
+    <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.turnRate">Turn Rate</span><input type="range" min="0.01" max="0.3" step="0.005" data-ship="tiein" data-key="turnRate" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-turnRate">0.065</span></div>
     <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.count">Count</span><input type="range" min="1" max="20" step="1" data-ship="tiein" data-key="count" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-count">2</span></div>
     <div class="boost-cfg-block" id="boost-block-tiein">
       <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.boost.energy">Boost Energy</span><input type="range" min="40" max="200" step="10" data-ship="tiein" data-key="boostEnergy" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-boostEnergy">120</span></div>
       <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.boost.cost">Boost Cost</span><input type="range" min="10" max="60" step="5" data-ship="tiein" data-key="boostCost" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-boostCost">35</span></div>
       <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.boost.regen">Regen/s</span><input type="range" min="2" max="30" step="1" data-ship="tiein" data-key="boostRegen" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-boostRegen">6</span></div>
       <div class="cfg-row"><span class="cfg-lbl" data-i18n="cfg.boost.force">Boost Force</span><input type="range" min="1" max="8" step="0.5" data-ship="tiein" data-key="boostForce" oninput="cfgUpdate(this)"><span class="cfg-val" id="v-tiein-boostForce">2.5</span></div>
+    </div>
+    <!-- Brain: TIE Bomber -->
+    <div class="brain-block" id="brain-block-tiein">
+      <div class="brain-header">
+        <div class="toggle" id="tog-brain-tiein" onclick="toggleBrain('tiein')"></div>
+        <span class="brain-label" data-i18n="cfg.brain.label">Brain</span>
+        <select class="brain-preset-select" id="preset-tiein" onchange="loadPreset('tiein',this.value)">
+          <option value="">— Preset —</option>
+          <option value="aggressive">Aggressive</option>
+          <option value="kiter">Kiter</option>
+          <option value="flanker">Flanker</option>
+          <option value="coward">Coward</option>
+          <option value="default">Default AI</option>
+          <option value="leadshot">Lead Shot</option>
+        </select>
+        <button class="brain-btn" onclick="resetBrain('tiein')" data-i18n="cfg.brain.reset">Reset</button>
+      </div>
+      <textarea class="brain-textarea" id="brain-tiein" spellcheck="false" placeholder="// return { steer, shoot, boost }"></textarea>
+      <div class="brain-error" id="brain-error-tiein"></div>
     </div>
   </div>
   </div>
@@ -377,7 +537,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 
 <div id="readmeScreen" class="screen hidden">
   <div class="rm-header" data-i18n="rm.title">Star Wars</div>
-  <div class="rm-sub" data-i18n="rm.sub">Pixel Battle Simulator — v1.4.0</div>
+  <div class="rm-sub" data-i18n="rm.sub">Pixel Battle Simulator — v1.5.5</div>
   <div class="rm-sec">
     <div class="rm-sec-title" data-i18n="rm.sec.what">What is this</div>
     <div class="rm-p" data-i18n="rm.what.p1">An autonomous pixel-art space battle...</div>
@@ -406,10 +566,17 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
   <div class="lv-header" data-i18n="lv.title">Load Version</div>
   <div class="lv-entry lv-current">
     <div class="lv-info">
-      <div class="lv-tag" data-i18n="lv.current.tag">v1.4.0 — current</div>
+      <div class="lv-tag" data-i18n="lv.current.tag">v1.5.5 — current</div>
       <div class="lv-desc" data-i18n="lv.current.desc">Boost System · Particles · Glow</div>
     </div>
     <button class="lv-btn" data-i18n="lv.current.btn">Playing</button>
+  </div>
+  <div class="lv-entry">
+    <div class="lv-info">
+      <div class="lv-tag">v1.4</div>
+      <div class="lv-desc" data-i18n="lv.v14.desc">Boost System · Particles · Glow</div>
+    </div>
+    <button class="lv-btn" style="width:60px;text-align:center;" onclick="openVersion('versions/v1.4.html')" data-i18n="lv.load">Load</button>
   </div>
   <div class="lv-entry">
     <div class="lv-info">
@@ -442,10 +609,37 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 
 <div id="hud" class="hidden">
   <div><div class="hud-lbl" style="color:#aaaaaa" data-i18n="hud.rebellion">Rebellion</div><div class="hud-sc" style="color:#cccccc" id="hudXS">0</div></div>
-  <div style="display:flex;gap:6px;">
-    <button class="hud-btn" id="muteBtn" onclick="toggleMute()">♪ On</button>
-    <button class="hud-btn" id="gameMusicBtn" onclick="toggleGameMusic()">♫ Music</button>
-    <button class="hud-btn" onclick="pauseGame()" data-i18n="hud.pause">|| Pause</button>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+    <div style="display:flex;gap:8px;" id="hudBtns">
+      <button class="hud-btn" id="muteBtn" onclick="toggleMute()">♪ On</button>
+      <button class="hud-btn" id="gameMusicBtn" onclick="toggleGameMusic()" data-i18n="hud.music.on">♫ Music</button>
+      <button class="hud-btn" id="debugBtn" onclick="toggleDebug()" data-i18n="hud.debug">⊕ Debug</button>
+      <button class="hud-btn" id="pauseBtn" onclick="togglePause()" data-i18n="hud.pause.btn">|| Pause</button>
+      <button class="hud-btn" id="exitBtn" onclick="goMenu()" style="border-color:#442222;color:#884444;" data-i18n="hud.exit">✕ Exit</button>
+    </div>
+    <!-- global speed slider (visible when debug OFF) -->
+    <div id="globalSpeedControl" style="width:100%;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:9px;letter-spacing:1px;color:#556677;text-transform:uppercase;white-space:nowrap;" data-i18n="hud.speed">Speed</span>
+      <input type="range" id="globalSpeedSlider" min="0" max="9" step="1" value="4"
+        oninput="setGlobalSpeed(this.value)"
+        style="flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;">
+      <span id="globalSpeedVal" style="font-size:9px;color:#4fa3e0;letter-spacing:1px;width:30px;text-align:right;">1x</span>
+    </div>
+    <!-- debug speed slider (visible when debug ON) -->
+    <div id="speedControl" style="display:none;width:100%;align-items:center;gap:8px;">
+      <span style="font-size:9px;letter-spacing:1px;color:#556677;text-transform:uppercase;white-space:nowrap;">Speed</span>
+      <input type="range" id="speedSlider" min="0" max="8" step="1" value="5"
+        oninput="setGameSpeed(this.value)"
+        style="flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;">
+      <span id="speedVal" style="font-size:9px;color:#4fa3e0;letter-spacing:1px;width:26px;text-align:right;">1.0x</span>
+    </div>
+    <div id="stepControl" style="display:none;width:100%;justify-content:center;gap:6px;">
+      <button class="hud-btn" onclick="stepGame(-10)" style="letter-spacing:0px;" data-i18n="step.back10">◀◀ -10</button>
+      <button class="hud-btn" onclick="stepGame(-1)"  style="letter-spacing:0px;" data-i18n="step.back1">◀ -1</button>
+      <span id="stepCounter" style="font-size:9px;color:#334455;letter-spacing:1px;min-width:56px;text-align:center;align-self:center;">0/0</span>
+      <button class="hud-btn" onclick="stepGame(1)"   style="letter-spacing:0px;" data-i18n="step.fwd1">+1 ▶</button>
+      <button class="hud-btn" onclick="stepGame(10)"  style="letter-spacing:0px;" data-i18n="step.fwd10">+10 ▶▶</button>
+    </div>
   </div>
   <div style="text-align:right"><div class="hud-lbl" style="color:#aaaaaa;text-align:right" data-i18n="hud.empire">Empire</div><div class="hud-sc" style="color:#cccccc" id="hudTS">0</div></div>
 </div>
@@ -474,11 +668,12 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 const LANGS={
   en:{
     'lang.code':'en','lang.label':'English',
-    'menu.title':'Star Wars','menu.subtitle':'Pixel Battle Simulator',
-    'menu.newGame':'New Game','menu.config':'Configuration',
+    'menu.title':'Star Wars','menu.subtitle':'Combat Simulation Division',
+    'menu.subtitle2':'Operation: Iron Wing',
+    'menu.newGame':'New Simulation','menu.config':'Configuration',
     'menu.changelog':'Changelog','menu.about':'About',
     'cl.title':'Changelog',
-    'cl.v14.tag':'v1.4.0','cl.v14.date':'2026-04-28 · current',
+    'cl.v14.tag':'v1.5.5','cl.v14.date':'2026-04-28 · current',
     'cl.v14.e1':'Boost system — 4 directions (forward · back · left · right), energy tank per ship with regeneration, cooldown prevents spam',
     'cl.v14.e2':'Boost AI — tactical: dodge incoming lasers sideways, retreat when low HP, close gap on distant enemies, evade when targeted',
     'cl.v14.e3':'Boost particles — 12 exhaust particles + glow ring burst; Rebel blue · Empire green; separate canvas with shadowBlur',
@@ -502,7 +697,7 @@ const LANGS={
     'cl.v10.e8':'Single HTML file, zero dependencies',
     'menu.showCrawl':'Show Intro',
     'menu.playMusic':'Play Music','menu.stopMusic':'Stop Music',
-    'menu.loadVersion':'Load Version','menu.madeWith':'v1.4.0 — made with Claude',
+    'menu.loadVersion':'Load Version','menu.madeWith':'v1.5.5 — made with Claude',
     'hud.rebellion':'Rebellion','hud.empire':'Empire',
     'hud.pause':'|| Pause','hud.mute.on':'♪ On','hud.mute.off':'♪ Off',
     'hud.music.on':'♫ Music','hud.music.off':'♫ Off',
@@ -522,6 +717,20 @@ const LANGS={
     'cfg.boost.enabled':'Boost enabled',
     'cfg.boost.energy':'Max Energy','cfg.boost.cost':'Cost/boost',
     'cfg.boost.regen':'Regen/s','cfg.boost.force':'Force',
+    'cfg.brain.label':'Brain','cfg.brain.reset':'Reset',
+    'brain.preset.label':'— Load Preset —','brain.on':'Brain On','brain.off':'Brain Off',
+    'brain.apply':'▶ Apply + New Game','brain.reset':'Reset','brain.docs':'? Docs',
+    'stats.nodata':'No data yet — run a simulation.','stats.reset':'Reset',
+    'hud.debug':'⊕ Debug','hud.debug.on':'⊕ Debug ON',
+    'hud.pause.btn':'|| Pause','hud.resume':'▶ Resume','hud.exit':'✕ Exit',
+    'hud.speed':'Speed',
+    'step.back10':'◀◀ -10','step.back1':'◀ -1','step.fwd1':'+1 ▶','step.fwd10':'+10 ▶▶',
+    'brain.editor.title':'⚡ Brain Editor',
+    'brain.ship.xwing':'X-Wing — Rebellion','brain.ship.awing':'A-Wing — Rebellion',
+    'brain.ship.tie':'TIE Fighter — Empire','brain.ship.tiein':'TIE Bomber — Empire',
+    'stats.title':'⚡ Stats',
+    'stats.shots':'Shots fired','stats.hitrate':'Hit rate','stats.fsrate':'1st-shot rate',
+    'stats.kills':'Kills','stats.deaths':'Deaths','stats.killtime':'Ø Kill time','stats.boosts':'Boosts',
     'cfg.ship.xwing':'X-Wing — Rebellion','cfg.ship.awing':'A-Wing — Rebellion',
     'cfg.ship.tie':'TIE Fighter — Empire','cfg.ship.tiein':'TIE Bomber — Empire',
     'cfg.formation.label':'Formation',
@@ -530,7 +739,7 @@ const LANGS={
     'cfg.dmg':'Damage','cfg.turnRate':'Turn Rate','cfg.count':'Count',
     'cfg.btn.reset':'Reset','cfg.btn.resetAll':'Reset All','cfg.btn.save':'Save','cfg.btn.back':'Back',
     'cfg.saved':'✓ Saved','cfg.on':'On','cfg.off':'Off',
-    'rm.title':'Star Wars','rm.sub':'Pixel Battle Simulator — v1.4.0',
+    'rm.title':'Star Wars','rm.sub':'Pixel Battle Simulator — v1.5.5',
     'rm.sec.what':'What is this',
     'rm.what.p1':'An autonomous pixel-art space battle between the Rebellion and the Empire.',
     'rm.what.p2':'Built entirely in a single HTML file — no server, no dependencies.',
@@ -540,10 +749,11 @@ const LANGS={
     'rm.team.rebel':'Rebel','rm.team.empire':'Empire',
     'rm.role.xwing':'All-rounder, 4 cannons','rm.role.awing':'Interceptor, fast, evasive',
     'rm.role.tie':'Cannon fodder, swarm','rm.role.tiein':'Heavy, double shot',
-    'lv.title':'Load Version','lv.current.tag':'v1.4.0 — current',
+    'lv.title':'Load Version','lv.current.tag':'v1.5.5 — current',
     'lv.current.desc':'Boost System · Particles · Glow',
     'lv.current.btn':'Playing','lv.load':'Load',
     'lv.v12.tag':'v1.2','lv.v12.desc':'Multi-language (EN/DE/PL) · Laser speed config · GitHub changelog',
+    'lv.v14.desc':'Boost System · Particles · Glow',
     'lv.v10.desc':'Initial release · All core features',
     'lv.hint':'Older versions are archived in versions/ in the repository. Loading opens the version in a new tab.',
     'vh.title':'⚠ Cannot open version',
@@ -553,11 +763,12 @@ const LANGS={
   },
   de:{
     'lang.code':'de','lang.label':'Deutsch',
-    'menu.title':'Krieg der Sterne','menu.subtitle':'Pixel Kampfsimulator',
-    'menu.newGame':'Neues Spiel','menu.config':'Konfiguration',
+    'menu.title':'Krieg der Sterne','menu.subtitle':'Kampfsimulationsabteilung',
+    'menu.subtitle2':'Operation: Eiserner Flügel',
+    'menu.newGame':'Neue Simulation','menu.config':'Konfiguration',
     'menu.changelog':'Changelog','menu.about':'Über das Spiel',
     'cl.title':'Changelog',
-    'cl.v14.tag':'v1.4.0','cl.v14.date':'2026-04-28 · aktuell',
+    'cl.v14.tag':'v1.5.5','cl.v14.date':'2026-04-28 · aktuell',
     'cl.v14.e1':'Boost-System — 4 Richtungen (vorwärts · rückwärts · links · rechts), Energie-Tank mit Regeneration, Cooldown verhindert Spam',
     'cl.v14.e2':'Boost-KI — taktisch: weicht einkommenden Lasern aus, zieht sich bei niedrigen TP zurück, schließt Lücke zu weit entfernten Feinden',
     'cl.v14.e3':'Boost-Partikel — 12 Abgas-Partikel + Glow-Ring-Burst; Rebellion blau · Imperium grün; separates Canvas mit shadowBlur',
@@ -581,7 +792,7 @@ const LANGS={
     'cl.v10.e8':'Einzelne HTML-Datei, keine Abhängigkeiten',
     'menu.showCrawl':'Intro anzeigen',
     'menu.playMusic':'Musik abspielen','menu.stopMusic':'Musik stoppen',
-    'menu.loadVersion':'Version laden','menu.madeWith':'v1.4.0 — made with Claude',
+    'menu.loadVersion':'Version laden','menu.madeWith':'v1.5.5 — made with Claude',
     'hud.rebellion':'Rebellion','hud.empire':'Imperium',
     'hud.pause':'|| Pause','hud.mute.on':'♪ An','hud.mute.off':'♪ Aus',
     'hud.music.on':'♫ Musik','hud.music.off':'♫ Aus',
@@ -601,6 +812,20 @@ const LANGS={
     'cfg.boost.enabled':'Boost aktiviert',
     'cfg.boost.energy':'Max. Energie','cfg.boost.cost':'Verbrauch/Boost',
     'cfg.boost.regen':'Regen/s','cfg.boost.force':'Kraft',
+    'cfg.brain.label':'Brain','cfg.brain.reset':'Reset',
+    'brain.preset.label':'— Preset laden —','brain.on':'Brain An','brain.off':'Brain Aus',
+    'brain.apply':'▶ Anwenden + Neue Simulation','brain.reset':'Zurücksetzen','brain.docs':'? Doku',
+    'stats.nodata':'Keine Daten — Simulation starten.','stats.reset':'Reset',
+    'hud.debug':'⊕ Debug','hud.debug.on':'⊕ Debug AN',
+    'hud.pause.btn':'|| Pause','hud.resume':'▶ Weiter','hud.exit':'✕ Beenden',
+    'hud.speed':'Tempo',
+    'step.back10':'◀◀ -10','step.back1':'◀ -1','step.fwd1':'+1 ▶','step.fwd10':'+10 ▶▶',
+    'brain.editor.title':'⚡ Brain-Editor',
+    'brain.ship.xwing':'X-Wing — Rebellion','brain.ship.awing':'A-Wing — Rebellion',
+    'brain.ship.tie':'TIE-Jäger — Imperium','brain.ship.tiein':'TIE-Bomber — Imperium',
+    'stats.title':'⚡ Stats',
+    'stats.shots':'Schüsse','stats.hitrate':'Trefferrate','stats.fsrate':'Erster Schuss',
+    'stats.kills':'Kills','stats.deaths':'Tode','stats.killtime':'Ø Kill-Zeit','stats.boosts':'Boosts',
     'cfg.ship.xwing':'X-Wing — Rebellion','cfg.ship.awing':'A-Wing — Rebellion',
     'cfg.ship.tie':'TIE-Jäger — Imperium','cfg.ship.tiein':'TIE-Bomber — Imperium',
     'cfg.formation.label':'Formation',
@@ -609,7 +834,7 @@ const LANGS={
     'cfg.dmg':'Schaden','cfg.turnRate':'Wenderate','cfg.count':'Anzahl',
     'cfg.btn.reset':'Zurücksetzen','cfg.btn.resetAll':'Alles zurücksetzen','cfg.btn.save':'Speichern','cfg.btn.back':'Zurück',
     'cfg.saved':'✓ Gespeichert','cfg.on':'An','cfg.off':'Aus',
-    'rm.title':'Krieg der Sterne','rm.sub':'Pixel Kampfsimulator — v1.4.0',
+    'rm.title':'Krieg der Sterne','rm.sub':'Pixel Kampfsimulator — v1.5.5',
     'rm.sec.what':'Was ist das?',
     'rm.what.p1':'Ein autonomer Pixel-Art-Weltraumkampf zwischen der Rebellion und dem Imperium.',
     'rm.what.p2':'Komplett in einer einzigen HTML-Datei.',
@@ -619,10 +844,11 @@ const LANGS={
     'rm.team.rebel':'Rebellen','rm.team.empire':'Imperium',
     'rm.role.xwing':'Allrounder, 4 Kanonen','rm.role.awing':'Abfangjäger, schnell',
     'rm.role.tie':'Kanonenfutter, Schwarm','rm.role.tiein':'Schwer, Doppelschuss',
-    'lv.title':'Version laden','lv.current.tag':'v1.4.0 — aktuell',
+    'lv.title':'Version laden','lv.current.tag':'v1.5.5 — aktuell',
     'lv.current.desc':'Boost-System · Partikel · Glow',
     'lv.current.btn':'Aktiv','lv.load':'Laden',
     'lv.v12.tag':'v1.2','lv.v12.desc':'Mehrsprachigkeit (EN/DE/PL) · Lasergeschwindigkeit · GitHub-Changelog',
+    'lv.v14.desc':'Boost-System · Partikel · Glow',
     'lv.v10.desc':'Erstveröffentlichung · Alle Kernfunktionen',
     'lv.hint':'Ältere Versionen sind im Ordner versions/ im Repository archiviert. Das Laden öffnet die Version in einem neuen Tab.',
     'vh.title':'⚠ Version nicht verfügbar',
@@ -632,11 +858,12 @@ const LANGS={
   },
   pl:{
     'lang.code':'pl','lang.label':'Polski',
-    'menu.title':'Gwiezdne Wojny','menu.subtitle':'Pikselowy Symulator Bitwy',
-    'menu.newGame':'Nowa Gra','menu.config':'Konfiguracja',
+    'menu.title':'Gwiezdne Wojny','menu.subtitle':'Wydział Symulacji Bojowej',
+    'menu.subtitle2':'Operacja: Żelazne Skrzydło',
+    'menu.newGame':'Nowa Symulacja','menu.config':'Konfiguracja',
     'menu.changelog':'Historia zmian','menu.about':'O grze',
     'cl.title':'Historia zmian',
-    'cl.v14.tag':'v1.4.0','cl.v14.date':'2026-04-28 · aktualna',
+    'cl.v14.tag':'v1.5.5','cl.v14.date':'2026-04-28 · aktualna',
     'cl.v14.e1':'System dopalacza — 4 kierunki (przód · tył · lewo · prawo), tank energii z regeneracją, cooldown zapobiega spamowi',
     'cl.v14.e2':'AI dopalacza — taktyczne użycie: unikanie laserów, odwrót przy niskim PW, doganianie odległych wrogów',
     'cl.v14.e3':'Cząsteczki dopalacza — 12 cząsteczek spalin + rozbłysk pierścienia; Rebelia niebieska · Imperium zielone',
@@ -660,7 +887,7 @@ const LANGS={
     'cl.v10.e8':'Pojedynczy plik HTML, brak zależności',
     'menu.showCrawl':'Pokaż intro',
     'menu.playMusic':'Odtwórz muzykę','menu.stopMusic':'Zatrzymaj muzykę',
-    'menu.loadVersion':'Wczytaj wersję','menu.madeWith':'v1.4.0 — stworzone z Claude',
+    'menu.loadVersion':'Wczytaj wersję','menu.madeWith':'v1.5.5 — stworzone z Claude',
     'hud.rebellion':'Rebelia','hud.empire':'Imperium',
     'hud.pause':'|| Pauza','hud.mute.on':'♪ Wł','hud.mute.off':'♪ Wył',
     'hud.music.on':'♫ Muzyka','hud.music.off':'♫ Wył',
@@ -680,6 +907,20 @@ const LANGS={
     'cfg.boost.enabled':'Dopalacz aktywny',
     'cfg.boost.energy':'Maks. energia','cfg.boost.cost':'Koszt/dopalacz',
     'cfg.boost.regen':'Regen/s','cfg.boost.force':'Siła',
+    'cfg.brain.label':'Brain','cfg.brain.reset':'Reset',
+    'brain.preset.label':'— Wczytaj preset —','brain.on':'Brain Wł','brain.off':'Brain Wył',
+    'brain.apply':'▶ Zastosuj + Nowa symulacja','brain.reset':'Resetuj','brain.docs':'? Dok',
+    'stats.nodata':'Brak danych — uruchom symulację.','stats.reset':'Reset',
+    'hud.debug':'⊕ Debug','hud.debug.on':'⊕ Debug WŁ',
+    'hud.pause.btn':'|| Pauza','hud.resume':'▶ Wznów','hud.exit':'✕ Wyjdź',
+    'hud.speed':'Tempo',
+    'step.back10':'◀◀ -10','step.back1':'◀ -1','step.fwd1':'+1 ▶','step.fwd10':'+10 ▶▶',
+    'brain.editor.title':'⚡ Edytor Brain',
+    'brain.ship.xwing':'X-Wing — Rebelia','brain.ship.awing':'A-Wing — Rebelia',
+    'brain.ship.tie':'TIE Fighter — Imperium','brain.ship.tiein':'TIE Bomber — Imperium',
+    'stats.title':'⚡ Statystyki',
+    'stats.shots':'Strzały','stats.hitrate':'Celność','stats.fsrate':'1. strzał',
+    'stats.kills':'Kills','stats.deaths':'Zgony','stats.killtime':'Ø Czas kill','stats.boosts':'Dopalacze',
     'cfg.ship.xwing':'X-Wing — Rebelia','cfg.ship.awing':'A-Wing — Rebelia',
     'cfg.ship.tie':'TIE Fighter — Imperium','cfg.ship.tiein':'TIE Bomber — Imperium',
     'cfg.formation.label':'Formacja',
@@ -688,7 +929,7 @@ const LANGS={
     'cfg.dmg':'Obrażenia','cfg.turnRate':'Zwrotność','cfg.count':'Liczba',
     'cfg.btn.reset':'Resetuj','cfg.btn.resetAll':'Resetuj wszystko','cfg.btn.save':'Zapisz','cfg.btn.back':'Wróć',
     'cfg.saved':'✓ Zapisano','cfg.on':'Wł','cfg.off':'Wył',
-    'rm.title':'Gwiezdne Wojny','rm.sub':'Pikselowy Symulator Bitwy — v1.4.0',
+    'rm.title':'Gwiezdne Wojny','rm.sub':'Pikselowy Symulator Bitwy — v1.5.5',
     'rm.sec.what':'Co to jest?',
     'rm.what.p1':'Autonomiczna pikselowa bitwa kosmiczna między Rebelią a Imperium.',
     'rm.what.p2':'Zbudowane w jednym pliku HTML.',
@@ -698,10 +939,11 @@ const LANGS={
     'rm.team.rebel':'Rebelia','rm.team.empire':'Imperium',
     'rm.role.xwing':'Wszechstronny, 4 działa','rm.role.awing':'Przechwytywacz, szybki',
     'rm.role.tie':'Mięso armatnie, rój','rm.role.tiein':'Ciężki, podwójny strzał',
-    'lv.title':'Wczytaj wersję','lv.current.tag':'v1.4.0 — aktualna',
+    'lv.title':'Wczytaj wersję','lv.current.tag':'v1.5.5 — aktualna',
     'lv.current.desc':'System Dopalacza · Cząsteczki · Poświata',
     'lv.current.btn':'Aktywna','lv.load':'Wczytaj',
     'lv.v12.tag':'v1.2','lv.v12.desc':'Wielojęzyczność (EN/DE/PL) · Prędkość lasera · Link do changelogu GitHub',
+    'lv.v14.desc':'System Dopalacza · Cząsteczki · Poświata',
     'lv.v10.desc':'Pierwsze wydanie · Wszystkie funkcje',
     'lv.hint':'Starsze wersje są zarchiwizowane w folderze versions/ w repozytorium. Wczytanie otwiera wersję w nowej karcie.',
     'vh.title':'⚠ Nie można otworzyć wersji',
@@ -718,6 +960,9 @@ function applyLang(){
   const mb=document.getElementById('muteBtn');
   if(mb)mb.textContent=muted?t('hud.mute.off'):t('hud.mute.on');
   document.querySelectorAll('.lang-pill').forEach(p=>{p.classList.toggle('active',p.dataset.lang===currentLang);});
+  // refresh brain panel status
+  const status=document.getElementById('bp-brain-status');
+  if(status) status.textContent = BRAINS[bpCurrentShip]?.enabled ? t('brain.on') : t('brain.off');
   try{localStorage.setItem('swLang',currentLang);}catch(e){}
 }
 function setLang(lang){currentLang=lang;applyLang();if(window._crawlSetLang&&!document.getElementById('crawl-screen').classList.contains('hidden'))window._crawlSetLang(lang);}
@@ -758,8 +1003,13 @@ function resizeCanvases(){
   partCv.width=W;partCv.height=H;partCv.style.width=W+'px';partCv.style.height=H+'px';
 }
 function unlockAppSize(){
+  const panel = document.getElementById('brainPanel');
+  const panelVisible = panel && panel.classList.contains('visible');
+  const panelCollapsed = panel && panel.classList.contains('collapsed');
+  const panelW = panelVisible ? (panelCollapsed ? 28 : bpPanelWidth) : 0;
   const app=document.getElementById('app');
-  app.style.width=window.innerWidth+'px';app.style.height=window.innerHeight+'px';
+  app.style.width=(window.innerWidth-panelW)+'px';
+  app.style.height=window.innerHeight+'px';
   app.style.minWidth='';app.style.minHeight='';
 }
 (function(){const app=document.getElementById('app');app.style.width=window.innerWidth+'px';app.style.height=window.innerHeight+'px';})();
@@ -819,13 +1069,36 @@ function toggleMenuMusic(){toggleGameMusic();}
 const SDATA={
   awing:{w:13,h:16,ox:9,oy:8,sprOff:0,b64:'iVBORw0KGgoAAAANSUhEUgAAAA0AAAAQCAYAAADNo/U5AAACK0lEQVR4nH2SQUhUcRDGZ+b/f+u+99Zc1yRNrSg66KFLUAR1Koju7qlDHbpGtw5FCV0qoltkEVEHbxGhHYog6hAGGWRaBlGKuppSbs91X7vu+89Mp0B2q+/2Db9hBr4PoUHpWfKy3SKKoKIg300js0Fe2OM8vyf5443XoWC31uo52miSeN4i1gqANgEiVRfp/r09m+uXsH7w/OlD/jgxRieP96s4luyOI0CoNZFy0HgJN60b26mLcwuIzOqUISqVzcz7R3jp4ukUgJV8X18KAAAm344oa01ZY3VJUSZGH/NLA3wKLBeaQvkSNnMh8HnOD2WQDIPfWcJcd5/LGYuBj5A4pP7VJXc0WqWDHCJRSs+4RTrhZ5wgYDFhuAtE2NrRy3eKs9hlFMqCcIsyOkzNtH1XFyxMzztENmR9eVdbwKqAzjhHJMbCHguSI8vtRLyILWDVaSmKIdfWBpW1FayUfmDEiFlD2GtSbANrcF9mm7a2BDYdpuXszBSmy7EO5HbC56lPBjCjH9IxxqhwNV7HiJoIRx7c5MOHDqCxRkSYxsYm4dmN+7r25BV0g9KxwNcVZaiK6LUE8IXtkA0JNTGA52q/frKrldy6qlZVuKqs5wbOK0CK/5YrAAAM3RuUodtXpFh4o6tL4w4grWDaOZ/P/6eDFJbHR4d1efq1Xr98QQCya/+GAQDIU0q3aSX6qknlm/rZ3QrQmtRjDT96wZYocdpsyCNhp5osUz3zG9+pF2hQ0P8cAAAAAElFTkSuQmCC'},
   tie:{w:13,h:16,ox:7,oy:8,sprOff:0,b64:'iVBORw0KGgoAAAANSUhEUgAAAA0AAAAQCAYAAADNo/U5AAAB7ElEQVR4nH2QQWsTYRCG35lvkzVJa5PaJmlpadM0tlQpKBSitJYKXnpQgvRiwZuIeFUEQcFf4W/wJ3jw7KGkPYjV4qUgGGowWbtp0s3uN+Oh4CXbznGGZ56Zl7L564H3+8ABWMDMJBZKIOMMgdloGHgMTkYg4nx+BksL466ztl41jrPKNgoZCu30utTtdTWRSNHs1JR4/l81zEb6Ef1pt/Bl/1tA8wvL9z2/kyGJQmsNtZqHH/KTFfKPWyKiHHQ9Gc4WHrJKEsaxo6PFNOLqUrakmdxVBVyNm3Nc87Rzgtt3qlIsLcUuHYCGxhf15Yvn+PmrwfeuLdr3xcTpxZCT7d9dvyWPalX7feezNATcefzMAZnYM8+Y1FS4X/8UEhuZLK8okFY3M6NAUs41qY0iN5WCalIL05PKiRxyrgtw8lwRYEbCB9tP9fDHjgAp/Thfkjflyrkp/i+itN5Y3dTh0bI6mQkxxg0vDgKAapcmxgp2s1az0Ukb1gaJgd/jbO0T39TruyCThtqBxOMgY8eyV3S5NkfFfBHv3r6KIGESgABgbG0RbT95rXOlWRCgwpY6xz30NVLrt3VtY4N3975CSdDvBajX97R5dESULSxa32uSDTw6M4kCTAAwMl6BcRJoNQ4ACDKXZ2Tl5rT7D5V20c99oNuQAAAAAElFTkSuQmCC'},
-  tiein:{w:10,h:16,ox:6,oy:8,sprOff:0,b64:'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAQCAYAAAAvf+5AAAABwUlEQVR4nG2RT2tTURDFz73v3ST2jwmxyQsxok2KBtviQmtRdKVSpDsr3eULWFy5UerCRSELEb+Hfg5R6NIQNWKCbZOIxmAjiUneu3NcqDGBHhgYmB9zDjMKf5XJXrbUVDbwlRLSmIhYWica6YXL5fLQ3Sjct6lkSlmxFBkwbI6x9rnG47MxfXjYYaPZ6HtnIgLAJYCxcgiECCgCEAAWgFIYydjZ+CnV//VTpTOn6bphfnr3WgAxAOCOMma8mZiX7S2eP+e3vred6ZkINgffdLFawQR4UG/0rlxdw61rZ03Ki/HVm48ovqiOHPWocaJ2t/QepWoHT56/ZPPHAE/X1wRHa5oPtp/xbmGL0FMcn+hJkHCcAF4ijpPzeZpQ0h4BhiR/YZWddgvpuEG9VqEfdBUwNZwAHRPh8lIOG+uXuLKc4+OdooZYAAMzYZrNXowurtyUzcI9uX7jjq192LU7Dx/Jv2VjB3flRHqBiYSnB8M+rSX2KqUA6IVGoIL2CdGAAUD58zFHA74CQMBqtbR6W7K5eWpFrQm4YhetL21JpuZ0t9uTvYN9Nvab/63n0nlSwSpoKK2V42gtPoOv9bchAPwNFSzDVjJrPTMAAAAASUVORK5CYII='},
+  tiein:{w:10,h:16,ox:6,oy:8,sprOff:0,b64:'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAQCAYAAAAvf+5AAAABJUlEQVR42oWRv0rDUBjFz/1y0+TGmtZ/2LSDxWggUhRJcVJcdRF0cnBwdXNy9AVEfABx8Dn0JUSQgnRz0QeohuTez6EqDZp6lm84Pw7n8AEjstXMG0ApaGIAVN5RLssAlqlOLTIAMxusZ78ZQRogDUgzvGDANiWJTtZaSszZ+QV/wT+iIpjaUbQsnno9vlpLxKgji6DKTw632a16Yu/gttisEE+1QZwkjlIeHTkffHp3T6W7hazzzv4xh2HcGdMREAam3QpMv//8MAa00rjbpTicJsDGGNCxV6M2b22sALCodAwAJJu7utloclQjXN5cy5IplM8FHfYbEQOO+ffXQ4gyqsxnJR21ATQDOQMsJ/16/mdH11/QnnIhpG2kEPnry6P69j4BOpJRPTN79/8AAAAASUVORK5CYII='},
   xwing:{w:12,h:16,ox:5.5,oy:8,sprOff:0,b64:'iVBORw0KGgoAAAANSUhEUgAAAAwAAAAQCAYAAAAiYZ4HAAABbUlEQVR42o1Rvy9DYRS9772+16992tI0peVRUWk0dCBq6CJWhs4iQSJiMCHxF9j8BRKrGIhIGPxImjR5SaXKIgixSBMWDATte993bIL0h7Pd5J5zzzmXqAIcrJVTPchaCFeFY1znD/iZm0FxtfHizanl8cet6iR3yN6UFB7tSSHj9gjFEUaDPyZ+Xf85iPeXsvAGNY2pYChJ3H6V3p7pP9AuH29zqLsWCMet7t6UraiNJSOaFIpu2DUJBXOfJ/qHRT67w4mYRaSDtGDtxop3p9jeWAORSzzd53Hu8uJwa/3bnvyXYJonQtcZJKcPnEBlGdQcaKqsvrC0CI0ZyJt7IGJ8UXFCdXfUCC95eDQ2iNnpKQSNBLrCkXRN/3MzE2J1ZRmKoorR9Hj9Wp2s/WNhfpK3x4ZgOj0V2/kVmktCzhYeJNsCjXX2gWT9U3UZpYrqA8kRXBQyyGV2hUNrAUl+XJwcIRxJ1rfma45X/fAXiEORYL4EnvYAAAAASUVORK5CYII='},
 };
 const IMGS={};let sprLoaded=0;
-function loadSprites(cb){for(const[k,v] of Object.entries(SDATA)){const img=new Image();img.onload=()=>{IMGS[k]=img;sprLoaded++;if(sprLoaded===4)cb();};img.src='data:image/png;base64,'+v.b64;}}
+function loadSprites(cb){
+  const keys=Object.keys(SDATA);
+  const total=keys.length;
+  function done(){ sprLoaded++; if(sprLoaded>=total) cb(); }
+  for(const[k,v] of Object.entries(SDATA)){
+    const img=new Image();
+    img.onload=()=>{IMGS[k]=img;done();};
+    img.onerror=()=>{console.warn('Sprite failed:',k);done();};
+    img.src='data:image/png;base64,'+v.b64;
+  }
+}
 const SCALE=2;
-function drawSprite(type,cx,cy,angle){const d=SDATA[type],img=IMGS[type];if(!img)return;ctx.save();ctx.translate(Math.round(cx),Math.round(cy));ctx.rotate(angle+d.sprOff);ctx.drawImage(img,-d.ox*SCALE,-d.oy*SCALE,d.w*SCALE,d.h*SCALE);ctx.restore();}
+function drawSprite(type,cx,cy,angle){
+  const d=SDATA[type],img=IMGS[type];
+  if(!img){
+    // Fallback: colored dot so ship is visible
+    ctx.save();
+    ctx.fillStyle=STATIC[type]?.laser||'#ffffff';
+    ctx.beginPath();
+    ctx.arc(Math.round(cx),Math.round(cy),6,0,Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+    return;
+  }
+  ctx.save();ctx.translate(Math.round(cx),Math.round(cy));ctx.rotate(angle+d.sprOff);ctx.drawImage(img,-d.ox*SCALE,-d.oy*SCALE,d.w*SCALE,d.h*SCALE);ctx.restore();
+}
 function drawSpriteWrapped(type,cx,cy,angle){
   const d=SDATA[type],m=d.w*SCALE;
   drawSprite(type,cx,cy,angle);
@@ -1030,7 +1303,7 @@ function loadSlidersFromCfg(){
     for(const key of ['hp','spd','cd','dmg','turnRate','count','ttl','laserSpd','boostEnergy','boostCost','boostRegen','boostForce']){
       const el=document.querySelector(`input[data-ship="${ship}"][data-key="${key}"]`);
       const vEl=document.getElementById(`v-${ship}-${key}`);
-      if(el&&vEl){el.value=CFG[ship][key];const dec=key==='ttl'?1:key==='spd'||key==='turnRate'||key==='boostForce'?1:0;vEl.textContent=parseFloat(CFG[ship][key]).toFixed(dec);}
+      if(el&&vEl){el.value=CFG[ship][key];const dec=key==='ttl'?1:key==='spd'||key==='boostForce'?1:key==='turnRate'?4:0;vEl.textContent=parseFloat(CFG[ship][key]).toFixed(dec);}
     }
   }
   const brEl=document.getElementById('sl-breakRange');if(brEl){brEl.value=CFG.breakRange;document.getElementById('v-breakRange').textContent=CFG.breakRange+'%';}
@@ -1042,7 +1315,7 @@ function cfgUpdate(el){
   const ship=el.dataset.ship,key=el.dataset.key,val=parseFloat(el.value);
   CFG[ship][key]=val;if(key==='hp')CFG[ship].maxHp=val;
   const vEl=document.getElementById(`v-${ship}-${key}`);
-  if(vEl){const dec=key==='ttl'?1:key==='spd'||key==='turnRate'||key==='boostForce'?1:0;vEl.textContent=val.toFixed(dec);}
+  if(vEl){const dec=key==='ttl'?1:key==='spd'||key==='boostForce'?1:key==='turnRate'?4:0;vEl.textContent=val.toFixed(dec);}
   markUnsaved();
 }
 
@@ -1065,8 +1338,8 @@ function getDist2(a,b){if(CFG.wrapWorld){let dx=Math.abs(a.x-b.x),dy=Math.abs(a.
 function getAngleTo(f,t){if(CFG.wrapWorld){let dx=t.x-f.x,dy=t.y-f.y;if(Math.abs(dx)>W/2)dx=dx>0?dx-W:dx+W;if(Math.abs(dy)>H/2)dy=dy>0?dy-H:dy+H;return Math.atan2(dy,dx);}return Math.atan2(t.y-f.y,t.x-f.x);}
 
 function showScreen(id){['menuScreen','configScreen','pauseScreen','loadScreen','readmeScreen'].forEach(s=>document.getElementById(s).classList.add('hidden'));if(id)document.getElementById(id).classList.remove('hidden');}
-function showMenu(){stopGame();unlockAppSize();showScreen('menuScreen');const btn=document.getElementById('musicBtn');if(btn)btn.setAttribute('data-i18n','menu.playMusic'),btn.textContent=t('menu.playMusic');document.getElementById('hud').classList.add('hidden');document.getElementById('legend').classList.add('hidden');ctx.clearRect(0,0,W,H);partCtx.clearRect(0,0,W,H);if(!menuAnimId)menuStarLoop();}
-function showConfig(){showScreen('configScreen');loadSlidersFromCfg();}
+function showMenu(){stopGame();unlockAppSize();showScreen('menuScreen');const btn=document.getElementById('musicBtn');if(btn)btn.setAttribute('data-i18n','menu.playMusic'),btn.textContent=t('menu.playMusic');document.getElementById('hud').classList.add('hidden');document.getElementById('legend').classList.add('hidden');ctx.clearRect(0,0,W,H);partCtx.clearRect(0,0,W,H);bpHide();if(!menuAnimId)menuStarLoop();}
+function showConfig(){showScreen('configScreen');loadSlidersFromCfg();loadBrainUI();}
 function showReadme(){showScreen('readmeScreen');}
 function loadVersion(){showScreen('loadScreen');}
 function openVersion(url){if(window.location.protocol==='file:'){showVersionHint(url);return;}const w=window.open(url,'_blank');if(!w||w.closed)showVersionHint(url);}
@@ -1092,10 +1365,11 @@ function makeShip(type,x,y,angle){
     formationMode:false,formationGroupId:null,formationIndex:0,breakDelay:0,wasHit:false,
     // boost state
     boostEnergy:tp.boostEnergy,
-    boostCooldown:0,  // frames until next boost allowed
-    boostActive:false,boostDir:null,
-    // AI boost state
-    aiBoostCooldown:0, // prevents boost spam in AI
+    boostCooldown:0,boostActive:false,boostDir:null,
+    aiBoostCooldown:0,
+    // stats
+    _spawnTime: performance.now(),
+    _shotFired: false,
   };
 }
 
@@ -1123,6 +1397,7 @@ function spawnGroup(type,count,formationName,side,verticalZone,groupId){
 
 function spawnAll(){
   ships=[];lasers=[];explosions=[];particles=[];roundOver=false;respawnCounter=0;
+  statOnSimStart();
   let gid=0;
   if(CFG.xwing.count>0)ships.push(...spawnGroup('xwing',CFG.xwing.count,CFG.xwing.formation,'left','top',gid++));
   if(CFG.awing.count>0)ships.push(...spawnGroup('awing',CFG.awing.count,CFG.awing.formation,'left','bottom',gid++));
@@ -1140,6 +1415,7 @@ function applyBoost(s,direction){
   s.boostEnergy-=tp.boostCost;
   s.boostCooldown=BOOST_COOLDOWN_FRAMES;
   s.boostActive=true;s.boostDir=direction;
+  statOnBoost(s.type);
   const force=tp.boostForce;
   let bx,by;
   if(direction==='forward'){bx=Math.cos(s.angle)*force;by=Math.sin(s.angle)*force;}
@@ -1225,6 +1501,43 @@ function moveBoid(s){
   // tick boost energy/cooldown
   tickBoost(s);
 
+  // ── BRAIN override ────────────────────────────────────────────────────────
+  if(BRAINS[s.type]?.enabled && _brainFns[s.type]){
+    const ctx2 = buildBrainContext(s);
+    const result = runBrain(s, ctx2);
+    if(result !== null){
+      // apply steer
+      const targetAngle = s.angle + result.steer;
+      s.angle += angleDiff(targetAngle, s.angle) * tp.turnRate;
+      s.vx += Math.cos(s.angle)*tp.spd*0.06;
+      s.vy += Math.sin(s.angle)*tp.spd*0.06;
+      s.vx *= 0.96; s.vy *= 0.96; s.x += s.vx; s.y += s.vy;
+      wrapOrBounce(s);
+      // apply shoot
+      if(result.shoot && s.cd<=0 && !s.kickTimer){
+        const foeList=ships.filter(o=>o.team!==s.team);
+        if(foeList.length){
+          const tgt=foeList.reduce((a,b)=>getDist2(a,s)<getDist2(b,s)?a:b);
+          const aTgt=getAngleTo(s,tgt);
+          const lspd=tp.laserSpd||12, shots=s.type==='tiein'?2:1, ttlF=Math.round((tp.ttl||2)*60);
+          s.cd=tp.cd+Math.floor(rand(-8,8));
+          playLaser(s.team);
+          for(let i=0;i<shots;i++){const sp=shots>1?(i===0?-0.06:0.06):0,a=aTgt+sp;const _isFirst=i===0&&!s._shotFired;lasers.push({x:s.x,y:s.y,vx:Math.cos(a)*lspd,vy:Math.sin(a)*lspd,angle:a,team:s.team,color:tp.laser,dmg:tp.dmg,life:ttlF,ownerType:s.type,_isFirstShot:_isFirst});statOnShot(s.type, !s._shotFired); if(i===0) s._shotFired=true;}
+        }
+      } else if(s.cd>0) s.cd--;
+      // apply boost
+      if(result.boost && CFG.boostEnabled) applyBoost(s, result.boost);
+      // store debug info
+      s._debugSteer = s.angle;
+      s._debugBoost = result.boost;
+      if(ctx2.foe){ s._debugFoeX=ctx2.foe.x; s._debugFoeY=ctx2.foe.y; }
+      else { s._debugFoeX=undefined; }
+      return;
+    }
+  }
+  // clear debug if brain not active
+  s._debugBoost = false; s._debugFoeX = undefined;
+
   // AI boost decision (only when not in formation or formation broken)
   if(!s.formationMode){
     const boostDir=aiDecideBoost(s);
@@ -1285,12 +1598,12 @@ function shoot(s){
     const fm=tp.fireMode||'atwill';if(fm==='hold')return;if(fm==='returnfire'&&!s.wasHit)return;
     if(Math.abs(angleDiff(aTgt,s.angle))>Math.PI*0.6)return;
     s.cd=tp.cd+Math.floor(rand(-8,8));playLaser(s.team);
-    for(let i=0;i<shots;i++){const sp=shots>1?(i===0?-0.06:0.06):0;lasers.push({x:s.x,y:s.y,vx:Math.cos(aTgt+sp)*lspd,vy:Math.sin(aTgt+sp)*lspd,angle:aTgt+sp,team:s.team,color:tp.laser,dmg:tp.dmg,life:ttlF});}
+    for(let i=0;i<shots;i++){const sp=shots>1?(i===0?-0.06:0.06):0;const _isFirst2=i===0&&!s._shotFired;lasers.push({x:s.x,y:s.y,vx:Math.cos(aTgt+sp)*lspd,vy:Math.sin(aTgt+sp)*lspd,angle:aTgt+sp,team:s.team,color:tp.laser,dmg:tp.dmg,life:ttlF,ownerType:s.type,_isFirstShot:_isFirst2});statOnShot(s.type, !s._shotFired); if(i===0) s._shotFired=true;}
     return;
   }
   if(Math.abs(angleDiff(aTgt,s.angle))>0.26)return;
   s.cd=tp.cd+Math.floor(rand(-8,8));playLaser(s.team);
-  for(let i=0;i<shots;i++){const sp=shots>1?(i===0?-0.06:0.06):0,a=s.angle+sp;lasers.push({x:s.x,y:s.y,vx:Math.cos(a)*lspd,vy:Math.sin(a)*lspd,angle:a,team:s.team,color:tp.laser,dmg:tp.dmg,life:ttlF});}
+  for(let i=0;i<shots;i++){const sp=shots>1?(i===0?-0.06:0.06):0,a=s.angle+sp;const _isFirst3=i===0&&!s._shotFired;lasers.push({x:s.x,y:s.y,vx:Math.cos(a)*lspd,vy:Math.sin(a)*lspd,angle:a,team:s.team,color:tp.laser,dmg:tp.dmg,life:ttlF,ownerType:s.type,_isFirstShot:_isFirst3});statOnShot(s.type, !s._shotFired); if(i===0) s._shotFired=true;}
 }
 
 function drawHP(s){
@@ -1337,7 +1650,38 @@ function checkRound(){
 const HIT=10;
 function loop(){
   if(!gameRunning||paused)return;
-  if(respawnCounter>0){respawnCounter--;if(respawnCounter===0)spawnAll();}
+
+  // respawn counter always runs at full speed
+  if(respawnCounter>0){
+    respawnCounter--;
+    if(respawnCounter===0) spawnAll();
+    drawStars();
+    updateDrawParticles();
+    animId=requestAnimationFrame(loop);
+    return;
+  }
+
+  // determine effective speed:
+  // debug mode uses gameSpeed (0–1), otherwise use globalGameSpeed (0.1–10)
+  const effectiveSpeed = debugMode ? gameSpeed : globalGameSpeed;
+
+  if(effectiveSpeed === 0){ animId=requestAnimationFrame(loop); return; }
+  if(effectiveSpeed < 1.0){
+    _speedAccum += effectiveSpeed;
+    if(_speedAccum < 1.0){ animId=requestAnimationFrame(loop); return; }
+    _speedAccum -= 1.0;
+  } else if(effectiveSpeed > 1.0){
+    // run multiple ticks per frame for speeds > 1
+    const ticks = Math.floor(effectiveSpeed);
+    const remainder = effectiveSpeed - ticks;
+    _globalSpeedAccum += remainder;
+    const extra = _globalSpeedAccum >= 1.0 ? 1 : 0;
+    if(extra) _globalSpeedAccum -= 1.0;
+    // run extra ticks (skip draw for them)
+    for(let i=0;i<ticks-1+extra;i++){
+      tickOnce();
+    }
+  }
   drawStars();ctx.clearRect(0,0,W,H);
   const ra=ships.filter(s=>s.team==='rebel').length;
   const ea=ships.filter(s=>s.team==='empire').length;
@@ -1352,7 +1696,7 @@ function loop(){
         if(s.team===l.team)continue;
         let dx=Math.abs(s.x-l.x),dy=Math.abs(s.y-l.y);
         if(CFG.wrapWorld){if(dx>W/2)dx=W-dx;if(dy>H/2)dy=H-dy;}
-        if(dx<HIT&&dy<HIT){s.hp-=l.dmg;l.life=0;onShipHit(s);if(s.hp<=0){addExplosion(s.x,s.y);ships=ships.filter(o=>o!==s);}break;}
+        if(dx<HIT&&dy<HIT){s.hp-=l.dmg;if(l.ownerType)statOnHit(l.ownerType,l);l.life=0;onShipHit(s);if(s.hp<=0){addExplosion(s.x,s.y);if(l.ownerType)statOnKill(l.ownerType);statOnDeath(s.type,s._spawnTime);ships=ships.filter(o=>o!==s);}break;}
       }
     }
     lasers=lasers.filter(l=>l.life>0);
@@ -1360,31 +1704,111 @@ function loop(){
   checkRound();
   explosions=explosions.filter(e=>e.life>0);
   for(const e of explosions){drawExplosion(e);e.life--;}
+  ctx.globalAlpha=1;
+  ctx.globalCompositeOperation='source-over';
   for(const s of ships){drawSpriteWrapped(s.type,s.x,s.y,s.angle);drawHP(s);}
+  drawDebug();
+  // always capture when debug on so step mode has history
+  if(debugMode){
+    // only capture if at present (not reviewing past)
+    if(stepCursor < 0 || stepCursor === stateBuffer.length - 1) captureState();
+  }
+  // update stats panel every ~60 frames
+  if(!window._statsFrameCount) window._statsFrameCount=0;
+  if(++window._statsFrameCount % 60 === 0) updateStatsPanel();
   // draw particles on particle canvas
   updateDrawParticles();
   animId=requestAnimationFrame(loop);
 }
 
-function calcGameSize(){W=window.innerWidth;H=window.innerHeight-54;if(W%2!==0)W--;if(H%2!==0)H--;}
+function calcGameSize(){
+  const panel = document.getElementById('brainPanel');
+  const panelVisible = panel && panel.classList.contains('visible');
+  const panelCollapsed = panel && panel.classList.contains('collapsed');
+  const panelW = panelVisible ? (panelCollapsed ? 28 : bpPanelWidth) : 0;
+  W = window.innerWidth - panelW;
+  H = window.innerHeight - 54;
+  if(W%2!==0) W--;
+  if(H%2!==0) H--;
+}
+
+function runCountdown(cb){
+  const el=document.getElementById('countdown');
+  const txt=document.getElementById('countdownText');
+  if(!el||!txt){cb();return;}
+  const steps=['3','2','1','FIGHT!'];
+  const colors=['#4fa3e0','#4fa3e0','#4fa3e0','#00cc44'];
+  const glows=[
+    '0 0 40px rgba(79,163,224,0.9),0 0 80px rgba(79,163,224,0.4)',
+    '0 0 40px rgba(79,163,224,0.9),0 0 80px rgba(79,163,224,0.4)',
+    '0 0 40px rgba(79,163,224,0.9),0 0 80px rgba(79,163,224,0.4)',
+    '0 0 40px rgba(0,204,68,0.9),0 0 80px rgba(0,204,68,0.4)',
+  ];
+  let i=0;
+  el.classList.remove('hidden');
+  function showStep(){
+    if(i>=steps.length){el.classList.add('hidden');cb();return;}
+    txt.textContent=steps[i];
+    txt.style.color=colors[i];
+    txt.style.textShadow=glows[i];
+    txt.style.transition='none';
+    txt.style.transform='scale(1.8)';
+    txt.style.opacity='0';
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      txt.style.transition='transform 0.22s cubic-bezier(.17,.67,.35,1.3),opacity 0.15s';
+      txt.style.transform='scale(1)';
+      txt.style.opacity='1';
+    }));
+    const dur=steps[i]==='FIGHT!'?700:850;
+    setTimeout(()=>{
+      txt.style.transition='transform 0.18s ease-in,opacity 0.18s';
+      txt.style.transform='scale(0.6)';
+      txt.style.opacity='0';
+      setTimeout(()=>{i++;showStep();},200);
+    },dur-200);
+  }
+  showStep();
+}
 
 function startGame(){
   try{getAudio();}catch(e){}
   calcGameSize();resizeCanvases();initStars();
   if(menuAnimId){cancelAnimationFrame(menuAnimId);menuAnimId=null;}
+  if(animId){cancelAnimationFrame(animId);animId=null;}
   xScore=0;tScore=0;
   document.getElementById('hudXS').textContent='0';
   document.getElementById('hudTS').textContent='0';
   showScreen(null);
   document.getElementById('hud').classList.remove('hidden');
   document.getElementById('legend').classList.remove('hidden');
-  gameRunning=true;paused=false;musicStop();updateMusicBtn();respawnCounter=0;particles=[];
-  spawnAll();
-  if(animId)cancelAnimationFrame(animId);
-  loop();
+  gameRunning=false;paused=false;musicStop();updateMusicBtn();respawnCounter=0;particles=[];
+  stateBuffer=[];stepCursor=-1;stepFrameCount=0;
+  _speedAccum=0;_globalSpeedAccum=0;
+  const sc=document.getElementById('speedControl');if(sc)sc.style.display='none';
+  const stc=document.getElementById('stepControl');if(stc)stc.style.display='none';
+  // show global speed slider only when debug is off
+  const gsc=document.getElementById('globalSpeedControl');
+  if(gsc) gsc.style.display=debugMode?'none':'flex';
+  const pb=document.getElementById('pauseBtn');if(pb)pb.textContent=t('hud.pause.btn');
+  updateDebugBtn();
+  // draw stars during countdown
+  (function starLoop(){ if(gameRunning)return; drawStars(); requestAnimationFrame(starLoop); })();
+  runCountdown(()=>{
+    spawnAll();
+    gameRunning=true;
+    loop();
+    if(debugMode) setTimeout(()=>bpShow(), 50);
+  });
 }
 function stopGame(){gameRunning=false;if(animId){cancelAnimationFrame(animId);animId=null;}}
-function pauseGame(){if(!gameRunning)return;paused=true;showScreen('pauseScreen');}
+function togglePause(){
+  if(!gameRunning) return;
+  paused = !paused;
+  const btn = document.getElementById('pauseBtn');
+  if(btn) btn.textContent = paused ? '▶ Resume' : '|| Pause';
+  if(!paused) loop();
+}
+function pauseGame(){if(!gameRunning)return;paused=true;const btn=document.getElementById('pauseBtn');if(btn)btn.textContent='▶ Resume';}
 function resumeGame(){paused=false;showScreen(null);loop();}
 
 window.addEventListener('resize',()=>{
@@ -1409,11 +1833,32 @@ function skipCrawl(){const el=document.getElementById('crawl-screen');el.classLi
   let starRaf;
   function drawCrawlStars(){sCtx.clearRect(0,0,sCv.width,sCv.height);for(const s of stars){s.a+=s.spd*s.dir;if(s.a>0.95){s.a=0.95;s.dir=-1;}if(s.a<0.18){s.a=0.18;s.dir=1;}sCtx.beginPath();sCtx.arc(s.x*sCv.width,s.y*sCv.height,s.r,0,Math.PI*2);sCtx.fillStyle=`rgba(255,255,255,${s.a.toFixed(2)})`;sCtx.fill();}starRaf=requestAnimationFrame(drawCrawlStars);}
   drawCrawlStars();
-  const START_DELAY=9.5,SCROLL_SPEED=45,VANISHING_Y=0.28,TEXT_COLOR='#FFE81F',FONT_NORMAL="'News Cycle','Arial Narrow',Arial,sans-serif";
+  const START_DELAY=9.5,SCROLL_SPEED=61,VANISHING_Y=0.28,TEXT_COLOR='#FFE81F',FONT_NORMAL="'News Cycle','Arial Narrow',Arial,sans-serif";
   const TEXTS={
-    en:{intro:'A long time ago, in a galaxy far, far away…',episode:'Episode IV',title:'A NEW HOPE',p1:'It is a period of civil war. Rebel spaceships, striking from a hidden base, have won their first victory against the evil Galactic Empire.',p2:"During the battle, Rebel spies managed to steal secret plans to the Empire's ultimate weapon, the DEATH STAR, an armored space station with enough power to destroy an entire planet.",p3:"Pursued by the Empire's sinister agents, Princess Leia races home aboard her starship, custodian of the stolen plans that can save her people and restore freedom to the galaxy…"},
-    de:{intro:'Es war einmal vor langer Zeit, in einer weit, weit entfernten Galaxis…',episode:'Episode IV',title:'EINE NEUE HOFFNUNG',p1:'Es ist eine Zeit des Bürgerkriegs. Rebellenschiffe haben ihren ersten Sieg gegen das böse Galaktische Imperium errungen.',p2:'Während des Kampfes gelang es Rebellenspionen, die geheimen Pläne der ultimativen Waffe des Imperiums zu stehlen – dem TODESSTERN.',p3:'Verfolgt von den finsteren Agenten des Imperiums, flieht Prinzessin Leia an Bord ihres Raumschiffes mit den gestohlenen Plänen…'},
-    pl:{intro:'Dawno, dawno temu, w odległej galaktyce…',episode:'Epizod IV',title:'NOWA NADZIEJA',p1:'Trwa okres wojny domowej. Statki rebeliantów odniosły pierwsze zwycięstwo nad złym Galaktycznym Imperium.',p2:'Szpiegom Rebelii udało się wykraść tajne plany GWIAZDY ŚMIERCI, stacji zdolnej zniszczyć całą planetę.',p3:'Ścigana przez agentów Imperium, Księżniczka Leia pędzi do domu ze skradzionymi planami…'},
+    en:{
+      intro:'Somewhere in the Outer Rim, in a hidden Rebel research bay…',
+      episode:'COMBAT SIMULATION DIVISION',
+      title:'OPERATION: IRON WING',
+      p1:'The Galactic Empire tightens its grip. Across the Outer Rim, Imperial fleets crush Rebel cells one by one. Outgunned and outnumbered, the Alliance desperately seeks any advantage it can find.',
+      p2:'Deep within a hidden asteroid base, a small team of Rebel engineers has been tasked with a critical mission: study Imperial combat tactics, push the limits of Rebel starfighter technology, and develop the flight algorithms that could turn the tide of war.',
+      p3:'You are one of them. Armed with data cores, a battle simulator, and the freedom to reprogram every system aboard an X-Wing or A-Wing — you run scenario after scenario, refining AI behaviour, optimising boost sequences, and testing formation tactics against endless waves of simulated TIE Fighters. The Empire does not rest. Neither do you.',
+    },
+    de:{
+      intro:'Irgendwo am Rand der Galaxis, in einem geheimen Forschungsdock der Rebellen…',
+      episode:'KAMPFSIMULATIONSABTEILUNG',
+      title:'OPERATION: EISERNER FLÜGEL',
+      p1:'Das Galaktische Imperium dehnt seine Macht unaufhaltsam aus. Am Rand der Galaxis werden Rebellenzellen eine nach der anderen zerschlagen. Unterlegen an Zahl und Feuerkraft, sucht die Allianz fieberhaft nach jedem Vorteil, den sie bekommen kann.',
+      p2:'Tief in einem verborgenen Asteroiden-Stützpunkt arbeitet ein kleines Team rebellischer Ingenieure an einer entscheidenden Aufgabe: imperiale Kampftaktiken analysieren, die Grenzen der Jägertechnik verschieben und Flugalgorithmen entwickeln, die den Krieg noch wenden könnten.',
+      p3:'Du bist einer von ihnen. Ausgestattet mit Datenspeichern, einem Kampfsimulator und der Freiheit, jeden Systemparameter eines X-Wings oder A-Wings neu zu programmieren — läufst du Szenario für Szenario, verfeinerst das Verhalten deiner KI, optimierst Schubsequenzen und testest Formationstaktiken gegen endlose Wellen simulierter TIE-Jäger. Das Imperium schläft nicht. Du auch nicht.',
+    },
+    pl:{
+      intro:'Gdzieś na rubieżach galaktyki, w ukrytej bazie badawczej Rebelii…',
+      episode:'WYDZIAŁ SYMULACJI BOJOWEJ',
+      title:'OPERACJA: ŻELAZNE SKRZYDŁO',
+      p1:'Galaktyczne Imperium rozszerza swoje panowanie bez opamiętania. Na rubieżach galaktyki imperialne floty rozbijają komórki Rebelii jedną po drugiej. Ustępując siłą i liczebnością, Sojusz gorączkowo szuka każdej możliwej przewagi.',
+      p2:'Głęboko w ukrytej bazie na asteroidzie mały zespół inżynierów Rebelii otrzymał kluczową misję: analizować taktykę bojową Imperium, przesuwać granice technologii myśliwców i opracowywać algorytmy lotu, które mogą odmienić losy wojny.',
+      p3:'Jesteś jednym z nich. Wyposażony w rdzenie danych, symulator bitew i swobodę przeprogramowania każdego parametru X-Winga lub A-Winga — przeprowadzasz scenariusz za scenariuszem, doskonaląc zachowanie AI, optymalizując sekwencje dopalacza i testując taktyki formacji przeciwko niekończącym się falom symulowanych myśliwców TIE. Imperium nie śpi. Ty też nie.',
+    },
   };
   try{const _sl=localStorage.getItem('swLang');if(_sl&&TEXTS[_sl])currentLang=_sl;}catch(e){}
   function getCrawlLang(){return(typeof currentLang!=='undefined'&&TEXTS[currentLang])?currentLang:'en';}
@@ -1438,13 +1883,918 @@ function skipCrawl(){const el=document.getElementById('crawl-screen');el.classLi
   window._crawlSetLang=function(lang){LINES=makeLines(lang);updateIntroText();buildOffscreen();scrolled=0;running=false;startTs=null;lastTs=null;crawlStopped=false;window._crawlMusicStarted=false;cancelAnimationFrame(crawlRaf);crawlRaf=requestAnimationFrame(render);};
 })();
 
+// ── BRAIN SYSTEM ──────────────────────────────────────────────────────────────
+// Storage: separate from CFG so Reset All doesn't wipe brains
+const BRAIN_KEY = 'swBrainV1';
+let BRAINS = { xwing:{enabled:false,script:''}, awing:{enabled:false,script:''}, tie:{enabled:false,script:''}, tiein:{enabled:false,script:''} };
+try{ const b=localStorage.getItem(BRAIN_KEY); if(b) BRAINS=Object.assign({},BRAINS,...[JSON.parse(b)]); }catch(e){}
+
+// Compiled brain functions cache — rebuilt when script changes
+const _brainFns = {};
+
+// Preset scripts
+const BRAIN_PRESETS = {
+  aggressive: `// Aggressive — rast direkt auf Feind, feuert immer
+if (!foe) return { steer: 0, shoot: false, boost: false };
+var s = angleDiff(foe.angleTo, self.angle);
+var shooting = Math.abs(s) < 0.3;
+var b = false;
+if (self.boostReady && foe.dist > 200) b = 'forward';
+return { steer: s, shoot: shooting, boost: b };`,
+
+  kiter: `// Kiter — hält Idealabstand 180px, weicht aus wenn zu nah
+var IDEAL = 180;
+if (!foe) return { steer: 0, shoot: false, boost: false };
+var flee = foe.dist < IDEAL;
+var steer = flee
+  ? angleDiff(foe.angleTo + Math.PI, self.angle)
+  : angleDiff(foe.angleTo, self.angle);
+var b = false;
+if (self.boostReady && flee && foe.dist < 80) b = 'back';
+return { steer: steer, shoot: foe.dist < 280, boost: b };`,
+
+  flanker: `// Flanker — greift von der Seite an (90° versetzt)
+if (!foe) return { steer: 0, shoot: false, boost: false };
+var flank = foe.angleTo + Math.PI * 0.5;
+var steer = angleDiff(flank, self.angle);
+var shooting = Math.abs(angleDiff(foe.angleTo, self.angle)) < 0.45;
+var b = false;
+if (self.boostReady && foe.dist > 220) b = 'forward';
+return { steer: steer, shoot: shooting, boost: b };`,
+
+  coward: `// Coward — flieht immer, schießt nur wenn Feind hinter ihm ist
+if (!foe) return { steer: 0, shoot: false, boost: false };
+var flee = angleDiff(foe.angleTo + Math.PI, self.angle);
+var behindAngle = Math.abs(angleDiff(foe.angleTo, self.angle + Math.PI));
+var b = false;
+if (self.boostReady) b = 'forward';
+return { steer: flee, shoot: behindAngle < 0.3, boost: b };`,
+
+  default: `// Default AI — normale KI nachgebaut
+if (!foe) return { steer: 0, shoot: false, boost: false };
+var steer = angleDiff(foe.angleTo, self.angle);
+// Ausweichen wenn nah
+if (foe.dist < 65) steer += 0.7;
+// Boost KI
+var b = false;
+if (self.boostReady) {
+  if (foe.dist < 70 && self.hp / self.maxHp < 0.4) b = 'back';
+  else if (foe.dist > 200 && Math.abs(steer) < 0.4) b = 'forward';
+}
+return {
+  steer: steer,
+  shoot: Math.abs(angleDiff(foe.angleTo, self.angle)) < 0.26,
+  boost: b
+};`,
+
+  leadshot: `// Lead Shot — Vorhalten
+// Berechnet wo der Feind sein wird wenn der Laser ankommt
+if (!foe) return { steer: 0, shoot: false, boost: false };
+
+var bulletSpeed = self.laserSpd || 12;
+var leadTime = foe.dist / bulletSpeed;
+
+// Vorhaltepunkt mit Winkelgeschwindigkeit des Feindes
+var leadAngle = foe.angleTo + foe.angularVel * leadTime * 0.8;
+var steer = angleDiff(leadAngle, self.angle);
+var shooting = Math.abs(angleDiff(leadAngle, self.angle)) < 0.2;
+
+var b = false;
+if (self.boostReady) {
+  if (foe.dist > 250) b = 'forward';
+  else if (Math.abs(steer) > 0.8) b = 'forward';
+}
+
+return { steer: steer, shoot: shooting, boost: b };`,
+};
+
+function compileBrain(ship){
+  const script = BRAINS[ship].script;
+  if(!script || !script.trim()){ _brainFns[ship]=null; return; }
+  try{
+    _brainFns[ship] = new Function(
+      'self','foe','friend','foes','friends','lasers','W','H','angleDiff','rand',
+      script
+    );
+  } catch(e){
+    _brainFns[ship] = null;
+    const el = document.getElementById('brain-error-'+ship);
+    if(el) el.textContent = '⚠ Compile: '+e.message;
+  }
+}
+
+function runBrain(ship, context){
+  const fn = _brainFns[ship.type];
+  if(!fn) return null;
+  try{
+    const t0 = performance.now();
+    // Note: we pass named args only — no DOM/canvas access possible
+    const result = fn(
+      context.self, context.foe, context.friend,
+      context.foes, context.friends, context.lasers,
+      context.W, context.H, context.angleDiff, context.rand
+    );
+    if(performance.now()-t0 > 2) throw new Error('timeout >2ms');
+    ship.brainError = null;
+    // clear error display
+    const errEl = document.getElementById('brain-error-'+ship.type);
+    if(errEl && errEl.textContent) errEl.textContent = '';
+    return {
+      steer: Math.max(-0.15, Math.min(0.15, result?.steer ?? 0)),
+      shoot: !!result?.shoot,
+      boost: result?.boost || false,
+    };
+  } catch(e){
+    ship.brainError = e.message;
+    const el = document.getElementById('brain-error-'+ship.type);
+    if(el) el.textContent = '⚠ '+e.message;
+    return null; // fallback to normal AI
+  }
+}
+
+// ── STATS SYSTEM ──────────────────────────────────────────────────────────────
+const SHIP_TYPES = ['xwing','awing','tie','tiein'];
+
+function makeStatEntry(){ return {
+  shotsFired:0, shotsHit:0,
+  firstShotPending:false, firstShotHits:0, firstShotAttempts:0,
+  kills:0, deaths:0,
+  killTimes:[],
+  boostCount:0,
+}; }
+
+// Current live stats per ship type
+let STATS = {};
+SHIP_TYPES.forEach(t=>{ STATS[t] = makeStatEntry(); });
+
+// Frozen runs per ship type — array of snapshots
+let STAT_RUNS = {};
+SHIP_TYPES.forEach(t=>{ STAT_RUNS[t] = []; });
+
+// Called on Apply — freeze current stats as a new run
+function freezeStatsRun(){
+  SHIP_TYPES.forEach(t=>{
+    const s = STATS[t];
+    if(s.shotsFired === 0 && s.kills === 0) return; // skip empty
+    STAT_RUNS[t].push({...s, killTimes:[...s.killTimes]});
+    STATS[t] = makeStatEntry(); // reset for next run
+  });
+  updateStatsPanel();
+}
+
+function resetStats(){
+  SHIP_TYPES.forEach(t=>{ STATS[t]=makeStatEntry(); STAT_RUNS[t]=[]; });
+  updateStatsPanel();
+}
+
+function statOnShot(shipType, isFirstShotOfLife){
+  const s=STATS[shipType];
+  s.shotsFired++;
+  if(isFirstShotOfLife && !s.firstShotPending){ s.firstShotPending=true; s.firstShotAttempts++; }
+}
+
+function statOnHit(shooterType, laser){
+  const s=STATS[shooterType];
+  s.shotsHit++;
+  if(laser._isFirstShot){ s.firstShotHits++; laser._isFirstShot=false; }
+}
+
+function statOnKill(shooterType){
+  STATS[shooterType].kills++;
+}
+
+function statOnDeath(shipType, spawnTime){
+  const s=STATS[shipType];
+  s.deaths++;
+  s.firstShotPending=false; // reset for next life
+  if(spawnTime) s.killTimes.push(performance.now()-spawnTime);
+}
+
+function statOnBoost(shipType){
+  STATS[shipType].boostCount++;
+}
+
+function statOnSimStart(){
+  // no-op now — runs are frozen on Apply
+}
+
+function calcStatRow(s){
+  const hr = s.shotsFired>0 ? s.shotsHit/s.shotsFired : null;
+  const fsr = s.firstShotAttempts>0 ? s.firstShotHits/s.firstShotAttempts : null;
+  const avgKT = s.killTimes.length>0 ? s.killTimes.reduce((a,b)=>a+b,0)/s.killTimes.length/1000 : null;
+  return {
+    shotsFired: s.shotsFired,
+    hitRate:    hr !== null ? (hr*100).toFixed(1)+'%' : '—',
+    hitRateNum: hr,
+    fsRate:     fsr !== null ? (fsr*100).toFixed(1)+'%' : '—',
+    fsRateNum:  fsr,
+    kills:      s.kills,
+    deaths:     s.deaths,
+    avgKillTime: avgKT !== null ? avgKT.toFixed(2)+'s' : '—',
+    avgKillTimeNum: avgKT,
+    boosts:     s.boostCount,
+  };
+}
+
+function trendArrow(curr, prev, higherIsBetter){
+  if(prev===null||curr===null) return '';
+  if(curr===prev) return '';
+  const up = curr>prev;
+  const good = higherIsBetter ? up : !up;
+  return `<span class="trend ${good?'val-up':'val-down'}">${up?'▲':'▼'}</span>`;
+}
+
+function updateStatsPanel(){
+  const scroll = document.getElementById('bp-stats-scroll');
+  if(!scroll) return;
+  const ship = bpCurrentShip;
+  // update ship label
+  const shipNames = {xwing:'X-Wing',awing:'A-Wing',tie:'TIE Fighter',tiein:'TIE Bomber'};
+  const lbl = document.getElementById('bp-stats-ship-label');
+  if(lbl) lbl.textContent = shipNames[ship] || ship;
+
+  const frozen = STAT_RUNS[ship]||[];
+  const live = STATS[ship];
+  const hasLive = live.shotsFired>0||live.kills>0;
+  const allRuns = [...frozen, ...(hasLive?[live]:[])];
+
+  if(allRuns.length===0){
+    scroll.innerHTML='<span style="color:#334455;font-size:9px;">No data yet — run a simulation.</span>';
+    return;
+  }
+
+  const rows = allRuns.map(calcStatRow);
+  const isCurrent = rows.map((_,i)=>i===allRuns.length-1&&hasLive);
+
+  const LABELS = [
+    [t('stats.shots'),    'shotsFired',      false, false],
+    [t('stats.hitrate'),       'hitRateNum',      true,  true ],
+    [t('stats.fsrate'),  'fsRateNum',       true,  true ],
+    [t('stats.kills'),          'kills',           true,  false],
+    [t('stats.deaths'),         'deaths',          false, true ],
+    [t('stats.killtime'),    'avgKillTimeNum',  false, true ],
+    [t('stats.boosts'),         'boosts',          false, false],
+  ];
+  const DISPLAY = ['shotsFired','hitRate','fsRate','kills','deaths','avgKillTime','boosts'];
+  const DIVIDER_BEFORE = new Set([3,5,6]); // before kills, avgKillTime, boosts
+
+  // build table
+  let html = '<table class="bp-stats-table"><thead><tr>';
+  html += '<th class="col-label row-header">—</th>';
+  rows.forEach((_,i)=>{
+    const cur = isCurrent[i];
+    const label = frozen.length>0 ? (cur?'Live':`R${i+1}`) : 'Live';
+    html += `<th class="col-run${cur?' current':''}">${label}</th>`;
+  });
+  html += '</tr></thead><tbody>';
+
+  LABELS.forEach(([label, numKey, higherBetter, lowerBetter], li)=>{
+    const divClass = DIVIDER_BEFORE.has(li) ? ' divider' : '';
+    html += `<tr class="${divClass}">`;
+    html += `<td class="col-label">${label}</td>`;
+    rows.forEach((r,i)=>{
+      const cur = isCurrent[i];
+      const dispKey = DISPLAY[li];
+      const val = r[dispKey];
+      const numVal = r[numKey];
+      const prevNum = i>0 ? rows[i-1][numKey] : null;
+      const arrow = trendArrow(numVal, prevNum, higherBetter||!lowerBetter);
+      // color good/warn for hit rate
+      let cls='';
+      if(numKey==='hitRateNum' && numVal!==null) cls=numVal>0.3?'val-good':numVal>0.15?'val-warn':'';
+      html += `<td class="col-run${cur?' current':''} ${cls}">${val}${arrow}</td>`;
+    });
+    html += '</tr>';
+  });
+
+  html += '</tbody></table>';
+  scroll.innerHTML = html;
+  // auto-scroll to rightmost (latest run)
+  setTimeout(()=>{ scroll.scrollLeft = scroll.scrollWidth; }, 10);
+}
+
+function buildBrainContext(ship){
+  const foes  = ships.filter(o=>o.team!==ship.team);
+  const friends = ships.filter(o=>o.team===ship.team&&o!==ship);
+  const nearFoe = foes.length ? foes.reduce((a,b)=>getDist2(a,ship)<getDist2(b,ship)?a:b) : null;
+  const nearFriend = friends.length ? friends.reduce((a,b)=>getDist2(a,ship)<getDist2(b,ship)?a:b) : null;
+  const tp = getType(ship.type);
+  const enemyLasers = lasers.filter(l=>l.team!==ship.team).map(l=>({
+    x:l.x, y:l.y, vx:l.vx, vy:l.vy, angle:l.angle,
+    dist: Math.sqrt((l.x-ship.x)**2+(l.y-ship.y)**2)
+  }));
+  const brainCtx = {
+    self: {
+      x:ship.x, y:ship.y, angle:ship.angle, vx:ship.vx, vy:ship.vy,
+      hp:ship.hp, maxHp:ship.maxHp, cd:ship.cd,
+      boostEnergy:ship.boostEnergy,
+      boostReady: CFG.boostEnabled && ship.boostEnergy>=(tp.boostCost||25) && ship.boostCooldown<=0,
+      team:ship.team, type:ship.type,
+      laserSpd: tp.laserSpd || 12,
+    },
+    foe: nearFoe ? {
+      x:nearFoe.x, y:nearFoe.y, angle:nearFoe.angle,
+      hp:nearFoe.hp, maxHp:nearFoe.maxHp,
+      dist: Math.sqrt(getDist2(nearFoe,ship)),
+      angleTo: getAngleTo(ship, nearFoe),
+      vx: nearFoe.vx, vy: nearFoe.vy,
+      angularVel: nearFoe.angle - (nearFoe._lastAngle !== undefined ? nearFoe._lastAngle : nearFoe.angle),
+    } : null,
+    friend: nearFriend ? {
+      x:nearFriend.x, y:nearFriend.y,
+      dist: Math.sqrt(getDist2(nearFriend,ship)),
+    } : null,
+    foes:  foes.map(o=>({x:o.x,y:o.y,angle:o.angle,hp:o.hp,maxHp:o.maxHp,dist:Math.sqrt(getDist2(o,ship)),angleTo:getAngleTo(ship,o),vx:o.vx,vy:o.vy,angularVel:o.angle-(o._lastAngle!==undefined?o._lastAngle:o.angle)})),
+    friends: friends.map(o=>({x:o.x,y:o.y,dist:Math.sqrt(getDist2(o,ship))})),
+    lasers: enemyLasers,
+    W, H, angleDiff, rand,
+  };
+  // store last angle for angular velocity next frame
+  if(nearFoe) nearFoe._lastAngle = nearFoe.angle;
+  foes.forEach(o=>{ o._lastAngle = o.angle; });
+  return brainCtx;
+}
+
+function toggleBrain(ship){
+  BRAINS[ship].enabled = !BRAINS[ship].enabled;
+  const tog = document.getElementById('tog-brain-'+ship);
+  if(tog) tog.classList.toggle('on', BRAINS[ship].enabled);
+  saveBrains();
+  updateDebugBtn();
+}
+
+function loadPreset(ship, preset){
+  if(!preset) return;
+  const script = BRAIN_PRESETS[preset] || '';
+  const ta = document.getElementById('brain-'+ship);
+  if(ta){ ta.value = script; BRAINS[ship].script = script; compileBrain(ship); saveBrains(); }
+  // reset select
+  const sel = document.getElementById('preset-'+ship);
+  if(sel) sel.value = '';
+}
+
+function resetBrain(ship){
+  BRAINS[ship].script = '';
+  BRAINS[ship].enabled = false;
+  const ta = document.getElementById('brain-'+ship);
+  if(ta) ta.value = '';
+  const tog = document.getElementById('tog-brain-'+ship);
+  if(tog) tog.classList.remove('on');
+  const err = document.getElementById('brain-error-'+ship);
+  if(err) err.textContent = '';
+  _brainFns[ship] = null;
+  saveBrains();
+  updateDebugBtn();
+}
+
+function saveBrains(){
+  // sync from config-screen textareas (but don't overwrite if panel already set the value)
+  for(const ship of ['xwing','awing','tie','tiein']){
+    const ta = document.getElementById('brain-'+ship);
+    if(ta && document.activeElement === ta) BRAINS[ship].script = ta.value;
+  }
+  try{ localStorage.setItem(BRAIN_KEY, JSON.stringify(BRAINS)); }catch(e){}
+  // recompile all
+  for(const ship of ['xwing','awing','tie','tiein']) compileBrain(ship);
+}
+
+function loadBrainUI(){
+  for(const ship of ['xwing','awing','tie','tiein']){
+    const ta = document.getElementById('brain-'+ship);
+    if(ta){
+      ta.value = BRAINS[ship].script || '';
+      ta.oninput = ()=>{ BRAINS[ship].script=ta.value; compileBrain(ship); saveBrains(); const e=document.getElementById('brain-error-'+ship); if(e)e.textContent=''; };
+    }
+    const tog = document.getElementById('tog-brain-'+ship);
+    if(tog) tog.classList.toggle('on', !!BRAINS[ship].enabled);
+    compileBrain(ship);
+  }
+}
+
+function anyBrainActive(){
+  return ['xwing','awing','tie','tiein'].some(s=>BRAINS[s].enabled && _brainFns[s]);
+}
+
+// ── DEBUG MODE ────────────────────────────────────────────────────────────────
+let debugMode = false;
+let gameSpeed = 1.0;
+let _speedAccum = 0; // sub-frame accumulator for speeds < 1
+
+const SPEED_STEPS = [0, 0.1, 0.25, 0.5, 0.75, 1.0, 2.0, 5.0, 10.0];
+const GLOBAL_SPEED_STEPS = [0.1, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 2, 5, 10];
+let globalGameSpeed = 1.0;
+let _globalSpeedAccum = 0;
+
+function setGlobalSpeed(val){
+  globalGameSpeed = GLOBAL_SPEED_STEPS[parseInt(val)];
+  const lbl = document.getElementById('globalSpeedVal');
+  if(lbl) lbl.textContent = globalGameSpeed % 1 === 0 ? globalGameSpeed+'x' : globalGameSpeed+'x';
+}
+
+// ── STATE BUFFER (bidirectional timeline) ─────────────────────────────────────
+// stateBuffer is a linear timeline of snapshots.
+// stepCursor points to current position (0 = oldest end, length-1 = newest).
+// Going back moves cursor left. Going forward:
+//   - if cursor < length-1: restore next already-recorded frame (no recalc)
+//   - if cursor === length-1: simulate new tick, append to buffer
+const STATE_BUFFER_MAX = 600; // ~10s at 60fps
+let stateBuffer = [];
+let stepCursor = -1; // index into stateBuffer, -1 = not in step mode
+let stepFrameCount = 0;
+
+function captureState(){
+  const snap = {
+    ships:      ships.map(s=>({...s})),
+    lasers:     lasers.map(l=>({...l})),
+    explosions: explosions.map(e=>({...e, p:e.p.map(p=>({...p}))})),
+    particles:  particles.map(p=>({...p})),
+    roundOver, respawnCounter, xScore, tScore,
+  };
+  // if we're in the past, trim future before appending
+  if(stepCursor >= 0 && stepCursor < stateBuffer.length - 1){
+    stateBuffer = stateBuffer.slice(0, stepCursor + 1);
+  }
+  stateBuffer.push(snap);
+  if(stateBuffer.length > STATE_BUFFER_MAX) stateBuffer.shift();
+  stepCursor = stateBuffer.length - 1;
+  stepFrameCount++;
+  updateStepCounter();
+}
+
+function restoreState(snap){
+  ships      = snap.ships.map(s=>({...s}));
+  lasers     = snap.lasers.map(l=>({...l}));
+  explosions = snap.explosions.map(e=>({...e, p:e.p.map(p=>({...p}))}));
+  particles  = snap.particles.map(p=>({...p}));
+  roundOver  = snap.roundOver;
+  respawnCounter = snap.respawnCounter;
+  xScore = snap.xScore; tScore = snap.tScore;
+  document.getElementById('hudXS').textContent = xScore;
+  document.getElementById('hudTS').textContent = tScore;
+}
+
+function updateStepCounter(){
+  const el = document.getElementById('stepCounter');
+  if(!el) return;
+  const atPresent = stepCursor === stateBuffer.length - 1;
+  const frame = stepCursor + 1;
+  const total = stateBuffer.length;
+  el.textContent = `${frame}/${total}`;
+  el.style.color = atPresent ? '#334455' : '#ff8800';
+}
+
+function redrawCurrentState(){
+  drawStars();
+  ctx.clearRect(0,0,W,H);
+  ctx.globalAlpha=1; ctx.globalCompositeOperation='source-over';
+  for(const e of explosions){ drawExplosion(e); }
+  for(const s of ships){ drawSpriteWrapped(s.type,s.x,s.y,s.angle); drawHP(s); }
+  drawDebug();
+  updateDrawParticles();
+}
+
+function stepGame(n){
+  if(!gameRunning) return;
+  if(n > 0){
+    // step forward
+    for(let i=0;i<n;i++){
+      if(stepCursor < stateBuffer.length - 1){
+        // future already recorded — just advance cursor
+        stepCursor++;
+        restoreState(stateBuffer[stepCursor]);
+        updateStepCounter();
+      } else {
+        // at present — simulate new tick and record
+        tickOnce();
+        captureState();
+      }
+    }
+  } else {
+    // step backward
+    const target = Math.max(0, stepCursor + n); // n is negative
+    stepCursor = target;
+    restoreState(stateBuffer[stepCursor]);
+    updateStepCounter();
+  }
+  redrawCurrentState();
+}
+
+function tickOnce(){
+  // one full game tick without RAF
+  const ra=ships.filter(s=>s.team==='rebel').length;
+  const ea=ships.filter(s=>s.team==='empire').length;
+  if(ra>0&&ea>0){
+    for(const s of ships){moveBoid(s);shoot(s);}
+    for(const l of lasers){
+      l.x+=l.vx;l.y+=l.vy;l.life--;
+      if(CFG.wrapWorld){if(l.x<0)l.x+=W;if(l.x>W)l.x-=W;if(l.y<0)l.y+=H;if(l.y>H)l.y-=H;}
+      else if(l.x<0||l.x>W||l.y<0||l.y>H){l.life=0;}
+      for(const s of ships){
+        if(s.team===l.team)continue;
+        let dx=Math.abs(s.x-l.x),dy=Math.abs(s.y-l.y);
+        if(CFG.wrapWorld){if(dx>W/2)dx=W-dx;if(dy>H/2)dy=H-dy;}
+        if(dx<HIT&&dy<HIT){s.hp-=l.dmg;if(l.ownerType)statOnHit(l.ownerType,l);l.life=0;onShipHit(s);if(s.hp<=0){addExplosion(s.x,s.y);if(l.ownerType)statOnKill(l.ownerType);statOnDeath(s.type,s._spawnTime);ships=ships.filter(o=>o!==s);}break;}
+      }
+    }
+    lasers=lasers.filter(l=>l.life>0);
+  }
+  checkRound();
+  explosions=explosions.filter(e=>e.life>0);
+  for(const e of explosions)e.life--;
+}
+
+function setGameSpeed(val){
+  gameSpeed = SPEED_STEPS[parseInt(val)];
+  const lbl = document.getElementById('speedVal');
+  if(lbl) lbl.textContent = gameSpeed === 0 ? '0x' : gameSpeed.toFixed(2).replace(/\.?0+$/,'')+'x';
+  _speedAccum = 0;
+  // show/hide step controls
+  const sc = document.getElementById('stepControl');
+  if(sc) sc.style.display = gameSpeed === 0 ? 'flex' : 'none';
+  // Fix 3: when entering step mode, set cursor to latest frame (not 0)
+  if(gameSpeed === 0){
+    stepCursor = stateBuffer.length > 0 ? stateBuffer.length - 1 : -1;
+    updateStepCounter();
+  } else {
+    // leaving step mode — snap back to present
+    stepCursor = stateBuffer.length > 0 ? stateBuffer.length - 1 : -1;
+    updateStepCounter();
+  }
+}
+
+function toggleDebug(){
+  debugMode = !debugMode;
+  const btn = document.getElementById('debugBtn');
+  if(btn){ btn.textContent = debugMode ? t('hud.debug.on') : t('hud.debug'); btn.style.color = debugMode ? '#4fa3e0' : ''; }
+  const sc = document.getElementById('speedControl');
+  if(sc) sc.style.display = debugMode ? 'flex' : 'none';
+  if(!debugMode){
+    // reset speed to 1x when debug off
+    gameSpeed = 1.0;
+    _speedAccum = 0;
+    const sl = document.getElementById('speedSlider');
+    if(sl) sl.value = 5;
+    const lbl = document.getElementById('speedVal');
+    if(lbl) lbl.textContent = '1.0x';
+    // hide step control too
+    const stc = document.getElementById('stepControl');
+    if(stc) stc.style.display = 'none';
+    // show global speed slider
+    const gsc = document.getElementById('globalSpeedControl');
+    if(gsc) gsc.style.display = 'flex';
+  } else {
+    // Fix 1: debug just turned on — restore slider state from current gameSpeed
+    const sl = document.getElementById('speedSlider');
+    const idx = SPEED_STEPS.indexOf(gameSpeed);
+    if(sl) sl.value = idx >= 0 ? idx : 5;
+    const lbl = document.getElementById('speedVal');
+    if(lbl) lbl.textContent = gameSpeed === 0 ? '0x' : gameSpeed.toFixed(2).replace(/\.?0+$/,'')+'x';
+    // show step control if currently at speed 0
+    const stc = document.getElementById('stepControl');
+    if(stc) stc.style.display = gameSpeed === 0 ? 'flex' : 'none';
+    // hide global speed slider
+    const gsc = document.getElementById('globalSpeedControl');
+    if(gsc) gsc.style.display = 'none';
+  }
+}
+
+function updateDebugBtn(){
+  const btn = document.getElementById('debugBtn');
+  if(!btn) return;
+  if(!anyBrainActive() && debugMode){
+    debugMode = false;
+    btn.textContent = t('hud.debug');
+    btn.style.color = '';
+    const sc = document.getElementById('speedControl');
+    if(sc) sc.style.display = 'none';
+    const stc = document.getElementById('stepControl');
+    if(stc) stc.style.display = 'none';
+    gameSpeed = 1.0; _speedAccum = 0;
+  }
+  if(anyBrainActive() && debugMode){
+    const sc = document.getElementById('speedControl');
+    if(sc) sc.style.display = 'flex';
+  }
+}
+
+function drawArrow(x1, y1, angle, length, color, alpha){
+  const x2 = x1 + Math.cos(angle) * length;
+  const y2 = y1 + Math.sin(angle) * length;
+  const headLen = 8;
+  const headAngle = 0.4;
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.strokeStyle = color;
+  ctx.fillStyle = color;
+  ctx.lineWidth = 2;
+  // shaft
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+  // arrowhead
+  ctx.beginPath();
+  ctx.moveTo(x2, y2);
+  ctx.lineTo(x2 - Math.cos(angle - headAngle)*headLen, y2 - Math.sin(angle - headAngle)*headLen);
+  ctx.lineTo(x2 - Math.cos(angle + headAngle)*headLen, y2 - Math.sin(angle + headAngle)*headLen);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawDebug(){
+  if(!debugMode) return;
+  for(const s of ships){
+    if(!BRAINS[s.type]?.enabled) continue;
+
+    // steering direction arrow — blue (rebel) / green (empire)
+    const steerColor = s.team==='rebel' ? '#4499ff' : '#00dd44';
+    drawArrow(s.x, s.y, s._debugSteer ?? s.angle, 40, steerColor, 0.85);
+
+    // target line — dashed red from ship to foe, arrow pointing at foe
+    if(s._debugFoeX !== undefined){
+      ctx.save();
+      ctx.globalAlpha = 0.55;
+      ctx.strokeStyle = '#ff3333';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(s.x, s.y);
+      ctx.lineTo(s._debugFoeX, s._debugFoeY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // arrowhead pointing AT the foe
+      const aTgt = Math.atan2(s._debugFoeY - s.y, s._debugFoeX - s.x);
+      const hLen = 9, hAng = 0.4;
+      const tx = s._debugFoeX, ty = s._debugFoeY;
+      ctx.globalAlpha = 0.85;
+      ctx.fillStyle = '#ff3333';
+      ctx.beginPath();
+      ctx.moveTo(tx, ty);
+      ctx.lineTo(tx - Math.cos(aTgt - hAng)*hLen, ty - Math.sin(aTgt - hAng)*hLen);
+      ctx.lineTo(tx - Math.cos(aTgt + hAng)*hLen, ty - Math.sin(aTgt + hAng)*hLen);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // boost arrow — yellow, larger
+    if(s._debugBoost && s._debugBoost !== false){
+      let bAngle = s.angle;
+      if(s._debugBoost==='back')   bAngle += Math.PI;
+      else if(s._debugBoost==='left')  bAngle -= Math.PI/2;
+      else if(s._debugBoost==='right') bAngle += Math.PI/2;
+      drawArrow(s.x, s.y, bAngle, 28, '#ffdd00', 0.95);
+    }
+
+    // error indicator
+    if(s.brainError){
+      ctx.save();
+      ctx.globalAlpha = 0.9;
+      ctx.fillStyle = '#ff4444';
+      ctx.font = 'bold 9px monospace';
+      ctx.fillText('ERR', s.x + 10, s.y - 12);
+      ctx.restore();
+    }
+  }
+}
+
+// ── LIVE BRAIN EDITOR PANEL ──────────────────────────────────────────────────
+let bpCurrentShip = 'xwing';
+let bpPanelWidth = 300;
+let bpCollapsed = false;
+let bpDragging = false;
+let bpDragStartX = 0;
+let bpDragStartW = 0;
+
+function bpShow(){
+  const panel = document.getElementById('brainPanel');
+  if(!panel) return;
+  // only on desktop
+  if(window.innerWidth < 900) return;
+  panel.classList.add('visible');
+  panel.style.width = bpPanelWidth + 'px';
+  bpSyncToShip(bpCurrentShip);
+  bpUpdateGameWidth();
+}
+
+function bpHide(){
+  const panel = document.getElementById('brainPanel');
+  if(panel) panel.classList.remove('visible');
+  bpUpdateGameWidth();
+}
+
+function toggleBrainPanel(){
+  bpCollapsed = !bpCollapsed;
+  const panel = document.getElementById('brainPanel');
+  const tab = document.getElementById('brainCollapseTab');
+  if(!panel) return;
+  panel.classList.toggle('collapsed', bpCollapsed);
+  if(tab) tab.textContent = bpCollapsed ? '▶' : '{ }';
+  bpUpdateGameWidth();
+}
+
+function bpUpdateGameWidth(){
+  const panel = document.getElementById('brainPanel');
+  const visible = panel && panel.classList.contains('visible');
+  const collapsed = panel && panel.classList.contains('collapsed');
+  const panelW = visible ? (collapsed ? 28 : bpPanelWidth) : 0;
+  if(gameRunning){
+    W = window.innerWidth - panelW;
+    H = window.innerHeight - 54;
+    if(W%2!==0) W--;
+    if(H%2!==0) H--;
+    resizeCanvases();
+    initStars();
+  } else {
+    // in menu — resize app container
+    const app = document.getElementById('app');
+    if(app){
+      app.style.width = (window.innerWidth - panelW) + 'px';
+      app.style.height = window.innerHeight + 'px';
+    }
+  }
+}
+
+function bpSelectShip(ship){
+  bpCurrentShip = ship;
+  bpSyncToShip(ship);
+  updateStatsPanel();
+}
+
+function bpSyncToShip(ship){
+  const ta = document.getElementById('bp-textarea');
+  const tog = document.getElementById('bp-brain-toggle');
+  const status = document.getElementById('bp-brain-status');
+  const err = document.getElementById('bp-error');
+  if(!ta) return;
+  ta.value = BRAINS[ship].script || '';
+  const on = !!BRAINS[ship].enabled;
+  if(tog) tog.classList.toggle('on', on);
+  if(status) status.textContent = on ? t('brain.on') : t('brain.off');
+  if(err) err.textContent = '';
+}
+
+function bpToggleBrain(){
+  const ship = bpCurrentShip;
+  BRAINS[ship].enabled = !BRAINS[ship].enabled;
+  const tog = document.getElementById('bp-brain-toggle');
+  const status = document.getElementById('bp-brain-status');
+  const on = BRAINS[ship].enabled;
+  if(tog) tog.classList.toggle('on', on);
+  if(status) status.textContent = on ? t('brain.on') : t('brain.off');
+  // sync to config-screen toggle too
+  const cfgTog = document.getElementById('tog-brain-'+ship);
+  if(cfgTog) cfgTog.classList.toggle('on', on);
+  saveBrains();
+  updateDebugBtn();
+}
+
+function bpLoadPreset(preset){
+  if(!preset) return;
+  const script = BRAIN_PRESETS[preset] || '';
+  const ta = document.getElementById('bp-textarea');
+  if(ta) ta.value = script;
+  BRAINS[bpCurrentShip].script = script;
+  const sel = document.getElementById('bp-preset');
+  if(sel) sel.value = '';
+}
+
+function bpApply(){
+  const ship = bpCurrentShip;
+  const ta = document.getElementById('bp-textarea');
+  const err = document.getElementById('bp-error');
+  if(!ta) return;
+  // save script from panel textarea
+  BRAINS[ship].script = ta.value;
+  BRAINS[ship].enabled = true;
+  // update panel toggle UI
+  const tog = document.getElementById('bp-brain-toggle');
+  if(tog) tog.classList.add('on');
+  const status = document.getElementById('bp-brain-status');
+  if(status) status.textContent = t('brain.on');
+  if(err) err.textContent = '';
+  // compile and persist
+  compileBrain(ship);
+  try{ localStorage.setItem(BRAIN_KEY, JSON.stringify(BRAINS)); }catch(e){}
+  updateDebugBtn();
+  // freeze current stats as completed run before new game
+  freezeStatsRun();
+  // start new game immediately
+  startGame();
+  // re-show panel — bpSyncToShip will read BRAINS[ship].script which is already set correctly
+  setTimeout(()=>{ bpShow(); }, 50);
+}
+
+function bpReset(){
+  resetBrain(bpCurrentShip);
+  bpSyncToShip(bpCurrentShip);
+}
+
+// Drag to resize
+function bpInitDrag(){
+  const handle = document.getElementById('brainDragHandle');
+  if(!handle) return;
+  handle.addEventListener('mousedown', e=>{
+    if(bpCollapsed) return;
+    bpDragging = true;
+    bpDragStartX = e.clientX;
+    bpDragStartW = bpPanelWidth;
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+    e.preventDefault();
+    e.stopPropagation();
+  });
+  document.addEventListener('mousemove', e=>{
+    if(!bpDragging) return;
+    const delta = bpDragStartX - e.clientX; // drag left = wider
+    bpPanelWidth = Math.max(220, Math.min(600, bpDragStartW + delta));
+    const panel = document.getElementById('brainPanel');
+    if(panel) panel.style.width = bpPanelWidth + 'px';
+    bpUpdateGameWidth();
+  });
+  document.addEventListener('mouseup', ()=>{
+    if(!bpDragging) return;
+    bpDragging = false;
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+  });
+}
+
+// Show/hide panel when debug toggles
+const _origToggleDebug = toggleDebug;
+toggleDebug = function(){
+  _origToggleDebug();
+  if(debugMode && gameRunning){ bpShow(); }
+  else { bpHide(); }
+};
+
+// Also update game width on window resize
+window.addEventListener('resize', ()=>{
+  bpUpdateGameWidth();
+});
+
 loadSprites(()=>{
   try{const sl=localStorage.getItem('swLang');if(sl&&LANGS[sl])currentLang=sl;}catch(e){}
   loadSlidersFromCfg();
+  loadBrainUI();
   initStars();
   menuStarLoop();
   applyLang();
+  bpInitDrag();
 });
 </script>
+<!-- LIVE BRAIN EDITOR PANEL -->
+<div id="brainPanel">
+  <div id="brainDragHandle"></div>
+  <div id="brainCollapseTab" onclick="toggleBrainPanel()">{ }</div>
+  <div id="brainPanelInner">
+    <div class="bp-header" data-i18n="brain.editor.title">⚡ Brain Editor</div>
+    <!-- ship selector -->
+    <div class="bp-row">
+      <select class="bp-select" id="bp-ship-select" onchange="bpSelectShip(this.value)">
+        <option value="xwing" data-i18n="brain.ship.xwing">X-Wing — Rebellion</option>
+        <option value="awing" data-i18n="brain.ship.awing">A-Wing — Rebellion</option>
+        <option value="tie" data-i18n="brain.ship.tie">TIE Fighter — Empire</option>
+        <option value="tiein" data-i18n="brain.ship.tiein">TIE Bomber — Empire</option>
+      </select>
+    </div>
+    <!-- brain toggle -->
+    <div class="bp-toggle-row">
+      <div class="toggle" id="bp-brain-toggle" onclick="bpToggleBrain()"></div>
+      <span id="bp-brain-status">Brain Off</span>
+    </div>
+    <!-- preset -->
+    <div class="bp-row">
+      <select class="bp-select" id="bp-preset" onchange="bpLoadPreset(this.value)">
+        <option value="" data-i18n="brain.preset.label">— Load Preset —</option>
+        <option value="aggressive">Aggressive</option>
+        <option value="kiter">Kiter</option>
+        <option value="flanker">Flanker</option>
+        <option value="coward">Coward</option>
+        <option value="default">Default AI</option>
+        <option value="leadshot">Lead Shot</option>
+      </select>
+    </div>
+    <!-- editor -->
+    <textarea id="bp-textarea" spellcheck="false" placeholder="// return { steer, shoot, boost }"></textarea>
+    <div id="bp-error"></div>
+    <!-- stats panel -->
+    <div id="bp-stats">
+      <div class="bp-stats-header">
+        <span class="bp-stats-title" data-i18n="stats.title">⚡ Stats</span>
+        <span id="bp-stats-ship-label" style="font-size:9px;color:#334455;letter-spacing:1px;text-transform:uppercase;"></span>
+        <button class="bp-stats-reset" onclick="resetStats()" data-i18n="stats.reset">Reset</button>
+      </div>
+      <div id="bp-stats-scroll"><span style="color:#334455;font-size:9px;">No data yet — run a simulation.</span></div>
+    </div>
+    <!-- footer buttons -->
+    <div class="bp-footer">
+      <button class="bp-btn apply" onclick="bpApply()" data-i18n="brain.apply">▶ Apply + New Game</button>
+      <button class="bp-btn danger" onclick="bpReset()" data-i18n="brain.reset">Reset</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
