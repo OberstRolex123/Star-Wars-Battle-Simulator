@@ -210,7 +210,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 #crawl-screen.hidden{display:none;}
 #crawl-starfield{position:fixed;inset:0;z-index:0;}
 #crawl-canvas-el{position:fixed;inset:0;z-index:2;}
-.crawl-fade-top{position:fixed;top:0;left:0;right:0;height:30%;background:linear-gradient(to bottom,#000 35%,transparent);z-index:3;pointer-events:none;}
+
 .crawl-intro{position:fixed;top:50%;left:10%;right:10%;transform:translateY(-50%);color:#4a9eff;font-family:'News Cycle','Arial Narrow',Arial,sans-serif;font-size:clamp(1.6rem,4.5vw,4rem);font-weight:900;-webkit-text-stroke:2px #4a9eff;letter-spacing:0.06em;text-align:center;z-index:20;animation:crawlIntroFade 5.5s ease forwards;}
 @keyframes crawlIntroFade{0%{opacity:0;}12%{opacity:1;}72%{opacity:1;}100%{opacity:0;}}
 #crawl-logo-el{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:clamp(220px,46vw,560px);will-change:transform,opacity;z-index:20;opacity:0;animation:crawlLogoAnim 8.5s cubic-bezier(.16,.84,.44,1) forwards;animation-delay:5.2s;}
@@ -243,7 +243,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 <div id="crawl-screen">
 <canvas id="crawl-starfield"></canvas>
 <canvas id="crawl-canvas-el"></canvas>
-<div class="crawl-fade-top"></div>
+
 <div class="crawl-intro" id="crawl-intro-text">Somewhere in the Outer Rim, in a hidden Rebel research bay&hellip;</div>
 <div id="crawl-logo-el">
   <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 693.615 419.375" xml:space="preserve">
@@ -292,7 +292,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
     <button class="btn" onclick="showCrawl()" data-i18n="menu.showCrawl">Show Intro</button>
     <button class="btn" style="border-color:#334455;color:#aaaaaa;" onclick="loadVersion()" data-i18n="menu.loadVersion">Load Version</button>
     </div>
-    <div style="font-size:9px;letter-spacing:2px;color:#ffffff;text-transform:uppercase;margin-top:4px;opacity:0.4;" data-i18n="menu.madeWith">v1.5.4 — made with Claude</div>
+    <div style="font-size:9px;letter-spacing:2px;color:#ffffff;text-transform:uppercase;margin-top:4px;opacity:0.4;" data-i18n="menu.madeWith">v1.5.5 — made with Claude</div>
   </div>
 </div>
 
@@ -392,7 +392,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
         <a href="https://github.com/OberstRolex123/Star-Wars-Battle-Simulator/blob/main/BRAIN_DOCUMENTATION.md"
            target="_blank"
            style="font-size:9px;color:#4fa3e0;border:1px solid #1a3a5a;padding:2px 7px;letter-spacing:1px;text-decoration:none;font-family:monospace;text-transform:uppercase;"
-           title="Brain Documentation">? Docs</a>
+           data-i18n="brain.docs" title="Brain Documentation">? Docs</a>
       </div>
       <textarea class="brain-textarea" id="brain-xwing" spellcheck="false" placeholder="// return { steer, shoot, boost }"></textarea>
       <div class="brain-error" id="brain-error-xwing"></div>
@@ -537,7 +537,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
 
 <div id="readmeScreen" class="screen hidden">
   <div class="rm-header" data-i18n="rm.title">Star Wars</div>
-  <div class="rm-sub" data-i18n="rm.sub">Pixel Battle Simulator — v1.5.4</div>
+  <div class="rm-sub" data-i18n="rm.sub">Pixel Battle Simulator — v1.5.5</div>
   <div class="rm-sec">
     <div class="rm-sec-title" data-i18n="rm.sec.what">What is this</div>
     <div class="rm-p" data-i18n="rm.what.p1">An autonomous pixel-art space battle...</div>
@@ -566,7 +566,7 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
   <div class="lv-header" data-i18n="lv.title">Load Version</div>
   <div class="lv-entry lv-current">
     <div class="lv-info">
-      <div class="lv-tag" data-i18n="lv.current.tag">v1.5.4 — current</div>
+      <div class="lv-tag" data-i18n="lv.current.tag">v1.5.5 — current</div>
       <div class="lv-desc" data-i18n="lv.current.desc">Boost System · Particles · Glow</div>
     </div>
     <button class="lv-btn" data-i18n="lv.current.btn">Playing</button>
@@ -605,14 +605,14 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
   <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
     <div style="display:flex;gap:8px;" id="hudBtns">
       <button class="hud-btn" id="muteBtn" onclick="toggleMute()">♪ On</button>
-      <button class="hud-btn" id="gameMusicBtn" onclick="toggleGameMusic()">♫ Music</button>
-      <button class="hud-btn" id="debugBtn" onclick="toggleDebug()" style="display:none;">⊕ Debug</button>
-      <button class="hud-btn" id="pauseBtn" onclick="togglePause()">|| Pause</button>
-      <button class="hud-btn" id="exitBtn" onclick="goMenu()" style="border-color:#442222;color:#884444;">✕ Exit</button>
+      <button class="hud-btn" id="gameMusicBtn" onclick="toggleGameMusic()" data-i18n="hud.music.on">♫ Music</button>
+      <button class="hud-btn" id="debugBtn" onclick="toggleDebug()" data-i18n="hud.debug">⊕ Debug</button>
+      <button class="hud-btn" id="pauseBtn" onclick="togglePause()" data-i18n="hud.pause.btn">|| Pause</button>
+      <button class="hud-btn" id="exitBtn" onclick="goMenu()" style="border-color:#442222;color:#884444;" data-i18n="hud.exit">✕ Exit</button>
     </div>
     <!-- global speed slider (visible when debug OFF) -->
     <div id="globalSpeedControl" style="width:100%;display:flex;align-items:center;gap:8px;">
-      <span style="font-size:9px;letter-spacing:1px;color:#556677;text-transform:uppercase;white-space:nowrap;">Speed</span>
+      <span style="font-size:9px;letter-spacing:1px;color:#556677;text-transform:uppercase;white-space:nowrap;" data-i18n="hud.speed">Speed</span>
       <input type="range" id="globalSpeedSlider" min="0" max="9" step="1" value="4"
         oninput="setGlobalSpeed(this.value)"
         style="flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;">
@@ -627,11 +627,11 @@ input[type=range]{flex:1;height:3px;accent-color:#4fa3e0;cursor:pointer;}
       <span id="speedVal" style="font-size:9px;color:#4fa3e0;letter-spacing:1px;width:26px;text-align:right;">1.0x</span>
     </div>
     <div id="stepControl" style="display:none;width:100%;justify-content:center;gap:6px;">
-      <button class="hud-btn" onclick="stepGame(-10)" style="letter-spacing:0px;">◀◀ -10</button>
-      <button class="hud-btn" onclick="stepGame(-1)"  style="letter-spacing:0px;">◀ -1</button>
+      <button class="hud-btn" onclick="stepGame(-10)" style="letter-spacing:0px;" data-i18n="step.back10">◀◀ -10</button>
+      <button class="hud-btn" onclick="stepGame(-1)"  style="letter-spacing:0px;" data-i18n="step.back1">◀ -1</button>
       <span id="stepCounter" style="font-size:9px;color:#334455;letter-spacing:1px;min-width:56px;text-align:center;align-self:center;">0/0</span>
-      <button class="hud-btn" onclick="stepGame(1)"   style="letter-spacing:0px;">+1 ▶</button>
-      <button class="hud-btn" onclick="stepGame(10)"  style="letter-spacing:0px;">+10 ▶▶</button>
+      <button class="hud-btn" onclick="stepGame(1)"   style="letter-spacing:0px;" data-i18n="step.fwd1">+1 ▶</button>
+      <button class="hud-btn" onclick="stepGame(10)"  style="letter-spacing:0px;" data-i18n="step.fwd10">+10 ▶▶</button>
     </div>
   </div>
   <div style="text-align:right"><div class="hud-lbl" style="color:#aaaaaa;text-align:right" data-i18n="hud.empire">Empire</div><div class="hud-sc" style="color:#cccccc" id="hudTS">0</div></div>
@@ -666,7 +666,7 @@ const LANGS={
     'menu.newGame':'New Simulation','menu.config':'Configuration',
     'menu.changelog':'Changelog','menu.about':'About',
     'cl.title':'Changelog',
-    'cl.v14.tag':'v1.5.4','cl.v14.date':'2026-04-28 · current',
+    'cl.v14.tag':'v1.5.5','cl.v14.date':'2026-04-28 · current',
     'cl.v14.e1':'Boost system — 4 directions (forward · back · left · right), energy tank per ship with regeneration, cooldown prevents spam',
     'cl.v14.e2':'Boost AI — tactical: dodge incoming lasers sideways, retreat when low HP, close gap on distant enemies, evade when targeted',
     'cl.v14.e3':'Boost particles — 12 exhaust particles + glow ring burst; Rebel blue · Empire green; separate canvas with shadowBlur',
@@ -690,7 +690,7 @@ const LANGS={
     'cl.v10.e8':'Single HTML file, zero dependencies',
     'menu.showCrawl':'Show Intro',
     'menu.playMusic':'Play Music','menu.stopMusic':'Stop Music',
-    'menu.loadVersion':'Load Version','menu.madeWith':'v1.5.4 — made with Claude',
+    'menu.loadVersion':'Load Version','menu.madeWith':'v1.5.5 — made with Claude',
     'hud.rebellion':'Rebellion','hud.empire':'Empire',
     'hud.pause':'|| Pause','hud.mute.on':'♪ On','hud.mute.off':'♪ Off',
     'hud.music.on':'♫ Music','hud.music.off':'♫ Off',
@@ -711,6 +711,19 @@ const LANGS={
     'cfg.boost.energy':'Max Energy','cfg.boost.cost':'Cost/boost',
     'cfg.boost.regen':'Regen/s','cfg.boost.force':'Force',
     'cfg.brain.label':'Brain','cfg.brain.reset':'Reset',
+    'brain.preset.label':'— Load Preset —','brain.on':'Brain On','brain.off':'Brain Off',
+    'brain.apply':'▶ Apply + New Game','brain.reset':'Reset','brain.docs':'? Docs',
+    'stats.nodata':'No data yet — run a simulation.','stats.reset':'Reset',
+    'hud.debug':'⊕ Debug','hud.debug.on':'⊕ Debug ON',
+    'hud.pause.btn':'|| Pause','hud.resume':'▶ Resume','hud.exit':'✕ Exit',
+    'hud.speed':'Speed',
+    'step.back10':'◀◀ -10','step.back1':'◀ -1','step.fwd1':'+1 ▶','step.fwd10':'+10 ▶▶',
+    'brain.editor.title':'⚡ Brain Editor',
+    'brain.ship.xwing':'X-Wing — Rebellion','brain.ship.awing':'A-Wing — Rebellion',
+    'brain.ship.tie':'TIE Fighter — Empire','brain.ship.tiein':'TIE Bomber — Empire',
+    'stats.title':'⚡ Stats',
+    'stats.shots':'Shots fired','stats.hitrate':'Hit rate','stats.fsrate':'1st-shot rate',
+    'stats.kills':'Kills','stats.deaths':'Deaths','stats.killtime':'Ø Kill time','stats.boosts':'Boosts',
     'cfg.ship.xwing':'X-Wing — Rebellion','cfg.ship.awing':'A-Wing — Rebellion',
     'cfg.ship.tie':'TIE Fighter — Empire','cfg.ship.tiein':'TIE Bomber — Empire',
     'cfg.formation.label':'Formation',
@@ -719,7 +732,7 @@ const LANGS={
     'cfg.dmg':'Damage','cfg.turnRate':'Turn Rate','cfg.count':'Count',
     'cfg.btn.reset':'Reset','cfg.btn.resetAll':'Reset All','cfg.btn.save':'Save','cfg.btn.back':'Back',
     'cfg.saved':'✓ Saved','cfg.on':'On','cfg.off':'Off',
-    'rm.title':'Star Wars','rm.sub':'Pixel Battle Simulator — v1.5.4',
+    'rm.title':'Star Wars','rm.sub':'Pixel Battle Simulator — v1.5.5',
     'rm.sec.what':'What is this',
     'rm.what.p1':'An autonomous pixel-art space battle between the Rebellion and the Empire.',
     'rm.what.p2':'Built entirely in a single HTML file — no server, no dependencies.',
@@ -729,7 +742,7 @@ const LANGS={
     'rm.team.rebel':'Rebel','rm.team.empire':'Empire',
     'rm.role.xwing':'All-rounder, 4 cannons','rm.role.awing':'Interceptor, fast, evasive',
     'rm.role.tie':'Cannon fodder, swarm','rm.role.tiein':'Heavy, double shot',
-    'lv.title':'Load Version','lv.current.tag':'v1.5.4 — current',
+    'lv.title':'Load Version','lv.current.tag':'v1.5.5 — current',
     'lv.current.desc':'Boost System · Particles · Glow',
     'lv.current.btn':'Playing','lv.load':'Load',
     'lv.v12.tag':'v1.2','lv.v12.desc':'Multi-language (EN/DE/PL) · Laser speed config · GitHub changelog',
@@ -747,7 +760,7 @@ const LANGS={
     'menu.newGame':'Neue Simulation','menu.config':'Konfiguration',
     'menu.changelog':'Changelog','menu.about':'Über das Spiel',
     'cl.title':'Changelog',
-    'cl.v14.tag':'v1.5.4','cl.v14.date':'2026-04-28 · aktuell',
+    'cl.v14.tag':'v1.5.5','cl.v14.date':'2026-04-28 · aktuell',
     'cl.v14.e1':'Boost-System — 4 Richtungen (vorwärts · rückwärts · links · rechts), Energie-Tank mit Regeneration, Cooldown verhindert Spam',
     'cl.v14.e2':'Boost-KI — taktisch: weicht einkommenden Lasern aus, zieht sich bei niedrigen TP zurück, schließt Lücke zu weit entfernten Feinden',
     'cl.v14.e3':'Boost-Partikel — 12 Abgas-Partikel + Glow-Ring-Burst; Rebellion blau · Imperium grün; separates Canvas mit shadowBlur',
@@ -771,7 +784,7 @@ const LANGS={
     'cl.v10.e8':'Einzelne HTML-Datei, keine Abhängigkeiten',
     'menu.showCrawl':'Intro anzeigen',
     'menu.playMusic':'Musik abspielen','menu.stopMusic':'Musik stoppen',
-    'menu.loadVersion':'Version laden','menu.madeWith':'v1.5.4 — made with Claude',
+    'menu.loadVersion':'Version laden','menu.madeWith':'v1.5.5 — made with Claude',
     'hud.rebellion':'Rebellion','hud.empire':'Imperium',
     'hud.pause':'|| Pause','hud.mute.on':'♪ An','hud.mute.off':'♪ Aus',
     'hud.music.on':'♫ Musik','hud.music.off':'♫ Aus',
@@ -792,6 +805,19 @@ const LANGS={
     'cfg.boost.energy':'Max. Energie','cfg.boost.cost':'Verbrauch/Boost',
     'cfg.boost.regen':'Regen/s','cfg.boost.force':'Kraft',
     'cfg.brain.label':'Brain','cfg.brain.reset':'Reset',
+    'brain.preset.label':'— Preset laden —','brain.on':'Brain An','brain.off':'Brain Aus',
+    'brain.apply':'▶ Anwenden + Neue Simulation','brain.reset':'Zurücksetzen','brain.docs':'? Doku',
+    'stats.nodata':'Keine Daten — Simulation starten.','stats.reset':'Reset',
+    'hud.debug':'⊕ Debug','hud.debug.on':'⊕ Debug AN',
+    'hud.pause.btn':'|| Pause','hud.resume':'▶ Weiter','hud.exit':'✕ Beenden',
+    'hud.speed':'Tempo',
+    'step.back10':'◀◀ -10','step.back1':'◀ -1','step.fwd1':'+1 ▶','step.fwd10':'+10 ▶▶',
+    'brain.editor.title':'⚡ Brain-Editor',
+    'brain.ship.xwing':'X-Wing — Rebellion','brain.ship.awing':'A-Wing — Rebellion',
+    'brain.ship.tie':'TIE-Jäger — Imperium','brain.ship.tiein':'TIE-Bomber — Imperium',
+    'stats.title':'⚡ Stats',
+    'stats.shots':'Schüsse','stats.hitrate':'Trefferrate','stats.fsrate':'Erster Schuss',
+    'stats.kills':'Kills','stats.deaths':'Tode','stats.killtime':'Ø Kill-Zeit','stats.boosts':'Boosts',
     'cfg.ship.xwing':'X-Wing — Rebellion','cfg.ship.awing':'A-Wing — Rebellion',
     'cfg.ship.tie':'TIE-Jäger — Imperium','cfg.ship.tiein':'TIE-Bomber — Imperium',
     'cfg.formation.label':'Formation',
@@ -800,7 +826,7 @@ const LANGS={
     'cfg.dmg':'Schaden','cfg.turnRate':'Wenderate','cfg.count':'Anzahl',
     'cfg.btn.reset':'Zurücksetzen','cfg.btn.resetAll':'Alles zurücksetzen','cfg.btn.save':'Speichern','cfg.btn.back':'Zurück',
     'cfg.saved':'✓ Gespeichert','cfg.on':'An','cfg.off':'Aus',
-    'rm.title':'Krieg der Sterne','rm.sub':'Pixel Kampfsimulator — v1.5.4',
+    'rm.title':'Krieg der Sterne','rm.sub':'Pixel Kampfsimulator — v1.5.5',
     'rm.sec.what':'Was ist das?',
     'rm.what.p1':'Ein autonomer Pixel-Art-Weltraumkampf zwischen der Rebellion und dem Imperium.',
     'rm.what.p2':'Komplett in einer einzigen HTML-Datei.',
@@ -810,7 +836,7 @@ const LANGS={
     'rm.team.rebel':'Rebellen','rm.team.empire':'Imperium',
     'rm.role.xwing':'Allrounder, 4 Kanonen','rm.role.awing':'Abfangjäger, schnell',
     'rm.role.tie':'Kanonenfutter, Schwarm','rm.role.tiein':'Schwer, Doppelschuss',
-    'lv.title':'Version laden','lv.current.tag':'v1.5.4 — aktuell',
+    'lv.title':'Version laden','lv.current.tag':'v1.5.5 — aktuell',
     'lv.current.desc':'Boost-System · Partikel · Glow',
     'lv.current.btn':'Aktiv','lv.load':'Laden',
     'lv.v12.tag':'v1.2','lv.v12.desc':'Mehrsprachigkeit (EN/DE/PL) · Lasergeschwindigkeit · GitHub-Changelog',
@@ -828,7 +854,7 @@ const LANGS={
     'menu.newGame':'Nowa Symulacja','menu.config':'Konfiguracja',
     'menu.changelog':'Historia zmian','menu.about':'O grze',
     'cl.title':'Historia zmian',
-    'cl.v14.tag':'v1.5.4','cl.v14.date':'2026-04-28 · aktualna',
+    'cl.v14.tag':'v1.5.5','cl.v14.date':'2026-04-28 · aktualna',
     'cl.v14.e1':'System dopalacza — 4 kierunki (przód · tył · lewo · prawo), tank energii z regeneracją, cooldown zapobiega spamowi',
     'cl.v14.e2':'AI dopalacza — taktyczne użycie: unikanie laserów, odwrót przy niskim PW, doganianie odległych wrogów',
     'cl.v14.e3':'Cząsteczki dopalacza — 12 cząsteczek spalin + rozbłysk pierścienia; Rebelia niebieska · Imperium zielone',
@@ -852,7 +878,7 @@ const LANGS={
     'cl.v10.e8':'Pojedynczy plik HTML, brak zależności',
     'menu.showCrawl':'Pokaż intro',
     'menu.playMusic':'Odtwórz muzykę','menu.stopMusic':'Zatrzymaj muzykę',
-    'menu.loadVersion':'Wczytaj wersję','menu.madeWith':'v1.5.4 — stworzone z Claude',
+    'menu.loadVersion':'Wczytaj wersję','menu.madeWith':'v1.5.5 — stworzone z Claude',
     'hud.rebellion':'Rebelia','hud.empire':'Imperium',
     'hud.pause':'|| Pauza','hud.mute.on':'♪ Wł','hud.mute.off':'♪ Wył',
     'hud.music.on':'♫ Muzyka','hud.music.off':'♫ Wył',
@@ -873,6 +899,19 @@ const LANGS={
     'cfg.boost.energy':'Maks. energia','cfg.boost.cost':'Koszt/dopalacz',
     'cfg.boost.regen':'Regen/s','cfg.boost.force':'Siła',
     'cfg.brain.label':'Brain','cfg.brain.reset':'Reset',
+    'brain.preset.label':'— Wczytaj preset —','brain.on':'Brain Wł','brain.off':'Brain Wył',
+    'brain.apply':'▶ Zastosuj + Nowa symulacja','brain.reset':'Resetuj','brain.docs':'? Dok',
+    'stats.nodata':'Brak danych — uruchom symulację.','stats.reset':'Reset',
+    'hud.debug':'⊕ Debug','hud.debug.on':'⊕ Debug WŁ',
+    'hud.pause.btn':'|| Pauza','hud.resume':'▶ Wznów','hud.exit':'✕ Wyjdź',
+    'hud.speed':'Tempo',
+    'step.back10':'◀◀ -10','step.back1':'◀ -1','step.fwd1':'+1 ▶','step.fwd10':'+10 ▶▶',
+    'brain.editor.title':'⚡ Edytor Brain',
+    'brain.ship.xwing':'X-Wing — Rebelia','brain.ship.awing':'A-Wing — Rebelia',
+    'brain.ship.tie':'TIE Fighter — Imperium','brain.ship.tiein':'TIE Bomber — Imperium',
+    'stats.title':'⚡ Statystyki',
+    'stats.shots':'Strzały','stats.hitrate':'Celność','stats.fsrate':'1. strzał',
+    'stats.kills':'Kills','stats.deaths':'Zgony','stats.killtime':'Ø Czas kill','stats.boosts':'Dopalacze',
     'cfg.ship.xwing':'X-Wing — Rebelia','cfg.ship.awing':'A-Wing — Rebelia',
     'cfg.ship.tie':'TIE Fighter — Imperium','cfg.ship.tiein':'TIE Bomber — Imperium',
     'cfg.formation.label':'Formacja',
@@ -881,7 +920,7 @@ const LANGS={
     'cfg.dmg':'Obrażenia','cfg.turnRate':'Zwrotność','cfg.count':'Liczba',
     'cfg.btn.reset':'Resetuj','cfg.btn.resetAll':'Resetuj wszystko','cfg.btn.save':'Zapisz','cfg.btn.back':'Wróć',
     'cfg.saved':'✓ Zapisano','cfg.on':'Wł','cfg.off':'Wył',
-    'rm.title':'Gwiezdne Wojny','rm.sub':'Pikselowy Symulator Bitwy — v1.5.4',
+    'rm.title':'Gwiezdne Wojny','rm.sub':'Pikselowy Symulator Bitwy — v1.5.5',
     'rm.sec.what':'Co to jest?',
     'rm.what.p1':'Autonomiczna pikselowa bitwa kosmiczna między Rebelią a Imperium.',
     'rm.what.p2':'Zbudowane w jednym pliku HTML.',
@@ -891,7 +930,7 @@ const LANGS={
     'rm.team.rebel':'Rebelia','rm.team.empire':'Imperium',
     'rm.role.xwing':'Wszechstronny, 4 działa','rm.role.awing':'Przechwytywacz, szybki',
     'rm.role.tie':'Mięso armatnie, rój','rm.role.tiein':'Ciężki, podwójny strzał',
-    'lv.title':'Wczytaj wersję','lv.current.tag':'v1.5.4 — aktualna',
+    'lv.title':'Wczytaj wersję','lv.current.tag':'v1.5.5 — aktualna',
     'lv.current.desc':'System Dopalacza · Cząsteczki · Poświata',
     'lv.current.btn':'Aktywna','lv.load':'Wczytaj',
     'lv.v12.tag':'v1.2','lv.v12.desc':'Wielojęzyczność (EN/DE/PL) · Prędkość lasera · Link do changelogu GitHub',
@@ -911,6 +950,9 @@ function applyLang(){
   const mb=document.getElementById('muteBtn');
   if(mb)mb.textContent=muted?t('hud.mute.off'):t('hud.mute.on');
   document.querySelectorAll('.lang-pill').forEach(p=>{p.classList.toggle('active',p.dataset.lang===currentLang);});
+  // refresh brain panel status
+  const status=document.getElementById('bp-brain-status');
+  if(status) status.textContent = BRAINS[bpCurrentShip]?.enabled ? t('brain.on') : t('brain.off');
   try{localStorage.setItem('swLang',currentLang);}catch(e){}
 }
 function setLang(lang){currentLang=lang;applyLang();if(window._crawlSetLang&&!document.getElementById('crawl-screen').classList.contains('hidden'))window._crawlSetLang(lang);}
@@ -1737,7 +1779,7 @@ function startGame(){
   // show global speed slider only when debug is off
   const gsc=document.getElementById('globalSpeedControl');
   if(gsc) gsc.style.display=debugMode?'none':'flex';
-  const pb=document.getElementById('pauseBtn');if(pb)pb.textContent='|| Pause';
+  const pb=document.getElementById('pauseBtn');if(pb)pb.textContent=t('hud.pause.btn');
   updateDebugBtn();
   // draw stars during countdown
   (function starLoop(){ if(gameRunning)return; drawStars(); requestAnimationFrame(starLoop); })();
@@ -1781,7 +1823,7 @@ function skipCrawl(){const el=document.getElementById('crawl-screen');el.classLi
   let starRaf;
   function drawCrawlStars(){sCtx.clearRect(0,0,sCv.width,sCv.height);for(const s of stars){s.a+=s.spd*s.dir;if(s.a>0.95){s.a=0.95;s.dir=-1;}if(s.a<0.18){s.a=0.18;s.dir=1;}sCtx.beginPath();sCtx.arc(s.x*sCv.width,s.y*sCv.height,s.r,0,Math.PI*2);sCtx.fillStyle=`rgba(255,255,255,${s.a.toFixed(2)})`;sCtx.fill();}starRaf=requestAnimationFrame(drawCrawlStars);}
   drawCrawlStars();
-  const START_DELAY=9.5,SCROLL_SPEED=50,VANISHING_Y=0.28,TEXT_COLOR='#FFE81F',FONT_NORMAL="'News Cycle','Arial Narrow',Arial,sans-serif";
+  const START_DELAY=9.5,SCROLL_SPEED=61,VANISHING_Y=0.28,TEXT_COLOR='#FFE81F',FONT_NORMAL="'News Cycle','Arial Narrow',Arial,sans-serif";
   const TEXTS={
     en:{
       intro:'Somewhere in the Outer Rim, in a hidden Rebel research bay…',
@@ -2056,6 +2098,10 @@ function updateStatsPanel(){
   const scroll = document.getElementById('bp-stats-scroll');
   if(!scroll) return;
   const ship = bpCurrentShip;
+  // update ship label
+  const shipNames = {xwing:'X-Wing',awing:'A-Wing',tie:'TIE Fighter',tiein:'TIE Bomber'};
+  const lbl = document.getElementById('bp-stats-ship-label');
+  if(lbl) lbl.textContent = shipNames[ship] || ship;
 
   const frozen = STAT_RUNS[ship]||[];
   const live = STATS[ship];
@@ -2071,13 +2117,13 @@ function updateStatsPanel(){
   const isCurrent = rows.map((_,i)=>i===allRuns.length-1&&hasLive);
 
   const LABELS = [
-    ['Shots fired',    'shotsFired',      false, false],
-    ['Hit rate',       'hitRateNum',      true,  true ],
-    ['1st-shot rate',  'fsRateNum',       true,  true ],
-    ['Kills',          'kills',           true,  false],
-    ['Deaths',         'deaths',          false, true ],
-    ['Ø Kill time',    'avgKillTimeNum',  false, true ],
-    ['Boosts',         'boosts',          false, false],
+    [t('stats.shots'),    'shotsFired',      false, false],
+    [t('stats.hitrate'),       'hitRateNum',      true,  true ],
+    [t('stats.fsrate'),  'fsRateNum',       true,  true ],
+    [t('stats.kills'),          'kills',           true,  false],
+    [t('stats.deaths'),         'deaths',          false, true ],
+    [t('stats.killtime'),    'avgKillTimeNum',  false, true ],
+    [t('stats.boosts'),         'boosts',          false, false],
   ];
   const DISPLAY = ['shotsFired','hitRate','fsRate','kills','deaths','avgKillTime','boosts'];
   const DIVIDER_BEFORE = new Set([3,5,6]); // before kills, avgKillTime, boosts
@@ -2369,7 +2415,7 @@ function setGameSpeed(val){
 function toggleDebug(){
   debugMode = !debugMode;
   const btn = document.getElementById('debugBtn');
-  if(btn){ btn.textContent = debugMode ? '⊕ Debug ON' : '⊕ Debug'; btn.style.color = debugMode ? '#4fa3e0' : ''; }
+  if(btn){ btn.textContent = debugMode ? t('hud.debug.on') : t('hud.debug'); btn.style.color = debugMode ? '#4fa3e0' : ''; }
   const sc = document.getElementById('speedControl');
   if(sc) sc.style.display = debugMode ? 'flex' : 'none';
   if(!debugMode){
@@ -2405,12 +2451,9 @@ function toggleDebug(){
 function updateDebugBtn(){
   const btn = document.getElementById('debugBtn');
   if(!btn) return;
-  const active = anyBrainActive();
-  btn.style.display = active ? '' : 'none';
-  if(!active && debugMode){
-    // brain was removed — force debug off
+  if(!anyBrainActive() && debugMode){
     debugMode = false;
-    btn.textContent = '⊕ Debug';
+    btn.textContent = t('hud.debug');
     btn.style.color = '';
     const sc = document.getElementById('speedControl');
     if(sc) sc.style.display = 'none';
@@ -2418,8 +2461,7 @@ function updateDebugBtn(){
     if(stc) stc.style.display = 'none';
     gameSpeed = 1.0; _speedAccum = 0;
   }
-  // Fix 1: if debug is on and new game started, make sure speedControl is visible
-  if(active && debugMode){
+  if(anyBrainActive() && debugMode){
     const sc = document.getElementById('speedControl');
     if(sc) sc.style.display = 'flex';
   }
@@ -2543,18 +2585,25 @@ function toggleBrainPanel(){
 }
 
 function bpUpdateGameWidth(){
-  // adjust #app and canvases to leave room for panel
-  if(!gameRunning) return;
   const panel = document.getElementById('brainPanel');
   const visible = panel && panel.classList.contains('visible');
   const collapsed = panel && panel.classList.contains('collapsed');
   const panelW = visible ? (collapsed ? 28 : bpPanelWidth) : 0;
-  W = window.innerWidth - panelW;
-  H = window.innerHeight - 54;
-  if(W%2!==0) W--;
-  if(H%2!==0) H--;
-  resizeCanvases();
-  initStars();
+  if(gameRunning){
+    W = window.innerWidth - panelW;
+    H = window.innerHeight - 54;
+    if(W%2!==0) W--;
+    if(H%2!==0) H--;
+    resizeCanvases();
+    initStars();
+  } else {
+    // in menu — resize app container
+    const app = document.getElementById('app');
+    if(app){
+      app.style.width = (window.innerWidth - panelW) + 'px';
+      app.style.height = window.innerHeight + 'px';
+    }
+  }
 }
 
 function bpSelectShip(ship){
@@ -2572,7 +2621,7 @@ function bpSyncToShip(ship){
   ta.value = BRAINS[ship].script || '';
   const on = !!BRAINS[ship].enabled;
   if(tog) tog.classList.toggle('on', on);
-  if(status) status.textContent = on ? 'Brain On' : 'Brain Off';
+  if(status) status.textContent = on ? t('brain.on') : t('brain.off');
   if(err) err.textContent = '';
 }
 
@@ -2583,7 +2632,7 @@ function bpToggleBrain(){
   const status = document.getElementById('bp-brain-status');
   const on = BRAINS[ship].enabled;
   if(tog) tog.classList.toggle('on', on);
-  if(status) status.textContent = on ? 'Brain On' : 'Brain Off';
+  if(status) status.textContent = on ? t('brain.on') : t('brain.off');
   // sync to config-screen toggle too
   const cfgTog = document.getElementById('tog-brain-'+ship);
   if(cfgTog) cfgTog.classList.toggle('on', on);
@@ -2613,7 +2662,7 @@ function bpApply(){
   const tog = document.getElementById('bp-brain-toggle');
   if(tog) tog.classList.add('on');
   const status = document.getElementById('bp-brain-status');
-  if(status) status.textContent = 'Brain On';
+  if(status) status.textContent = t('brain.on');
   if(err) err.textContent = '';
   // compile and persist
   compileBrain(ship);
@@ -2690,14 +2739,14 @@ loadSprites(()=>{
   <div id="brainDragHandle"></div>
   <div id="brainCollapseTab" onclick="toggleBrainPanel()">{ }</div>
   <div id="brainPanelInner">
-    <div class="bp-header">⚡ Brain Editor</div>
+    <div class="bp-header" data-i18n="brain.editor.title">⚡ Brain Editor</div>
     <!-- ship selector -->
     <div class="bp-row">
       <select class="bp-select" id="bp-ship-select" onchange="bpSelectShip(this.value)">
-        <option value="xwing">X-Wing — Rebellion</option>
-        <option value="awing">A-Wing — Rebellion</option>
-        <option value="tie">TIE Fighter — Empire</option>
-        <option value="tiein">TIE Bomber — Empire</option>
+        <option value="xwing" data-i18n="brain.ship.xwing">X-Wing — Rebellion</option>
+        <option value="awing" data-i18n="brain.ship.awing">A-Wing — Rebellion</option>
+        <option value="tie" data-i18n="brain.ship.tie">TIE Fighter — Empire</option>
+        <option value="tiein" data-i18n="brain.ship.tiein">TIE Bomber — Empire</option>
       </select>
     </div>
     <!-- brain toggle -->
@@ -2708,7 +2757,7 @@ loadSprites(()=>{
     <!-- preset -->
     <div class="bp-row">
       <select class="bp-select" id="bp-preset" onchange="bpLoadPreset(this.value)">
-        <option value="">— Load Preset —</option>
+        <option value="" data-i18n="brain.preset.label">— Load Preset —</option>
         <option value="aggressive">Aggressive</option>
         <option value="kiter">Kiter</option>
         <option value="flanker">Flanker</option>
@@ -2723,15 +2772,16 @@ loadSprites(()=>{
     <!-- stats panel -->
     <div id="bp-stats">
       <div class="bp-stats-header">
-        <span class="bp-stats-title">⚡ Stats</span>
-        <button class="bp-stats-reset" onclick="resetStats()">Reset</button>
+        <span class="bp-stats-title" data-i18n="stats.title">⚡ Stats</span>
+        <span id="bp-stats-ship-label" style="font-size:9px;color:#334455;letter-spacing:1px;text-transform:uppercase;"></span>
+        <button class="bp-stats-reset" onclick="resetStats()" data-i18n="stats.reset">Reset</button>
       </div>
       <div id="bp-stats-scroll"><span style="color:#334455;font-size:9px;">No data yet — run a simulation.</span></div>
     </div>
     <!-- footer buttons -->
     <div class="bp-footer">
-      <button class="bp-btn apply" onclick="bpApply()">▶ Apply + New Game</button>
-      <button class="bp-btn danger" onclick="bpReset()">Reset</button>
+      <button class="bp-btn apply" onclick="bpApply()" data-i18n="brain.apply">▶ Apply + New Game</button>
+      <button class="bp-btn danger" onclick="bpReset()" data-i18n="brain.reset">Reset</button>
     </div>
   </div>
 </div>
